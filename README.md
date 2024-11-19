@@ -81,6 +81,8 @@ Contact us if you are interested in our Enterprise plan for large organizations 
 
 - [Typescript](https://www.typescriptlang.org/) - Language
 - [ReactRouter](https://reactrouter.com/) - Framework
+- [Next.js](https://nextjs.org/) - Framework
+- [Prisma](https://www.prisma.io/)  - ORM
 - [Prisma](https://www.prisma.io/) - ORM
 - [Tailwind](https://tailwindcss.com/) - CSS
 - [shadcn/ui](https://ui.shadcn.com/) - Component Library
@@ -171,9 +173,11 @@ git clone https://github.com/<your-username>/documenso
 
 5. Create the database schema by running `npm run prisma:migrate-dev`
 
-6. Run `npm run dev` in the root directory to start
+6. set up traditional chinese by running `npm run translate:compile`
 
-7. Register a new user at http://localhost:3000/signup
+7. Run `npm run dev` in the root directory to start
+
+8. Register a new user at http://localhost:3000/signup
 
 ---
 
