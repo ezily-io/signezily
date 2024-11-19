@@ -566,6 +566,10 @@ msgstr "Ccers"
 msgid "Character Limit"
 msgstr "Limite de caractères"
 
+#: packages/ui/primitives/document-flow/types.ts:58
+msgid "Checkbox"
+msgstr ""
+
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/checkbox-field.tsx:197
 msgid "Checkbox values"
 msgstr "Valeurs de case à cocher"
@@ -1198,6 +1202,7 @@ msgstr ""
 msgid "Please try again or contact our support."
 msgstr "Veuillez réessayer ou contacter notre support."
 
+#: packages/ui/primitives/document-flow/types.ts:57
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:768
 msgid "Radio"
 msgstr "Radio"
@@ -1327,6 +1332,7 @@ msgid "Search languages..."
 msgstr "Rechercher des langues..."
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/dropdown-field.tsx:115
+#: packages/ui/primitives/document-flow/types.ts:59
 msgid "Select"
 msgstr "Sélectionner"
 
