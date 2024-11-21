@@ -1490,10 +1490,26 @@ msgstr "Bannière mise à jour"
 msgid "Before you get started, please confirm your email address by clicking the button below:"
 msgstr "Avant de commencer, veuillez confirmer votre adresse e-mail en cliquant sur le bouton ci-dessous :"
 
+<<<<<<< HEAD
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl.settings.billing.tsx
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl.settings._layout.tsx
 #: apps/remix/app/components/general/settings-nav-mobile.tsx
 #: apps/remix/app/components/general/settings-nav-desktop.tsx
+||||||| parent of 15a782c3a (chore: update translation and color theme)
+#: apps/web/src/app/(dashboard)/settings/billing/page.tsx:72
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/billing/page.tsx:61
+#: apps/web/src/components/(dashboard)/settings/layout/desktop-nav.tsx:117
+#: apps/web/src/components/(dashboard)/settings/layout/mobile-nav.tsx:120
+#: apps/web/src/components/(teams)/settings/layout/desktop-nav.tsx:123
+#: apps/web/src/components/(teams)/settings/layout/mobile-nav.tsx:132
+=======
+#: apps/web/src/app/(dashboard)/settings/billing/page.tsx:74
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/billing/page.tsx:61
+#: apps/web/src/components/(dashboard)/settings/layout/desktop-nav.tsx:117
+#: apps/web/src/components/(dashboard)/settings/layout/mobile-nav.tsx:120
+#: apps/web/src/components/(teams)/settings/layout/desktop-nav.tsx:123
+#: apps/web/src/components/(teams)/settings/layout/mobile-nav.tsx:132
+>>>>>>> 15a782c3a (chore: update translation and color theme)
 msgid "Billing"
 msgstr "Facturation"
 
@@ -4093,11 +4109,21 @@ msgstr "Gérer toutes les réclamations d'abonnement"
 msgid "Manage and view template"
 msgstr "Gérer et afficher le modèle"
 
+<<<<<<< HEAD
 #: apps/remix/app/components/general/organisations/organisation-billing-portal-button.tsx
 msgid "Manage billing"
 msgstr "Gérer la facturation"
 
 #: apps/remix/app/components/dialogs/public-profile-template-manage-dialog.tsx
+||||||| parent of 15a782c3a (chore: update translation and color theme)
+#: apps/web/src/components/templates/manage-public-template-dialog.tsx:341
+=======
+#: apps/web/src/app/(dashboard)/settings/billing/page.tsx:136
+msgid "Manage billing"
+msgstr ""
+
+#: apps/web/src/components/templates/manage-public-template-dialog.tsx:341
+>>>>>>> 15a782c3a (chore: update translation and color theme)
 msgid "Manage details for this public template"
 msgstr "Gérer les détails de ce modèle public"
 
@@ -4134,10 +4160,20 @@ msgstr "Gérer les sessions"
 msgid "Manage subscription"
 msgstr "Gérer l'abonnement"
 
+<<<<<<< HEAD
 #. placeholder {0}: organisation.name
 #: apps/remix/app/routes/_authenticated+/admin+/organisations.$id.tsx
 msgid "Manage the {0} organisation"
 msgstr "Gérer l'organisation {0}"
+||||||| parent of 15a782c3a (chore: update translation and color theme)
+#: apps/web/src/app/(dashboard)/settings/billing/billing-portal-button.tsx:66
+msgid "Manage Subscription"
+msgstr "Gérer l'abonnement"
+=======
+#: apps/web/src/app/(dashboard)/settings/billing/billing-portal-button.tsx:67
+msgid "Manage Subscription"
+msgstr "Gérer l'abonnement"
+>>>>>>> 15a782c3a (chore: update translation and color theme)
 
 #. placeholder {0}: organisation.name
 #: apps/remix/app/routes/_authenticated+/admin+/organisations.$id.tsx
@@ -6040,6 +6076,7 @@ msgstr "Bannière du site"
 msgid "Site Settings"
 msgstr "Paramètres du site"
 
+<<<<<<< HEAD
 #: packages/ui/primitives/document-flow/missing-signature-field-dialog.tsx
 msgid "Some signers have not been assigned a signature field. Please assign at least 1 signature field to each signer before proceeding."
 msgstr "Certains signataires n'ont pas été assignés à un champ de signature. Veuillez assigner au moins 1 champ de signature à chaque signataire avant de continuer."
@@ -6090,6 +6127,89 @@ msgstr "Certains signataires n'ont pas été assignés à un champ de signature.
 #: apps/remix/app/components/dialogs/document-duplicate-dialog.tsx
 #: apps/remix/app/components/dialogs/document-delete-dialog.tsx
 #: packages/ui/components/document/document-share-button.tsx
+||||||| parent of 15a782c3a (chore: update translation and color theme)
+#: apps/web/src/app/(dashboard)/documents/_action-items/resend-document.tsx:105
+#: apps/web/src/app/(dashboard)/documents/[id]/document-page-view-button.tsx:63
+#: apps/web/src/app/(dashboard)/documents/[id]/document-page-view-dropdown.tsx:91
+#: apps/web/src/app/(dashboard)/documents/[id]/logs/download-audit-log-button.tsx:65
+#: apps/web/src/app/(dashboard)/documents/[id]/logs/download-certificate-button.tsx:68
+#: apps/web/src/app/(dashboard)/documents/data-table-action-button.tsx:75
+#: apps/web/src/app/(dashboard)/documents/data-table-action-dropdown.tsx:106
+#: apps/web/src/app/(dashboard)/documents/delete-document-dialog.tsx:80
+#: apps/web/src/app/(dashboard)/documents/duplicate-document-dialog.tsx:72
+#: apps/web/src/app/(dashboard)/settings/billing/billing-plans.tsx:62
+#: apps/web/src/app/(dashboard)/settings/billing/billing-portal-button.tsx:50
+#: apps/web/src/app/(dashboard)/settings/public-profile/public-profile-page-view.tsx:124
+#: apps/web/src/app/(dashboard)/settings/security/passkeys/user-passkeys-data-table-actions.tsx:73
+#: apps/web/src/app/(dashboard)/settings/security/passkeys/user-passkeys-data-table-actions.tsx:93
+#: apps/web/src/app/(dashboard)/settings/teams/accept-team-invitation-button.tsx:32
+#: apps/web/src/app/(dashboard)/settings/teams/decline-team-invitation-button.tsx:32
+#: apps/web/src/app/(dashboard)/settings/teams/team-email-usage.tsx:44
+#: apps/web/src/app/(dashboard)/templates/delete-template-dialog.tsx:50
+#: apps/web/src/app/(dashboard)/templates/new-template-dialog.tsx:79
+#: apps/web/src/app/(dashboard)/templates/template-direct-link-dialog.tsx:104
+#: apps/web/src/app/(dashboard)/templates/template-direct-link-dialog.tsx:127
+#: apps/web/src/app/(dashboard)/templates/template-direct-link-dialog.tsx:151
+#: apps/web/src/app/(recipient)/d/[token]/direct-template.tsx:118
+#: apps/web/src/app/(recipient)/d/[token]/signing-auth-page.tsx:27
+#: apps/web/src/app/(signing)/sign/[token]/signing-auth-page.tsx:38
+#: apps/web/src/app/(teams)/t/[teamUrl]/layout-billing-banner.tsx:53
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/preferences/branding-preferences.tsx:107
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/team-email-dropdown.tsx:39
+#: apps/web/src/app/(unauthenticated)/verify-email/[token]/page.tsx:61
+#: apps/web/src/app/embed/direct/[[...url]]/client.tsx:243
+#: apps/web/src/app/embed/sign/[[...url]]/client.tsx:125
+#: apps/web/src/components/(teams)/dialogs/create-team-checkout-dialog.tsx:50
+#: apps/web/src/components/(teams)/dialogs/create-team-checkout-dialog.tsx:99
+#: apps/web/src/components/(teams)/dialogs/invite-team-member-dialog.tsx:210
+#: apps/web/src/components/(teams)/dialogs/remove-team-email-dialog.tsx:64
+#: apps/web/src/components/(teams)/dialogs/remove-team-email-dialog.tsx:83
+#: apps/web/src/components/(teams)/tables/pending-user-teams-data-table-actions.tsx:33
+#: apps/web/src/components/(teams)/tables/team-member-invites-data-table.tsx:68
+#: apps/web/src/components/(teams)/tables/team-member-invites-data-table.tsx:85
+#: apps/web/src/components/(teams)/team-billing-portal-button.tsx:29
+=======
+#: apps/web/src/app/(dashboard)/documents/_action-items/resend-document.tsx:105
+#: apps/web/src/app/(dashboard)/documents/[id]/document-page-view-button.tsx:63
+#: apps/web/src/app/(dashboard)/documents/[id]/document-page-view-dropdown.tsx:91
+#: apps/web/src/app/(dashboard)/documents/[id]/logs/download-audit-log-button.tsx:65
+#: apps/web/src/app/(dashboard)/documents/[id]/logs/download-certificate-button.tsx:68
+#: apps/web/src/app/(dashboard)/documents/data-table-action-button.tsx:75
+#: apps/web/src/app/(dashboard)/documents/data-table-action-dropdown.tsx:106
+#: apps/web/src/app/(dashboard)/documents/delete-document-dialog.tsx:80
+#: apps/web/src/app/(dashboard)/documents/duplicate-document-dialog.tsx:72
+#: apps/web/src/app/(dashboard)/settings/billing/billing-plans.tsx:62
+#: apps/web/src/app/(dashboard)/settings/billing/billing-portal-button.tsx:51
+#: apps/web/src/app/(dashboard)/settings/public-profile/public-profile-page-view.tsx:124
+#: apps/web/src/app/(dashboard)/settings/security/passkeys/user-passkeys-data-table-actions.tsx:73
+#: apps/web/src/app/(dashboard)/settings/security/passkeys/user-passkeys-data-table-actions.tsx:93
+#: apps/web/src/app/(dashboard)/settings/teams/accept-team-invitation-button.tsx:32
+#: apps/web/src/app/(dashboard)/settings/teams/decline-team-invitation-button.tsx:32
+#: apps/web/src/app/(dashboard)/settings/teams/team-email-usage.tsx:44
+#: apps/web/src/app/(dashboard)/templates/delete-template-dialog.tsx:50
+#: apps/web/src/app/(dashboard)/templates/new-template-dialog.tsx:79
+#: apps/web/src/app/(dashboard)/templates/template-direct-link-dialog.tsx:104
+#: apps/web/src/app/(dashboard)/templates/template-direct-link-dialog.tsx:127
+#: apps/web/src/app/(dashboard)/templates/template-direct-link-dialog.tsx:151
+#: apps/web/src/app/(recipient)/d/[token]/direct-template.tsx:118
+#: apps/web/src/app/(recipient)/d/[token]/signing-auth-page.tsx:27
+#: apps/web/src/app/(signing)/sign/[token]/signing-auth-page.tsx:38
+#: apps/web/src/app/(teams)/t/[teamUrl]/layout-billing-banner.tsx:53
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/preferences/branding-preferences.tsx:107
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/team-email-dropdown.tsx:39
+#: apps/web/src/app/(unauthenticated)/verify-email/[token]/page.tsx:61
+#: apps/web/src/app/embed/direct/[[...url]]/client.tsx:243
+#: apps/web/src/app/embed/sign/[[...url]]/client.tsx:125
+#: apps/web/src/components/(teams)/dialogs/create-team-checkout-dialog.tsx:50
+#: apps/web/src/components/(teams)/dialogs/create-team-checkout-dialog.tsx:99
+#: apps/web/src/components/(teams)/dialogs/invite-team-member-dialog.tsx:210
+#: apps/web/src/components/(teams)/dialogs/remove-team-email-dialog.tsx:64
+#: apps/web/src/components/(teams)/dialogs/remove-team-email-dialog.tsx:83
+#: apps/web/src/components/(teams)/tables/pending-user-teams-data-table-actions.tsx:33
+#: apps/web/src/components/(teams)/tables/team-member-invites-data-table.tsx:68
+#: apps/web/src/components/(teams)/tables/team-member-invites-data-table.tsx:85
+#: apps/web/src/components/(teams)/team-billing-portal-button.tsx:29
+>>>>>>> 15a782c3a (chore: update translation and color theme)
 msgid "Something went wrong"
 msgstr "Quelque chose a mal tourné"
 
@@ -7767,6 +7887,7 @@ msgstr "Vous voulez envoyer des liens de signature élégants comme celui-ci ? <
 msgid "Want your own public profile?"
 msgstr "Vous voulez votre propre profil public ?"
 
+<<<<<<< HEAD
 #: packages/ui/primitives/template-flow/add-template-placeholder-recipients.tsx
 #: packages/ui/primitives/template-flow/add-template-placeholder-recipients.tsx
 #: packages/ui/primitives/template-flow/add-template-placeholder-recipients.tsx
@@ -7778,6 +7899,15 @@ msgstr "Avertissement : Assistant comme dernier signataire"
 
 #: apps/remix/app/components/general/organisations/organisation-billing-portal-button.tsx
 #: apps/remix/app/components/general/organisations/organisation-billing-banner.tsx
+||||||| parent of 15a782c3a (chore: update translation and color theme)
+#: apps/web/src/app/(dashboard)/settings/billing/billing-portal-button.tsx:40
+#: apps/web/src/app/(teams)/t/[teamUrl]/layout-billing-banner.tsx:55
+#: apps/web/src/components/(teams)/team-billing-portal-button.tsx:31
+=======
+#: apps/web/src/app/(dashboard)/settings/billing/billing-portal-button.tsx:41
+#: apps/web/src/app/(teams)/t/[teamUrl]/layout-billing-banner.tsx:55
+#: apps/web/src/components/(teams)/team-billing-portal-button.tsx:31
+>>>>>>> 15a782c3a (chore: update translation and color theme)
 msgid "We are unable to proceed to the billing portal at this time. Please try again, or contact support."
 msgstr "Nous ne pouvons pas accéder au portail de facturation pour le moment. Veuillez réessayer ou contacter le support."
 
@@ -8194,6 +8324,7 @@ msgstr "Vous êtes sur le point de supprimer l'utilisateur suivant de <0>{teamNa
 msgid "You are about to revoke access for team <0>{0}</0> ({1}) to use your email."
 msgstr "Vous êtes sur le point de révoquer l'accès de l'équipe <0>{0}</0> ({1}) à votre e-mail."
 
+<<<<<<< HEAD
 #: packages/ui/primitives/document-flow/send-document-action-dialog.tsx
 msgid "You are about to send this document to the recipients. Are you sure you want to continue?"
 msgstr "Vous êtes sur le point d'envoyer ce document aux destinataires. Êtes-vous sûr de vouloir continuer ?"
@@ -8203,6 +8334,11 @@ msgid "You are about to subscribe to the {planName}"
 msgstr "Vous êtes sur le point de vous abonner au {planName}"
 
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl.settings.billing.tsx
+||||||| parent of 15a782c3a (chore: update translation and color theme)
+#: apps/web/src/app/(dashboard)/settings/billing/page.tsx:78
+=======
+#: apps/web/src/app/(dashboard)/settings/billing/page.tsx:80
+>>>>>>> 15a782c3a (chore: update translation and color theme)
 msgid "You are currently on the <0>Free Plan</0>."
 msgstr "Vous êtes actuellement sur l'<0>Abonnement Gratuit</0>."
 
@@ -8318,9 +8454,19 @@ msgstr "Vous ne pouvez pas importer de documents pour le moment."
 msgid "You cannot upload encrypted PDFs"
 msgstr "Vous ne pouvez pas importer de PDF cryptés"
 
+<<<<<<< HEAD
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl.settings.billing.tsx
 msgid "You currently have an inactive <0>{currentProductName}</0> subscription"
 msgstr "Vous avez actuellement un abonnement inactif à <0>{currentProductName}</0>"
+||||||| parent of 15a782c3a (chore: update translation and color theme)
+#: apps/web/src/app/(dashboard)/settings/billing/billing-portal-button.tsx:45
+msgid "You do not currently have a customer record, this should not happen. Please contact support for assistance."
+msgstr "Vous n'avez actuellement pas de dossier client, cela ne devrait pas se produire. Veuillez contacter le support pour obtenir de l'aide."
+=======
+#: apps/web/src/app/(dashboard)/settings/billing/billing-portal-button.tsx:46
+msgid "You do not currently have a customer record, this should not happen. Please contact support for assistance."
+msgstr "Vous n'avez actuellement pas de dossier client, cela ne devrait pas se produire. Veuillez contacter le support pour obtenir de l'aide."
+>>>>>>> 15a782c3a (chore: update translation and color theme)
 
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl._index.tsx
 msgid "You currently have no access to any teams within this organisation. Please contact your organisation to request access."
@@ -8536,9 +8682,19 @@ msgstr "L'URL de votre site web de marque"
 msgid "Your branding preferences have been updated"
 msgstr "Vos préférences de branding ont été mises à jour"
 
+<<<<<<< HEAD
 #: apps/remix/app/components/dialogs/template-bulk-send-dialog.tsx
 msgid "Your bulk send has been initiated. You will receive an email notification upon completion."
 msgstr "Votre envoi groupé a été initié. Vous recevrez une notification par email une fois terminé."
+||||||| parent of 15a782c3a (chore: update translation and color theme)
+#: apps/web/src/app/(dashboard)/settings/billing/page.tsx:119
+msgid "Your current plan is past due. Please update your payment information."
+msgstr "Votre plan actuel est en retard. Veuillez mettre à jour vos informations de paiement."
+=======
+#: apps/web/src/app/(dashboard)/settings/billing/page.tsx:125
+msgid "Your current plan is past due. Please update your payment information."
+msgstr "Votre plan actuel est en retard. Veuillez mettre à jour vos informations de paiement."
+>>>>>>> 15a782c3a (chore: update translation and color theme)
 
 #: packages/email/templates/bulk-send-complete.tsx
 msgid "Your bulk send operation for template \"{templateName}\" has completed."
@@ -8727,5 +8883,12 @@ msgstr "Votre token a été créé avec succès ! Assurez-vous de le copier car 
 
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.tokens.tsx
 msgid "Your tokens will be shown here once you create them."
+<<<<<<< HEAD
 msgstr "Vos tokens seront affichés ici une fois que vous les aurez créés."
 
+||||||| parent of 15a782c3a (chore: update translation and color theme)
+msgstr "Vos jetons seront affichés ici une fois que vous les aurez créés."
+
+=======
+msgstr "Vos jetons seront affichés ici une fois que vous les aurez créés."
+>>>>>>> 15a782c3a (chore: update translation and color theme)

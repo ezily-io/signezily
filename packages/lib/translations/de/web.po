@@ -1494,6 +1494,18 @@ msgstr "Bitte bestätige vor dem Start deine E-Mail-Adresse, indem du auf den Bu
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl.settings._layout.tsx
 #: apps/remix/app/components/general/settings-nav-mobile.tsx
 #: apps/remix/app/components/general/settings-nav-desktop.tsx
+#: apps/web/src/app/(dashboard)/settings/billing/page.tsx:72
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/billing/page.tsx:61
+#: apps/web/src/components/(dashboard)/settings/layout/desktop-nav.tsx:117
+#: apps/web/src/components/(dashboard)/settings/layout/mobile-nav.tsx:120
+#: apps/web/src/components/(teams)/settings/layout/desktop-nav.tsx:123
+#: apps/web/src/components/(teams)/settings/layout/mobile-nav.tsx:132
+#: apps/web/src/app/(dashboard)/settings/billing/page.tsx:74
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/billing/page.tsx:61
+#: apps/web/src/components/(dashboard)/settings/layout/desktop-nav.tsx:117
+#: apps/web/src/components/(dashboard)/settings/layout/mobile-nav.tsx:120
+#: apps/web/src/components/(teams)/settings/layout/desktop-nav.tsx:123
+#: apps/web/src/components/(teams)/settings/layout/mobile-nav.tsx:132
 msgid "Billing"
 msgstr "Abrechnung"
 
@@ -4094,10 +4106,14 @@ msgid "Manage and view template"
 msgstr "Vorlage verwalten und anzeigen"
 
 #: apps/remix/app/components/general/organisations/organisation-billing-portal-button.tsx
+#: apps/remix/app/components/dialogs/public-profile-template-manage-dialog.tsx
+#: apps/web/src/components/templates/manage-public-template-dialog.tsx:341
+#: apps/web/src/app/(dashboard)/settings/billing/page.tsx:136
 msgid "Manage billing"
 msgstr "Rechnungsmanagement"
 
-#: apps/remix/app/components/dialogs/public-profile-template-manage-dialog.tsx
+
+#: apps/web/src/components/templates/manage-public-template-dialog.tsx:341
 msgid "Manage details for this public template"
 msgstr "Details für diese öffentliche Vorlage verwalten"
 
@@ -4138,6 +4154,11 @@ msgstr "Abonnement verwalten"
 #: apps/remix/app/routes/_authenticated+/admin+/organisations.$id.tsx
 msgid "Manage the {0} organisation"
 msgstr "Verwalten Sie die {0} Organisation"
+
+#: apps/web/src/app/(dashboard)/settings/billing/billing-portal-button.tsx:66
+#: apps/web/src/app/(dashboard)/settings/billing/billing-portal-button.tsx:67
+msgid "Manage Subscription"
+msgstr "Abonnement verwalten"
 
 #. placeholder {0}: organisation.name
 #: apps/remix/app/routes/_authenticated+/admin+/organisations.$id.tsx
@@ -6090,6 +6111,86 @@ msgstr "Einige Unterzeichner haben noch kein Unterschriftsfeld zugewiesen bekomm
 #: apps/remix/app/components/dialogs/document-duplicate-dialog.tsx
 #: apps/remix/app/components/dialogs/document-delete-dialog.tsx
 #: packages/ui/components/document/document-share-button.tsx
+#: apps/web/src/app/(dashboard)/documents/_action-items/resend-document.tsx:105
+#: apps/web/src/app/(dashboard)/documents/[id]/document-page-view-button.tsx:63
+#: apps/web/src/app/(dashboard)/documents/[id]/document-page-view-dropdown.tsx:91
+#: apps/web/src/app/(dashboard)/documents/[id]/logs/download-audit-log-button.tsx:65
+#: apps/web/src/app/(dashboard)/documents/[id]/logs/download-certificate-button.tsx:68
+#: apps/web/src/app/(dashboard)/documents/data-table-action-button.tsx:75
+#: apps/web/src/app/(dashboard)/documents/data-table-action-dropdown.tsx:106
+#: apps/web/src/app/(dashboard)/documents/delete-document-dialog.tsx:80
+#: apps/web/src/app/(dashboard)/documents/duplicate-document-dialog.tsx:72
+#: apps/web/src/app/(dashboard)/settings/billing/billing-plans.tsx:62
+#: apps/web/src/app/(dashboard)/settings/billing/billing-portal-button.tsx:50
+#: apps/web/src/app/(dashboard)/settings/public-profile/public-profile-page-view.tsx:124
+#: apps/web/src/app/(dashboard)/settings/security/passkeys/user-passkeys-data-table-actions.tsx:73
+#: apps/web/src/app/(dashboard)/settings/security/passkeys/user-passkeys-data-table-actions.tsx:93
+#: apps/web/src/app/(dashboard)/settings/teams/accept-team-invitation-button.tsx:32
+#: apps/web/src/app/(dashboard)/settings/teams/decline-team-invitation-button.tsx:32
+#: apps/web/src/app/(dashboard)/settings/teams/team-email-usage.tsx:44
+#: apps/web/src/app/(dashboard)/templates/delete-template-dialog.tsx:50
+#: apps/web/src/app/(dashboard)/templates/new-template-dialog.tsx:79
+#: apps/web/src/app/(dashboard)/templates/template-direct-link-dialog.tsx:104
+#: apps/web/src/app/(dashboard)/templates/template-direct-link-dialog.tsx:127
+#: apps/web/src/app/(dashboard)/templates/template-direct-link-dialog.tsx:151
+#: apps/web/src/app/(recipient)/d/[token]/direct-template.tsx:118
+#: apps/web/src/app/(recipient)/d/[token]/signing-auth-page.tsx:27
+#: apps/web/src/app/(signing)/sign/[token]/signing-auth-page.tsx:38
+#: apps/web/src/app/(teams)/t/[teamUrl]/layout-billing-banner.tsx:53
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/preferences/branding-preferences.tsx:107
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/team-email-dropdown.tsx:39
+#: apps/web/src/app/(unauthenticated)/verify-email/[token]/page.tsx:61
+#: apps/web/src/app/embed/direct/[[...url]]/client.tsx:243
+#: apps/web/src/app/embed/sign/[[...url]]/client.tsx:125
+#: apps/web/src/components/(teams)/dialogs/create-team-checkout-dialog.tsx:50
+#: apps/web/src/components/(teams)/dialogs/create-team-checkout-dialog.tsx:99
+#: apps/web/src/components/(teams)/dialogs/invite-team-member-dialog.tsx:210
+#: apps/web/src/components/(teams)/dialogs/remove-team-email-dialog.tsx:64
+#: apps/web/src/components/(teams)/dialogs/remove-team-email-dialog.tsx:83
+#: apps/web/src/components/(teams)/tables/pending-user-teams-data-table-actions.tsx:33
+#: apps/web/src/components/(teams)/tables/team-member-invites-data-table.tsx:68
+#: apps/web/src/components/(teams)/tables/team-member-invites-data-table.tsx:85
+#: apps/web/src/components/(teams)/team-billing-portal-button.tsx:29
+#: apps/web/src/app/(dashboard)/documents/_action-items/resend-document.tsx:105
+#: apps/web/src/app/(dashboard)/documents/[id]/document-page-view-button.tsx:63
+#: apps/web/src/app/(dashboard)/documents/[id]/document-page-view-dropdown.tsx:91
+#: apps/web/src/app/(dashboard)/documents/[id]/logs/download-audit-log-button.tsx:65
+#: apps/web/src/app/(dashboard)/documents/[id]/logs/download-certificate-button.tsx:68
+#: apps/web/src/app/(dashboard)/documents/data-table-action-button.tsx:75
+#: apps/web/src/app/(dashboard)/documents/data-table-action-dropdown.tsx:106
+#: apps/web/src/app/(dashboard)/documents/delete-document-dialog.tsx:80
+#: apps/web/src/app/(dashboard)/documents/duplicate-document-dialog.tsx:72
+#: apps/web/src/app/(dashboard)/settings/billing/billing-plans.tsx:62
+#: apps/web/src/app/(dashboard)/settings/billing/billing-portal-button.tsx:51
+#: apps/web/src/app/(dashboard)/settings/public-profile/public-profile-page-view.tsx:124
+#: apps/web/src/app/(dashboard)/settings/security/passkeys/user-passkeys-data-table-actions.tsx:73
+#: apps/web/src/app/(dashboard)/settings/security/passkeys/user-passkeys-data-table-actions.tsx:93
+#: apps/web/src/app/(dashboard)/settings/teams/accept-team-invitation-button.tsx:32
+#: apps/web/src/app/(dashboard)/settings/teams/decline-team-invitation-button.tsx:32
+#: apps/web/src/app/(dashboard)/settings/teams/team-email-usage.tsx:44
+#: apps/web/src/app/(dashboard)/templates/delete-template-dialog.tsx:50
+#: apps/web/src/app/(dashboard)/templates/new-template-dialog.tsx:79
+#: apps/web/src/app/(dashboard)/templates/template-direct-link-dialog.tsx:104
+#: apps/web/src/app/(dashboard)/templates/template-direct-link-dialog.tsx:127
+#: apps/web/src/app/(dashboard)/templates/template-direct-link-dialog.tsx:151
+#: apps/web/src/app/(recipient)/d/[token]/direct-template.tsx:118
+#: apps/web/src/app/(recipient)/d/[token]/signing-auth-page.tsx:27
+#: apps/web/src/app/(signing)/sign/[token]/signing-auth-page.tsx:38
+#: apps/web/src/app/(teams)/t/[teamUrl]/layout-billing-banner.tsx:53
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/preferences/branding-preferences.tsx:107
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/team-email-dropdown.tsx:39
+#: apps/web/src/app/(unauthenticated)/verify-email/[token]/page.tsx:61
+#: apps/web/src/app/embed/direct/[[...url]]/client.tsx:243
+#: apps/web/src/app/embed/sign/[[...url]]/client.tsx:125
+#: apps/web/src/components/(teams)/dialogs/create-team-checkout-dialog.tsx:50
+#: apps/web/src/components/(teams)/dialogs/create-team-checkout-dialog.tsx:99
+#: apps/web/src/components/(teams)/dialogs/invite-team-member-dialog.tsx:210
+#: apps/web/src/components/(teams)/dialogs/remove-team-email-dialog.tsx:64
+#: apps/web/src/components/(teams)/dialogs/remove-team-email-dialog.tsx:83
+#: apps/web/src/components/(teams)/tables/pending-user-teams-data-table-actions.tsx:33
+#: apps/web/src/components/(teams)/tables/team-member-invites-data-table.tsx:68
+#: apps/web/src/components/(teams)/tables/team-member-invites-data-table.tsx:85
+#: apps/web/src/components/(teams)/team-billing-portal-button.tsx:29
 msgid "Something went wrong"
 msgstr "Etwas ist schief gelaufen"
 
@@ -7778,6 +7879,12 @@ msgstr "Warnung: Assistent als letzter Unterzeichner"
 
 #: apps/remix/app/components/general/organisations/organisation-billing-portal-button.tsx
 #: apps/remix/app/components/general/organisations/organisation-billing-banner.tsx
+#: apps/web/src/app/(dashboard)/settings/billing/billing-portal-button.tsx:40
+#: apps/web/src/app/(teams)/t/[teamUrl]/layout-billing-banner.tsx:55
+#: apps/web/src/components/(teams)/team-billing-portal-button.tsx:31
+#: apps/web/src/app/(dashboard)/settings/billing/billing-portal-button.tsx:41
+#: apps/web/src/app/(teams)/t/[teamUrl]/layout-billing-banner.tsx:55
+#: apps/web/src/components/(teams)/team-billing-portal-button.tsx:31
 msgid "We are unable to proceed to the billing portal at this time. Please try again, or contact support."
 msgstr "Wir können zurzeit nicht auf das Abrechnungsportal zugreifen. Bitte versuchen Sie es erneut oder wenden Sie sich an den Support."
 
@@ -8203,6 +8310,8 @@ msgid "You are about to subscribe to the {planName}"
 msgstr "Sie sind dabei, das {planName} zu abonnieren"
 
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl.settings.billing.tsx
+#: apps/web/src/app/(dashboard)/settings/billing/page.tsx:78
+#: apps/web/src/app/(dashboard)/settings/billing/page.tsx:80
 msgid "You are currently on the <0>Free Plan</0>."
 msgstr "Sie befinden sich derzeit im <0>kostenlosen Plan</0>."
 
@@ -8321,6 +8430,14 @@ msgstr "Sie können keine verschlüsselten PDFs hochladen"
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl.settings.billing.tsx
 msgid "You currently have an inactive <0>{currentProductName}</0> subscription"
 msgstr "Sie haben derzeit ein inaktives <0>{currentProductName}</0> Abonnement"
+
+#: apps/web/src/app/(dashboard)/settings/billing/billing-portal-button.tsx:45
+msgid "You do not currently have a customer record, this should not happen. Please contact support for assistance."
+msgstr "Sie haben derzeit keinen Kundenrecord, das sollte nicht passieren. Bitte kontaktieren Sie den Support um Hilfe."
+
+#: apps/web/src/app/(dashboard)/settings/billing/billing-portal-button.tsx:46
+msgid "You do not currently have a customer record, this should not happen. Please contact support for assistance."
+msgstr "Sie haben derzeit keinen Kundenrecord, das sollte nicht passieren. Bitte kontaktieren Sie den Support um Hilfe."
 
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl._index.tsx
 msgid "You currently have no access to any teams within this organisation. Please contact your organisation to request access."
@@ -8540,6 +8657,10 @@ msgstr "Ihre Markenpräferenzen wurden aktualisiert"
 msgid "Your bulk send has been initiated. You will receive an email notification upon completion."
 msgstr "Ihr Massenversand wurde gestartet. Sie erhalten eine E-Mail-Benachrichtigung nach Abschluss."
 
+#: apps/web/src/app/(dashboard)/settings/billing/page.tsx:119
+msgid "Your current plan is past due. Please update your payment information."
+msgstr "Ihr aktueller Plan ist überfällig. Bitte aktualisieren Sie Ihre Zahlungsinformationen."
+
 #: packages/email/templates/bulk-send-complete.tsx
 msgid "Your bulk send operation for template \"{templateName}\" has completed."
 msgstr "Ihre Massenversandoperation für Vorlage \"{templateName}\" ist abgeschlossen."
@@ -8728,4 +8849,3 @@ msgstr "Ihr Token wurde erfolgreich erstellt! Stellen Sie sicher, dass Sie es ko
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.tokens.tsx
 msgid "Your tokens will be shown here once you create them."
 msgstr "Ihre Tokens werden hier angezeigt, sobald Sie sie erstellt haben."
-

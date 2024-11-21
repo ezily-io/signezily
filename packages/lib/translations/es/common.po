@@ -1,500 +1,533 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2024-11-14 15:34+0800\n"
+"POT-Creation-Date: 2024-07-24 13:01+1000\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
-"Language: zh_tw\n"
-"Project-Id-Version: \n"
+"Language: es\n"
+"Project-Id-Version: documenso-app\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: \n"
+"PO-Revision-Date: 2024-11-14 12:05\n"
 "Last-Translator: \n"
-"Language-Team: \n"
-"Plural-Forms: \n"
+"Language-Team: Spanish\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: documenso-app\n"
+"X-Crowdin-Project-ID: 694691\n"
+"X-Crowdin-Language: es-ES\n"
+"X-Crowdin-File: common.po\n"
+"X-Crowdin-File-ID: 4\n"
 
 #: packages/email/template-components/template-document-super-delete.tsx:27
 msgid "\"{documentName}\" has been deleted by an admin."
-msgstr "\"{documentName}\" 已被管理員刪除。"
+msgstr "\"{documentName}\" ha sido eliminado por un admin."
 
 #: packages/email/template-components/template-document-pending.tsx:37
 msgid "“{documentName}” has been signed"
-msgstr "“{documentName}” 已簽署"
+msgstr "“{documentName}” ha sido firmado"
 
 #: packages/email/template-components/template-document-completed.tsx:41
 msgid "“{documentName}” was signed by all signers"
-msgstr "“{documentName}” 已由所有簽署者簽署完畢"
+msgstr "\"{documentName}\" fue firmado por todos los firmantes"
+
+#: packages/lib/server-only/document/resend-document.tsx:109
+#~ msgid "{0}"
+#~ msgstr "{0}"
+
+#: packages/email/template-components/template-document-invite.tsx:80
+#~ msgid "{0} Document"
+#~ msgstr "{0} Document"
 
 #: packages/lib/jobs/definitions/emails/send-signing-email.ts:137
 msgid "{0} has invited you to {recipientActionVerb} the document \"{1}\"."
-msgstr "{0} 已邀請您{recipientActionVerb}文件 \"{1}\"。"
+msgstr "{0} te ha invitado a {recipientActionVerb} el documento \"{1}\"."
 
 #: packages/lib/jobs/definitions/emails/send-signing-email.ts:130
 msgid "{0} invited you to {recipientActionVerb} a document"
-msgstr "{0} 邀請您{recipientActionVerb}文件"
+msgstr "{0} te invitó a {recipientActionVerb} un documento"
 
 #: packages/email/templates/team-join.tsx:61
 msgid "{0} joined the team {teamName} on Documenso"
-msgstr "{0} 已加入團隊 {teamName} 並在 Documenso 上。"
+msgstr "{0} se unió al equipo {teamName} en Documenso"
 
 #: packages/email/templates/team-leave.tsx:61
 msgid "{0} left the team {teamName} on Documenso"
-msgstr "{0} 已離開 Documenso 上的團隊 {teamName}"
+msgstr "{0} dejó el equipo {teamName} en Documenso"
 
 #: packages/ui/primitives/data-table-pagination.tsx:30
 msgid "{0} of {1} row(s) selected."
-msgstr "已選擇 {0} 筆中的 {1} 筆資料。"
+msgstr "{0} de {1} fila(s) seleccionada."
 
 #: packages/lib/jobs/definitions/emails/send-signing-email.ts:136
 #: packages/lib/server-only/document/resend-document.tsx:137
 msgid "{0} on behalf of {1} has invited you to {recipientActionVerb} the document \"{2}\"."
-msgstr "{0} 代表 {1} 邀請您{recipientActionVerb}檔案 \\{2}\\。"
+msgstr "{0} en nombre de {1} te ha invitado a {recipientActionVerb} el documento \"{2}\"."
+
+#: packages/email/template-components/template-document-invite.tsx:51
+#~ msgid "{0}<0/>\"{documentName}\""
+#~ msgstr "{0}<0/>\"{documentName}\""
 
 #: packages/email/templates/document-invite.tsx:94
 msgid "{inviterName} <0>({inviterEmail})</0>"
-msgstr "{inviterName} <0>（{inviterEmail}）</0>"
+msgstr "{inviterName} <0>({inviterEmail})</0>"
 
 #: packages/email/templates/document-cancel.tsx:21
 msgid "{inviterName} has cancelled the document {documentName}, you don't need to sign it anymore."
-msgstr "{inviterName} 已取消文件 {documentName}，您不再需要簽署。"
+msgstr "{inviterName} ha cancelado el documento {documentName}, ya no necesitas firmarlo."
 
 #: packages/email/template-components/template-document-cancel.tsx:24
 msgid "{inviterName} has cancelled the document<0/>\"{documentName}\""
-msgstr "{inviterName} 已取消文件<0/>\\{documentName}\\"
+msgstr "{inviterName} ha cancelado el documento<0/>\"{documentName}\""
 
 #: packages/email/template-components/template-document-invite.tsx:75
 msgid "{inviterName} has invited you to {0}<0/>\"{documentName}\""
-msgstr "{inviterName} 已邀請您加入 {0}<0/>\\{documentName}\\"
+msgstr "{inviterName} te ha invitado a {0}<0/>\"{documentName}\""
 
 #: packages/email/templates/document-invite.tsx:41
 msgid "{inviterName} has invited you to {action} {documentName}"
-msgstr "{inviterName} 邀請您{action} {documentName}"
+msgstr "{inviterName} te ha invitado a {action} {documentName}"
 
 #: packages/email/templates/document-invite.tsx:106
 msgid "{inviterName} has invited you to {action} the document \"{documentName}\"."
-msgstr "{inviterName} 邀請您{action}文件 \\{documentName}\\。"
+msgstr "{inviterName} te ha invitado a {action} el documento \"{documentName}\"."
 
 #: packages/email/templates/recipient-removed-from-document.tsx:20
 msgid "{inviterName} has removed you from the document {documentName}."
-msgstr "{inviterName} 已將您從文件 {documentName} 中移除。"
+msgstr "{inviterName} te ha eliminado del documento {documentName}."
 
 #: packages/email/templates/recipient-removed-from-document.tsx:49
 msgid "{inviterName} has removed you from the document<0/>\"{documentName}\""
-msgstr "{inviterName} 已將您從文件中移除<0/>\\{documentName}\\"
+msgstr "{inviterName} te ha eliminado del documento<0/>\"{documentName}\""
 
 #: packages/email/template-components/template-document-invite.tsx:63
 msgid "{inviterName} on behalf of {teamName} has invited you to {0}"
-msgstr "{inviterName} 代表 {teamName} 邀請您加入 {0}"
+msgstr "{inviterName} en nombre de {teamName} te ha invitado a {0}"
+
+#: packages/email/template-components/template-document-invite.tsx:49
+#~ msgid "{inviterName} on behalf of {teamName} has invited you to {0}<0/>\"{documentName}\""
+#~ msgstr "{inviterName} on behalf of {teamName} has invited you to {0}<0/>\"{documentName}\""
 
 #: packages/email/templates/document-invite.tsx:45
 msgid "{inviterName} on behalf of {teamName} has invited you to {action} {documentName}"
-msgstr "{inviterName} 代表 {teamName} 邀請您 {action} {documentName}"
+msgstr "{inviterName} en nombre de {teamName} te ha invitado a {action} {documentName}"
 
 #: packages/email/templates/team-join.tsx:67
 msgid "{memberEmail} joined the following team"
-msgstr "{memberEmail} 加入了以下團隊"
+msgstr "{memberEmail} se unió al siguiente equipo"
 
 #: packages/email/templates/team-leave.tsx:67
 msgid "{memberEmail} left the following team"
-msgstr "{memberEmail} 離開了以下團隊"
+msgstr "{memberEmail} dejó el siguiente equipo"
 
 #: packages/lib/utils/document-audit-logs.ts:263
 msgid "{prefix} added a field"
-msgstr "{prefix} 新增了一個欄位"
+msgstr "{prefix} agregó un campo"
 
 #: packages/lib/utils/document-audit-logs.ts:275
 msgid "{prefix} added a recipient"
-msgstr "{prefix} 新增了一位收件人"
+msgstr "{prefix} agregó un destinatario"
 
 #: packages/lib/utils/document-audit-logs.ts:287
 msgid "{prefix} created the document"
-msgstr "{prefix} 建立了文件"
+msgstr "{prefix} creó el documento"
 
 #: packages/lib/utils/document-audit-logs.ts:291
 msgid "{prefix} deleted the document"
-msgstr "{prefix} 已刪除文件"
+msgstr "{prefix} eliminó el documento"
 
 #: packages/lib/utils/document-audit-logs.ts:335
 msgid "{prefix} moved the document to team"
-msgstr "{prefix} 已將文件移動到團隊"
+msgstr "{prefix} movió el documento al equipo"
 
 #: packages/lib/utils/document-audit-logs.ts:319
 msgid "{prefix} opened the document"
-msgstr "{prefix} 已開啟文件"
+msgstr "{prefix} abrió el documento"
 
 #: packages/lib/utils/document-audit-logs.ts:267
 msgid "{prefix} removed a field"
-msgstr "{prefix} 移除了欄位"
+msgstr "{prefix} eliminó un campo"
 
 #: packages/lib/utils/document-audit-logs.ts:279
 msgid "{prefix} removed a recipient"
-msgstr "{prefix} 已移除收件者"
+msgstr "{prefix} eliminó un destinatario"
 
 #: packages/lib/utils/document-audit-logs.ts:365
 msgid "{prefix} resent an email to {0}"
-msgstr "{prefix} 重新發送了一封電子郵件給 {0}"
+msgstr "{prefix} reenviaron un correo electrónico a {0}"
 
 #: packages/lib/utils/document-audit-logs.ts:366
 msgid "{prefix} sent an email to {0}"
-msgstr "{prefix} 已向 {0} 發送一封電子郵件"
+msgstr "{prefix} envió un correo electrónico a {0}"
 
 #: packages/lib/utils/document-audit-logs.ts:331
 msgid "{prefix} sent the document"
-msgstr "{prefix} 已傳送文件"
+msgstr "{prefix} envió el documento"
 
 #: packages/lib/utils/document-audit-logs.ts:295
 msgid "{prefix} signed a field"
-msgstr "{prefix} 已簽署一個欄位"
+msgstr "{prefix} firmó un campo"
 
 #: packages/lib/utils/document-audit-logs.ts:299
 msgid "{prefix} unsigned a field"
-msgstr "{prefix} 未簽名的欄位"
+msgstr "{prefix} no firmó un campo"
 
 #: packages/lib/utils/document-audit-logs.ts:271
 msgid "{prefix} updated a field"
-msgstr "{prefix} 已更新一個欄位"
+msgstr "{prefix} actualizó un campo"
 
 #: packages/lib/utils/document-audit-logs.ts:283
 msgid "{prefix} updated a recipient"
-msgstr "{prefix} 已更新收件人"
+msgstr "{prefix} actualizó un destinatario"
 
 #: packages/lib/utils/document-audit-logs.ts:315
 msgid "{prefix} updated the document"
-msgstr "{prefix} 更新了文件"
+msgstr "{prefix} actualizó el documento"
 
 #: packages/lib/utils/document-audit-logs.ts:307
 msgid "{prefix} updated the document access auth requirements"
-msgstr "{prefix} 已更新文件存取授權要求"
+msgstr "{prefix} actualizó los requisitos de autorización de acceso al documento"
 
 #: packages/lib/utils/document-audit-logs.ts:327
 msgid "{prefix} updated the document external ID"
-msgstr "{prefix} 更新了文件外部 ID"
+msgstr "{prefix} actualizó el ID externo del documento"
 
 #: packages/lib/utils/document-audit-logs.ts:311
 msgid "{prefix} updated the document signing auth requirements"
-msgstr "{prefix} 已更新文件簽署驗證要求"
+msgstr "{prefix} actualizó los requisitos de autenticación para la firma del documento"
 
 #: packages/lib/utils/document-audit-logs.ts:323
 msgid "{prefix} updated the document title"
-msgstr "{prefix} 已更新文件標題"
+msgstr "{prefix} actualizó el título del documento"
 
 #: packages/lib/utils/document-audit-logs.ts:303
 msgid "{prefix} updated the document visibility"
-msgstr "{prefix} 已更新文件可見性"
+msgstr "{prefix} actualizó la visibilidad del documento"
 
 #: packages/email/templates/document-created-from-direct-template.tsx:61
 msgid "{recipientName} {action} a document by using one of your direct links"
-msgstr "{recipientName} {action} 了一份文件，使用了您的直接連結。"
+msgstr "{recipientName} {action} un documento utilizando uno de tus enlaces directos"
 
 #: packages/email/templates/document-rejected.tsx:27
 msgid "{recipientName} has rejected the document '{documentName}'"
-msgstr ""
+msgstr "{recipientName} ha rechazado el documento '{documentName}'"
 
 #: packages/email/template-components/template-document-rejected.tsx:25
 msgid "{signerName} has rejected the document \"{documentName}\"."
-msgstr ""
+msgstr "{signerName} ha rechazado el documento \"{documentName}\"."
 
 #: packages/email/template-components/template-document-invite.tsx:68
 msgid "{teamName} has invited you to {0}"
-msgstr "{teamName} 已邀請您加入 {0}"
+msgstr "{teamName} te ha invitado a {0}"
 
 #: packages/email/templates/document-invite.tsx:46
 msgid "{teamName} has invited you to {action} {documentName}"
-msgstr "{teamName} 已邀請您{action} {documentName}"
+msgstr "{teamName} te ha invitado a {action} {documentName}"
 
 #: packages/email/templates/team-transfer-request.tsx:55
 msgid "{teamName} ownership transfer request"
-msgstr "{teamName} 所有權轉移請求"
+msgstr "solicitud de transferencia de propiedad de {teamName}"
 
 #: packages/lib/utils/document-audit-logs.ts:343
 msgid "{userName} approved the document"
-msgstr "{userName} 已核准此文件"
+msgstr "{userName} aprobó el documento"
 
 #: packages/lib/utils/document-audit-logs.ts:344
 msgid "{userName} CC'd the document"
-msgstr "{userName} 已將文件副本發送給其他人"
+msgstr "{userName} envió una copia del documento"
 
 #: packages/lib/utils/document-audit-logs.ts:345
 msgid "{userName} completed their task"
-msgstr "{userName} 完成了他們的任務"
+msgstr "{userName} completó su tarea"
 
 #: packages/lib/utils/document-audit-logs.ts:355
 msgid "{userName} rejected the document"
-msgstr ""
+msgstr "{userName} rechazó el documento"
 
 #: packages/lib/utils/document-audit-logs.ts:341
 msgid "{userName} signed the document"
-msgstr "{userName} 已簽署文件"
+msgstr "{userName} firmó el documento"
 
 #: packages/lib/utils/document-audit-logs.ts:342
 msgid "{userName} viewed the document"
-msgstr "{userName} 查看了文件"
+msgstr "{userName} vio el documento"
 
 #: packages/ui/primitives/data-table-pagination.tsx:41
 msgid "{visibleRows, plural, one {Showing # result.} other {Showing # results.}}"
-msgstr "{visibleRows, plural, one {顯示 # 筆結果。} other {顯示 # 筆結果。}}"
+msgstr "{visibleRows, plural, one {Mostrando # resultado.} other {Mostrando # resultados.}}"
+
+#: packages/email/templates/document-invite.tsx:100
+#~ msgid "`${inviterName} has invited you to ${action} the document \"${documentName}\".`"
+#~ msgstr "`${inviterName} has invited you to ${action} the document \"${documentName}\".`"
 
 #: packages/email/templates/team-transfer-request.tsx:59
 msgid "<0>{senderName}</0> has requested that you take ownership of the following team"
-msgstr "<0>{senderName}</0> 已請求您接管以下團隊的所有權"
+msgstr "<0>{senderName}</0> ha solicitado que asumas la propiedad del siguiente equipo"
 
 #: packages/email/templates/confirm-team-email.tsx:75
 msgid "<0>{teamName}</0> has requested to use your email address for their team on Documenso."
-msgstr "<0>{teamName}</0> 已申請使用您的電子郵件地址作為他們在 Documenso 團隊上的聯繫方式。"
+msgstr "<0>{teamName}</0> ha solicitado usar tu dirección de correo electrónico para su equipo en Documenso."
 
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:239
 msgid "<0>Email</0> - The recipient will be emailed the document to sign, approve, etc."
-msgstr "<0>電子郵件</0> - 收件人將通過電子郵件收到文件以進行簽署、批准等。"
+msgstr "<0>Correo electrónico</0> - Al destinatario se le enviará el documento para firmar, aprobar, etc."
 
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:53
 msgid "<0>Inherit authentication method</0> - Use the global action signing authentication method configured in the \"General Settings\" step"
-msgstr "<0>繼承驗證方法</0> - 使用在\\一般設定\\步驟中配置的全域動作簽署驗證方法"
+msgstr "<0>Heredar método de autenticación</0> - Use el método de autenticación de firma de acción global configurado en el paso \"Configuración General\""
 
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:245
 msgid "<0>Links</0> - We will generate links which you can send to the recipients manually."
-msgstr "<0>連結</0> - 我們將生成連結，您可以手動將其發送給收件者。"
+msgstr "<0>Enlaces</0> - Generaremos enlaces que puedes enviar a los destinatarios manualmente."
 
 #: packages/ui/components/document/document-global-auth-action-select.tsx:95
 msgid "<0>No restrictions</0> - No authentication required"
-msgstr "<0>無限制</0> - 無需身份驗證"
+msgstr "<0>Sin restricciones</0> - No se requiere autenticación"
 
 #: packages/ui/components/document/document-global-auth-access-select.tsx:77
 msgid "<0>No restrictions</0> - The document can be accessed directly by the URL sent to the recipient"
-msgstr "<0>無限制</0> - 文件可以通過發送給接收者的 URL 直接訪問"
+msgstr "<0>Sin restricciones</0> - El documento se puede acceder directamente a través de la URL enviada al destinatario"
 
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:75
 msgid "<0>None</0> - No authentication required"
-msgstr "<0>無</0> - 不需要驗證"
+msgstr "<0>Ninguno</0> - No se requiere autenticación"
 
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:252
 msgid "<0>Note</0> - If you use Links in combination with direct templates, you will need to manually send the links to the remaining recipients."
-msgstr "<0>注意</0> - 如果您將連結與直接範本結合使用，您將需要手動將連結發送給其餘的收件者。"
+msgstr "<0>Nota</0> - Si usas Enlaces en combinación con plantillas directas, necesitarás enviar manualmente los enlaces a los destinatarios restantes."
 
 #: packages/ui/components/document/document-global-auth-action-select.tsx:89
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:69
 msgid "<0>Require 2FA</0> - The recipient must have an account and 2FA enabled via their settings"
-msgstr "<0>需要雙重身份驗證 (2FA)</0> - 收件人必須擁有一個帳戶，並通過其設定啟用雙重身份驗證 (2FA)。"
+msgstr "<0>Requerir 2FA</0> - El destinatario debe tener una cuenta y 2FA habilitado a través de sus configuraciones"
 
 #: packages/ui/components/document/document-global-auth-access-select.tsx:72
 msgid "<0>Require account</0> - The recipient must be signed in to view the document"
-msgstr "<0>需要帳戶</0> - 接收者必須登入才能查看文件"
+msgstr "<0>Requerir cuenta</0> - El destinatario debe haber iniciado sesión para ver el documento"
 
 #: packages/ui/components/document/document-global-auth-action-select.tsx:83
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:63
 msgid "<0>Require passkey</0> - The recipient must have an account and passkey configured via their settings"
-msgstr "<0>需要通行碼</0> - 接收者必須擁有一個帳戶，並在其設置中配置通行碼。"
+msgstr "<0>Requerir clave de acceso</0> - El destinatario debe tener una cuenta y clave de acceso configurada a través de sus configuraciones"
 
 #: packages/lib/jobs/definitions/emails/send-signing-email.ts:122
 msgid "A document was created by your direct template that requires you to {recipientActionVerb} it."
-msgstr "一份文件已由您的直接模板創建，需您{recipientActionVerb}。"
+msgstr "Se creó un documento a partir de tu plantilla directa que requiere que {recipientActionVerb}."
 
 #: packages/lib/utils/document-audit-logs.ts:262
 msgid "A field was added"
-msgstr "已新增欄位"
+msgstr "Se añadió un campo"
 
 #: packages/lib/utils/document-audit-logs.ts:266
 msgid "A field was removed"
-msgstr "一個欄位已被移除"
+msgstr "Se eliminó un campo"
 
 #: packages/lib/utils/document-audit-logs.ts:270
 msgid "A field was updated"
-msgstr "欄位已更新"
+msgstr "Se actualizó un campo"
 
 #: packages/lib/jobs/definitions/emails/send-team-member-joined-email.ts:107
 msgid "A new member has joined your team"
-msgstr "有新成員加入您的團隊"
+msgstr "Un nuevo miembro se ha unido a tu equipo"
 
 #: packages/lib/utils/document-audit-logs.ts:274
 msgid "A recipient was added"
-msgstr "已新增一位收件者"
+msgstr "Se añadió un destinatario"
 
 #: packages/lib/utils/document-audit-logs.ts:278
 msgid "A recipient was removed"
-msgstr "已移除收件者"
+msgstr "Se eliminó un destinatario"
 
 #: packages/lib/utils/document-audit-logs.ts:282
 msgid "A recipient was updated"
-msgstr "收件者已更新"
+msgstr "Se actualizó un destinatario"
 
 #: packages/lib/server-only/team/create-team-email-verification.ts:156
 msgid "A request to use your email has been initiated by {0} on Documenso"
-msgstr "{0} 已在 Documenso 上發起使用您的電子郵件的請求。"
+msgstr "Se ha iniciado una solicitud para usar tu correo electrónico por {0} en Documenso"
+
+#: packages/lib/server-only/team/create-team-email-verification.ts:142
+#~ msgid "A request to use your email has been initiated by {teamName} on Documenso"
+#~ msgstr "A request to use your email has been initiated by {teamName} on Documenso"
 
 #: packages/email/templates/team-join.tsx:31
 msgid "A team member has joined a team on Documenso"
-msgstr "一位團隊成員已加入 Documenso 團隊"
+msgstr "Un miembro del equipo se ha unido a un equipo en Documenso"
 
 #: packages/lib/jobs/definitions/emails/send-team-member-left-email.ts:96
 msgid "A team member has left {0}"
-msgstr "團隊成員已離開{0}"
+msgstr "Un miembro del equipo ha dejado {0}"
 
 #: packages/email/templates/team-leave.tsx:31
 msgid "A team member has left a team on Documenso"
-msgstr "團隊成員已離開 Documenso 的團隊"
+msgstr "Un miembro del equipo ha dejado un equipo en Documenso"
 
 #: packages/email/templates/team-delete.tsx:29
 #: packages/email/templates/team-delete.tsx:33
 msgid "A team you were a part of has been deleted"
-msgstr "您所屬的團隊已經被刪除"
+msgstr "Un equipo del que formabas parte ha sido eliminado"
 
 #: packages/email/templates/confirm-team-email.tsx:118
 #: packages/email/templates/team-invite.tsx:94
 #: packages/email/templates/team-transfer-request.tsx:81
 msgid "Accept"
-msgstr "接受"
+msgstr "Aceptar"
 
 #: packages/email/templates/team-invite.tsx:42
 msgid "Accept invitation to join a team on Documenso"
-msgstr "接受邀請加入 Documenso 團隊"
+msgstr "Aceptar invitación para unirse a un equipo en Documenso"
 
 #: packages/email/templates/confirm-team-email.tsx:41
 msgid "Accept team email request for {teamName} on Documenso"
-msgstr "在 Documenso 上接受 {teamName} 的團隊電子郵件請求"
+msgstr "Aceptar la solicitud de correo electrónico del equipo para {teamName} en Documenso"
 
 #: packages/email/templates/team-transfer-request.tsx:29
 msgid "Accept team transfer request on Documenso"
-msgstr "接受團隊轉移申請บน Documenso"
+msgstr "Aceptar solicitud de transferencia de equipo en Documenso"
 
 #: packages/ui/primitives/document-dropzone.tsx:69
 msgid "Add a document"
-msgstr "新增文件"
+msgstr "Agregar un documento"
 
 #: packages/ui/primitives/document-flow/add-settings.tsx:376
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:466
 msgid "Add a URL to redirect the user to once the document is signed"
-msgstr "添加一個URL，以便在文件簽署後重定向使用者"
+msgstr "Agregue una URL para redirigir al usuario una vez que se firme el documento"
 
 #: packages/ui/primitives/document-flow/add-settings.tsx:288
 msgid "Add an external ID to the document. This can be used to identify the document in external systems."
-msgstr "新增一個外部 ID 到文件中。此外部 ID 可用於在外部系統中識別文件。"
+msgstr "Agregue un ID externo al documento. Esto se puede usar para identificar el documento en sistemas externos."
 
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:383
 msgid "Add an external ID to the template. This can be used to identify in external systems."
-msgstr "將外部 ID 添加到範本中。這可用於在外部系統中識別。"
+msgstr "Agregue un ID externo a la plantilla. Esto se puede usar para identificar en sistemas externos."
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/dropdown-field.tsx:187
 msgid "Add another option"
-msgstr "新增另一個選項"
+msgstr "Agregar otra opción"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/checkbox-field.tsx:232
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/radio-field.tsx:167
 msgid "Add another value"
-msgstr "新增另一個值"
+msgstr "Agregar otro valor"
 
 #: packages/ui/primitives/document-flow/add-signers.tsx:691
 msgid "Add myself"
-msgstr "新增自己"
+msgstr "Agregame"
 
 #: packages/ui/primitives/template-flow/add-template-placeholder-recipients.tsx:637
 msgid "Add Myself"
-msgstr "新增自己"
+msgstr "Agregame"
 
 #: packages/ui/primitives/template-flow/add-template-placeholder-recipients.tsx:623
 msgid "Add Placeholder Recipient"
-msgstr "新增佔位符收件者"
+msgstr "Agregar destinatario de marcador de posición"
 
 #: packages/ui/primitives/document-flow/add-signers.tsx:680
 msgid "Add Signer"
-msgstr "新增簽署者"
+msgstr "Agregar firmante"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/text-field.tsx:73
 msgid "Add text"
-msgstr "新增文字"
+msgstr "Agregar texto"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/text-field.tsx:78
 msgid "Add text to the field"
-msgstr "將文字新增到欄位中"
+msgstr "Agregar texto al campo"
 
 #: packages/lib/constants/teams.ts:10
 msgid "Admin"
-msgstr "管理員"
+msgstr "Admin"
 
 #: packages/ui/primitives/document-flow/add-settings.tsx:270
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:365
 msgid "Advanced Options"
-msgstr "進階選項"
+msgstr "Opciones avanzadas"
 
 #: packages/ui/primitives/document-flow/add-fields.tsx:573
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:406
 msgid "Advanced settings"
-msgstr "進階設定"
+msgstr "Configuraciones avanzadas"
 
 #: packages/lib/constants/template.ts:21
 msgid "After submission, a document will be automatically generated and added to your documents page. You will also receive a notification via email."
-msgstr "提交後，將自動生成一份文件並添加到您的文件頁面中。您也會通過電子郵件收到通知。"
+msgstr "Después de la presentación, se generará automáticamente un documento y se agregará a su página de documentos. También recibirá una notificación por correo electrónico."
 
 #: packages/email/template-components/template-document-cancel.tsx:31
 msgid "All signatures have been voided."
-msgstr "所有簽名均已失效。"
+msgstr "Todas las firmas han sido anuladas."
 
 #: packages/email/templates/confirm-team-email.tsx:98
 msgid "Allow document recipients to reply directly to this email address"
-msgstr "允許文件收件者直接回覆到此電子郵件地址"
+msgstr "Permitir que los destinatarios del documento respondan directamente a esta dirección de correo electrónico"
 
 #: packages/email/templates/document-super-delete.tsx:22
 msgid "An admin has deleted your document \"{documentName}\"."
-msgstr "管理員已經刪除了您的文件 \"{documentName}\"。"
+msgstr "Un administrador ha eliminado tu documento \"{documentName}\"."
 
 #: packages/ui/primitives/pdf-viewer.tsx:167
 msgid "An error occurred while loading the document."
-msgstr "載入文件時發生錯誤。"
+msgstr "Se produjo un error al cargar el documento."
 
 #: packages/lib/constants/recipient-roles.ts:8
 msgid "Approve"
-msgstr "核准"
+msgstr "Aprobar"
 
 #: packages/email/template-components/template-document-invite.tsx:106
 msgid "Approve Document"
-msgstr "核准文件"
+msgstr "Aprobar Documento"
+
+#: packages/lib/constants/recipient-roles.ts:68
+#~ msgid "APPROVE_REQUEST"
+#~ msgstr "APPROVE_REQUEST"
 
 #: packages/lib/constants/recipient-roles.ts:9
 msgid "Approved"
-msgstr "批准"
+msgstr "Aprobado"
 
 #: packages/lib/constants/recipient-roles.ts:11
 msgid "Approver"
-msgstr "核准者"
+msgstr "Aprobador"
 
 #: packages/lib/constants/recipient-roles.ts:12
 msgid "Approvers"
-msgstr "審批者"
+msgstr "Aprobadores"
 
 #: packages/lib/constants/recipient-roles.ts:10
 msgid "Approving"
-msgstr "核准中"
+msgstr "Aprobando"
 
 #: packages/email/template-components/template-confirmation-email.tsx:25
 msgid "Before you get started, please confirm your email address by clicking the button below:"
-msgstr "在開始之前，請點擊下方按鈕確認您的電子郵件地址："
+msgstr "Antes de comenzar, por favor confirma tu dirección de correo electrónico haciendo clic en el botón de abajo:"
 
 #: packages/ui/primitives/signature-pad/signature-pad.tsx:377
 msgid "Black"
-msgstr "黑色"
+msgstr "Negro"
 
 #: packages/ui/primitives/signature-pad/signature-pad.tsx:391
 msgid "Blue"
-msgstr "藍色"
+msgstr "Azul"
 
 #: packages/email/templates/team-invite.tsx:84
 msgid "by <0>{senderName}</0>"
-msgstr "由 <0>{senderName}</0>"
+msgstr "por <0>{senderName}</0>"
 
 #: packages/email/templates/confirm-team-email.tsx:87
 msgid "By accepting this request, you will be granting <0>{teamName}</0> access to:"
-msgstr "接受此請求即表示您將授予<0>{teamName}</0>以下權限："
+msgstr "Al aceptar esta solicitud, estarás concediendo a <0>{teamName}</0> acceso a:"
 
 #: packages/email/templates/team-transfer-request.tsx:70
 msgid "By accepting this request, you will take responsibility for any billing items associated with this team."
-msgstr "接受此請求後，您將承擔與此團隊相關的任何計費項目的責任。"
+msgstr "Al aceptar esta solicitud, asumirás la responsabilidad de cualquier ítem de facturación asociado con este equipo."
 
 #: packages/ui/primitives/document-flow/field-item-advanced-settings.tsx:356
 #: packages/ui/primitives/document-flow/send-document-action-dialog.tsx:58
 msgid "Cancel"
-msgstr "取消"
+msgstr "Cancelar"
 
 #: packages/ui/primitives/document-flow/add-signers.tsx:193
 msgid "Cannot remove signer"
-msgstr "無法移除簽署者"
+msgstr "No se puede eliminar el firmante"
 
 #: packages/lib/constants/recipient-roles.ts:18
 msgid "Cc"
@@ -507,7 +540,7 @@ msgstr "CC"
 
 #: packages/lib/constants/recipient-roles.ts:16
 msgid "CC'd"
-msgstr "抄送"
+msgstr "CC'd"
 
 #: packages/lib/constants/recipient-roles.ts:19
 msgid "Ccers"
@@ -515,247 +548,254 @@ msgstr "Ccers"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/text-field.tsx:86
 msgid "Character Limit"
-msgstr "字元限制"
+msgstr "Límite de caracteres"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/checkbox-field.tsx:197
 msgid "Checkbox values"
-msgstr "核取方塊值"
+msgstr "Valores de Checkbox"
 
 #: packages/ui/primitives/data-table.tsx:156
 msgid "Clear filters"
-msgstr "清除篩選條件"
+msgstr "Limpiar filtros"
 
 #: packages/ui/primitives/signature-pad/signature-pad.tsx:411
 msgid "Clear Signature"
-msgstr "清除簽名"
+msgstr "Limpiar firma"
 
 #: packages/ui/primitives/document-flow/add-signature.tsx:394
 msgid "Click to insert field"
-msgstr "點選以插入欄位"
+msgstr "Haga clic para insertar campo"
 
 #: packages/ui/primitives/document-flow/missing-signature-field-dialog.tsx:44
 msgid "Close"
-msgstr "關閉"
+msgstr "Cerrar"
 
 #: packages/email/template-components/template-document-completed.tsx:35
 #: packages/email/template-components/template-document-self-signed.tsx:36
 #: packages/lib/constants/document.ts:10
 msgid "Completed"
-msgstr "已完成"
+msgstr "Completado"
 
 #: packages/email/templates/document-completed.tsx:23
 #: packages/email/templates/document-self-signed.tsx:19
 msgid "Completed Document"
-msgstr "已完成文件"
+msgstr "Documento completado"
 
 #: packages/lib/constants/template.ts:12
 msgid "Configure Direct Recipient"
-msgstr "配置直接接收者"
+msgstr "Configurar destinatario directo"
 
 #: packages/ui/primitives/document-flow/add-fields.tsx:574
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:407
 msgid "Configure the {0} field"
-msgstr "配置 {0} 欄位"
+msgstr "Configurar el campo {0}"
 
 #: packages/email/template-components/template-confirmation-email.tsx:35
 msgid "Confirm email"
-msgstr "確認電子郵件"
+msgstr "Confirmar correo electrónico"
 
 #: packages/ui/primitives/document-flow/document-flow-root.tsx:141
 msgid "Continue"
-msgstr "繼續"
+msgstr "Continuar"
+
+#: packages/email/template-components/template-document-invite.tsx:72
+#~ msgid "Continue by {0} the document."
+#~ msgstr "Continue by {0} the document."
 
 #: packages/email/template-components/template-document-invite.tsx:86
 msgid "Continue by approving the document."
-msgstr "繼續批准文件。"
+msgstr "Continúa aprobando el documento."
 
 #: packages/email/template-components/template-document-completed.tsx:45
 msgid "Continue by downloading the document."
-msgstr "繼續下載文件。"
+msgstr "Continúa descargando el documento."
 
 #: packages/email/template-components/template-document-invite.tsx:84
 msgid "Continue by signing the document."
-msgstr "繼續簽署文件。"
+msgstr "Continúa firmando el documento."
 
 #: packages/email/template-components/template-document-invite.tsx:85
 msgid "Continue by viewing the document."
-msgstr "繼續查看文件。"
+msgstr "Continúa viendo el documento."
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:254
 msgid "Copied"
-msgstr "已複製"
+msgstr "Copiado"
 
 #: packages/ui/components/document/document-share-button.tsx:46
 #: packages/ui/primitives/document-flow/add-subject.tsx:241
 msgid "Copied to clipboard"
-msgstr "已複製到剪貼簿"
+msgstr "Copiado al portapapeles"
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:249
 msgid "Copy"
-msgstr "複製"
+msgstr "Copiar"
 
 #: packages/ui/components/document/document-share-button.tsx:194
 msgid "Copy Link"
-msgstr "複製連結"
+msgstr "Copiar enlace"
 
 #: packages/email/template-components/template-document-self-signed.tsx:46
 msgid "Create a <0>free account</0> to access your signed documents at any time."
-msgstr "建立一個<0>免費帳戶</0>以隨時訪問您的已簽署文件。"
+msgstr "Crea una <0>cuenta gratuita</0> para acceder a tus documentos firmados en cualquier momento."
 
 #: packages/email/template-components/template-document-self-signed.tsx:68
 msgid "Create account"
-msgstr "建立帳戶"
+msgstr "Crear cuenta"
 
 #: packages/ui/primitives/document-flow/add-signature.tsx:360
 msgid "Custom Text"
-msgstr "自訂文字"
+msgstr "Texto personalizado"
 
 #: packages/ui/primitives/document-flow/add-fields.tsx:927
 #: packages/ui/primitives/document-flow/types.ts:53
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:690
 msgid "Date"
-msgstr "日期"
+msgstr "Fecha"
 
 #: packages/ui/primitives/document-flow/add-settings.tsx:311
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:406
 msgid "Date Format"
-msgstr "日期格式"
+msgstr "Formato de fecha"
 
 #: packages/email/templates/team-invite.tsx:100
 msgid "Decline"
-msgstr "拒絕"
+msgstr "Rechazar"
 
 #: packages/email/templates/reset-password.tsx:71
 msgid "Didn't request a password change? We are here to help you secure your account, just <0>contact us.</0>"
-msgstr "未請求更改密碼？我們在這裡幫助您保護帳戶，只需<0>聯絡我們。</0>"
+msgstr "¿No solicitaste un cambio de contraseña? Estamos aquí para ayudarte a asegurar tu cuenta, solo <0>contáctanos.</0>"
 
 #: packages/ui/primitives/template-flow/add-template-placeholder-recipients.tsx:570
 msgid "Direct link receiver"
-msgstr "直接連結接收者"
+msgstr "Receptor de enlace directo"
 
 #: packages/lib/jobs/definitions/emails/send-rejection-emails.ts:149
 msgid "Document \"{0}\" - Rejected by {1}"
-msgstr ""
+msgstr "Documento \"{0}\" - Rechazado por {1}"
 
 #: packages/lib/jobs/definitions/emails/send-rejection-emails.ts:109
 msgid "Document \"{0}\" - Rejection Confirmed"
-msgstr ""
+msgstr "Documento \"{0}\" - Rechazo confirmado"
 
 #: packages/ui/components/document/document-global-auth-access-select.tsx:62
 #: packages/ui/primitives/document-flow/add-settings.tsx:214
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:200
 msgid "Document access"
-msgstr "文件存取權限"
+msgstr "Acceso al documento"
 
 #: packages/lib/utils/document-audit-logs.ts:306
 msgid "Document access auth updated"
-msgstr "文件訪問授權已更新"
+msgstr "Se actualizó la autenticación de acceso al documento"
 
 #: packages/lib/server-only/document/delete-document.ts:246
 #: packages/lib/server-only/document/super-delete-document.ts:98
 msgid "Document Cancelled"
-msgstr "文件已取消"
+msgstr "Documento cancelado"
 
 #: packages/lib/utils/document-audit-logs.ts:369
 #: packages/lib/utils/document-audit-logs.ts:370
 msgid "Document completed"
-msgstr "文件已完成"
+msgstr "Documento completado"
 
 #: packages/ui/components/document/document-email-checkboxes.tsx:168
 msgid "Document completed email"
-msgstr "文件已完成電子郵件"
+msgstr "Correo electrónico de documento completado"
 
 #: packages/lib/utils/document-audit-logs.ts:286
 msgid "Document created"
-msgstr "文件已建立"
+msgstr "Documento creado"
 
 #: packages/email/templates/document-created-from-direct-template.tsx:32
 #: packages/lib/server-only/template/create-document-from-direct-template.ts:567
 msgid "Document created from direct template"
-msgstr "從直接範本建立的文件"
+msgstr "Documento creado a partir de plantilla directa"
 
 #: packages/lib/constants/template.ts:20
 msgid "Document Creation"
-msgstr "文件建立"
+msgstr "Creación de documento"
 
 #: packages/lib/utils/document-audit-logs.ts:290
 msgid "Document deleted"
-msgstr "文件已刪除"
+msgstr "Documento eliminado"
 
 #: packages/ui/components/document/document-email-checkboxes.tsx:207
 msgid "Document deleted email"
-msgstr "文件已刪除的電子郵件"
+msgstr "Correo electrónico de documento eliminado"
 
 #: packages/lib/server-only/document/send-delete-email.ts:82
 msgid "Document Deleted!"
-msgstr "文件已刪除！"
+msgstr "¡Documento eliminado!"
 
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:217
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:226
 msgid "Document Distribution Method"
-msgstr "文件分發方式"
+msgstr "Método de distribución de documentos"
 
 #: packages/lib/utils/document-audit-logs.ts:326
 msgid "Document external ID updated"
-msgstr "文件外部 ID 已更新"
+msgstr "ID externo del documento actualizado"
 
 #: packages/lib/utils/document-audit-logs.ts:334
 msgid "Document moved to team"
-msgstr "文件已移動到團隊"
+msgstr "Documento movido al equipo"
 
 #: packages/lib/utils/document-audit-logs.ts:318
 msgid "Document opened"
-msgstr "文件已開啟"
+msgstr "Documento abierto"
 
 #: packages/ui/components/document/document-email-checkboxes.tsx:128
 msgid "Document pending email"
-msgstr "文件待處理電子郵件"
+msgstr "Correo electrónico de documento pendiente"
 
 #: packages/email/template-components/template-document-rejected.tsx:21
 msgid "Document Rejected"
-msgstr ""
+msgstr "Documento Rechazado"
+
+#~ msgid "Document Rejection Confirmed"
+#~ msgstr "Document Rejection Confirmed"
 
 #: packages/lib/utils/document-audit-logs.ts:330
 msgid "Document sent"
-msgstr "文件已發送"
+msgstr "Documento enviado"
 
 #: packages/lib/utils/document-audit-logs.ts:310
 msgid "Document signing auth updated"
-msgstr "文件簽署認證已更新"
+msgstr "Se actualizó la autenticación de firma del documento"
 
 #: packages/lib/utils/document-audit-logs.ts:322
 msgid "Document title updated"
-msgstr "檔案標題已更新"
+msgstr "Título del documento actualizado"
 
 #: packages/lib/utils/document-audit-logs.ts:314
 msgid "Document updated"
-msgstr "文件已更新"
+msgstr "Documento actualizado"
 
 #: packages/lib/utils/document-audit-logs.ts:302
 msgid "Document visibility updated"
-msgstr "文件可見性已更新"
+msgstr "Visibilidad del documento actualizada"
 
 #: packages/email/template-components/template-document-completed.tsx:57
 #: packages/ui/components/document/document-download-button.tsx:68
 msgid "Download"
-msgstr "下載"
+msgstr "Descargar"
 
 #: packages/lib/constants/document.ts:13
 msgid "Draft"
-msgstr "草稿"
+msgstr "Borrador"
 
 #: packages/ui/primitives/document-dropzone.tsx:162
 msgid "Drag & drop your PDF here."
-msgstr "將您的 PDF 拖放到此處。"
+msgstr "Arrastre y suelte su PDF aquí."
 
 #: packages/ui/primitives/document-flow/add-fields.tsx:1058
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:820
 msgid "Dropdown"
-msgstr "下拉選單"
+msgstr "Menú desplegable"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/dropdown-field.tsx:158
 msgid "Dropdown options"
-msgstr "下拉選項"
+msgstr "Opciones de menú desplegable"
 
 #: packages/lib/constants/document.ts:28
 #: packages/ui/primitives/document-flow/add-fields.tsx:875
@@ -767,62 +807,62 @@ msgstr "下拉選項"
 #: packages/ui/primitives/template-flow/add-template-placeholder-recipients.tsx:463
 #: packages/ui/primitives/template-flow/add-template-placeholder-recipients.tsx:470
 msgid "Email"
-msgstr "電子郵件"
+msgstr "Correo electrónico"
 
 #: packages/ui/primitives/document-flow/add-signature.types.ts:7
 msgid "Email is required"
-msgstr "需要提供電子郵件地址"
+msgstr "Se requiere email"
 
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:305
 msgid "Email Options"
-msgstr "電子郵件選項"
+msgstr "Opciones de correo electrónico"
 
 #: packages/lib/utils/document-audit-logs.ts:363
 msgid "Email resent"
-msgstr "已重新發送電子郵件"
+msgstr "Correo electrónico reeenviado"
 
 #: packages/lib/utils/document-audit-logs.ts:363
 msgid "Email sent"
-msgstr "電子郵件已發送"
+msgstr "Correo electrónico enviado"
 
 #: packages/ui/primitives/document-flow/add-fields.tsx:1123
 msgid "Empty field"
-msgstr "空白欄位"
+msgstr "Campo vacío"
 
 #: packages/lib/constants/template.ts:8
 msgid "Enable Direct Link Signing"
-msgstr "啟用直接連結簽署"
+msgstr "Habilitar firma de enlace directo"
 
 #: packages/ui/primitives/document-flow/add-signers.tsx:401
 #: packages/ui/primitives/template-flow/add-template-placeholder-recipients.tsx:362
 msgid "Enable signing order"
-msgstr "啟用簽署順序"
+msgstr "Habilitar orden de firma"
 
 #: packages/ui/primitives/document-flow/add-fields.tsx:795
 msgid "Enable Typed Signatures"
-msgstr "啟用鍵入簽名"
+msgstr "Habilitar firmas escritas"
 
 #: packages/ui/primitives/document-password-dialog.tsx:84
 msgid "Enter password"
-msgstr "輸入密碼"
+msgstr "Ingrese la contraseña"
 
 #: packages/ui/primitives/document-flow/field-item-advanced-settings.tsx:257
 #: packages/ui/primitives/pdf-viewer.tsx:166
 msgid "Error"
-msgstr "錯誤"
+msgstr "Error"
 
 #: packages/ui/primitives/document-flow/add-settings.tsx:281
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:376
 msgid "External ID"
-msgstr "外部ID"
+msgstr "ID externo"
 
 #: packages/ui/primitives/document-flow/field-item-advanced-settings.tsx:258
 msgid "Failed to save settings."
-msgstr "無法儲存設定。"
+msgstr "Fallo al guardar configuraciones."
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/text-field.tsx:93
 msgid "Field character limit"
-msgstr "欄位字元限制"
+msgstr "Límite de caracteres del campo"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/date-field.tsx:62
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/email-field.tsx:44
@@ -831,27 +871,27 @@ msgstr "欄位字元限制"
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:130
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/text-field.tsx:107
 msgid "Field font size"
-msgstr "欄位字體大小"
+msgstr "Tamaño de fuente del campo"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:110
 msgid "Field format"
-msgstr "欄位格式"
+msgstr "Formato de campo"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/text-field.tsx:53
 msgid "Field label"
-msgstr "欄位標籤"
+msgstr "Etiqueta de campo"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/text-field.tsx:65
 msgid "Field placeholder"
-msgstr "欄位佔位符"
+msgstr "Marcador de posición de campo"
 
 #: packages/lib/utils/document-audit-logs.ts:294
 msgid "Field signed"
-msgstr "已簽署欄位"
+msgstr "Campo firmado"
 
 #: packages/lib/utils/document-audit-logs.ts:298
 msgid "Field unsigned"
-msgstr "無符號欄位"
+msgstr "Campo no firmado"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/date-field.tsx:56
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/email-field.tsx:38
@@ -860,118 +900,121 @@ msgstr "無符號欄位"
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:124
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/text-field.tsx:101
 msgid "Font Size"
-msgstr "字型大小"
+msgstr "Tamaño de fuente"
 
 #: packages/lib/server-only/auth/send-forgot-password.ts:61
 msgid "Forgot Password?"
-msgstr "忘記密碼？"
+msgstr "¿Olvidaste tu contraseña?"
 
 #: packages/email/template-components/template-forgot-password.tsx:21
 msgid "Forgot your password?"
-msgstr "忘記密碼？"
+msgstr "¿Olvidaste tu contraseña?"
 
 #: packages/ui/primitives/document-flow/types.ts:50
 msgid "Free Signature"
-msgstr "免費簽名"
+msgstr "Firma gratuita"
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:89
 msgid "Generate Links"
-msgstr "生成連結"
+msgstr "Generar enlaces"
 
 #: packages/ui/components/document/document-global-auth-action-select.tsx:64
 msgid "Global recipient action authentication"
-msgstr "全球接收者操作驗證"
+msgstr "Autenticación de acción de destinatario global"
 
 #: packages/ui/primitives/document-flow/document-flow-root.tsx:142
 msgid "Go Back"
-msgstr "返回"
+msgstr "Regresar"
 
 #: packages/ui/primitives/signature-pad/signature-pad.tsx:398
 msgid "Green"
-msgstr "綠色"
+msgstr "Verde"
+
+#~ msgid "Hello {recipientName},"
+#~ msgstr "Hello {recipientName},"
 
 #: packages/email/templates/reset-password.tsx:56
 msgid "Hi, {userName} <0>({userEmail})</0>"
-msgstr "嗨，{userName} <0>（{userEmail}）</0>"
+msgstr "Hola, {userName} <0>({userEmail})</0>"
 
 #: packages/lib/constants/recipient-roles.ts:44
 msgid "I am a signer of this document"
-msgstr "我是此文件的簽署人"
+msgstr "Soy un firmante de este documento"
 
 #: packages/lib/constants/recipient-roles.ts:47
 msgid "I am a viewer of this document"
-msgstr "我是此文件的檢視者。"
+msgstr "Soy un visualizador de este documento"
 
 #: packages/lib/constants/recipient-roles.ts:45
 msgid "I am an approver of this document"
-msgstr "我是此文件的審核者"
+msgstr "Soy un aprobador de este documento"
 
 #: packages/lib/constants/recipient-roles.ts:46
 msgid "I am required to receive a copy of this document"
-msgstr "我需要收到此文件的副本。"
+msgstr "Se me requiere recibir una copia de este documento"
 
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:29
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:87
 msgid "Inherit authentication method"
-msgstr "繼承驗證方法"
+msgstr "Heredar método de autenticación"
 
 #: packages/ui/primitives/document-flow/types.ts:51
 msgid "Initials"
-msgstr "縮寫字母"
+msgstr "Iniciales"
 
 #: packages/ui/primitives/document-flow/add-signers.types.ts:17
 msgid "Invalid email"
-msgstr "無效的電子郵件地址"
+msgstr "Email inválido"
 
 #: packages/ui/primitives/document-flow/add-signature.types.ts:8
 msgid "Invalid email address"
-msgstr "無效的電子郵件地址"
+msgstr "Dirección de email inválida"
 
 #: packages/email/templates/team-invite.tsx:72
 msgid "Join {teamName} on Documenso"
-msgstr "加入 {teamName} 在 Documenso"
+msgstr "Únete a {teamName} en Documenso"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:67
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:72
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/text-field.tsx:48
 msgid "Label"
-msgstr "標籤"
+msgstr "Etiqueta"
 
 #: packages/ui/primitives/document-flow/add-settings.tsx:176
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:162
 msgid "Language"
-msgstr "語言"
+msgstr "Idioma"
 
 #: packages/email/templates/confirm-team-email.tsx:124
 #: packages/email/templates/team-transfer-request.tsx:87
 msgid "Link expires in 1 hour."
-msgstr "鏈接將在 1 小時後過期。"
+msgstr "El enlace expira en 1 hora."
 
 #: packages/ui/primitives/lazy-pdf-viewer.tsx:15
 #: packages/ui/primitives/pdf-viewer.tsx:44
 msgid "Loading document..."
-msgstr "正在載入文件..."
+msgstr "Cargando documento..."
 
 #: packages/lib/constants/teams.ts:11
 msgid "Manager"
-msgstr "管理員"
+msgstr "Gerente"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:188
 msgid "Max"
-msgstr "最大值"
+msgstr "Máx"
 
 #: packages/lib/constants/teams.ts:12
 msgid "Member"
-msgstr "會員"
+msgstr "Miembro"
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:160
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:336
 msgid "Message <0>(Optional)</0>"
-msgstr "訊息 <0>（可選）</0>"
+msgstr "Mensaje <0>(Opcional)</0>"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:176
 msgid "Min"
-msgstr "分鐘"
+msgstr "Mín"
 
 #: packages/ui/primitives/document-flow/add-fields.tsx:901
 #: packages/ui/primitives/document-flow/add-signature.tsx:298
@@ -982,158 +1025,158 @@ msgstr "分鐘"
 #: packages/ui/primitives/template-flow/add-template-placeholder-recipients.tsx:498
 #: packages/ui/primitives/template-flow/add-template-placeholder-recipients.tsx:504
 msgid "Name"
-msgstr "名字"
+msgstr "Nombre"
 
 #: packages/ui/components/recipient/recipient-role-select.tsx:52
 msgid "Needs to approve"
-msgstr "需要批准"
+msgstr "Necesita aprobar"
 
 #: packages/ui/components/recipient/recipient-role-select.tsx:31
 msgid "Needs to sign"
-msgstr "需要簽署"
+msgstr "Necesita firmar"
 
 #: packages/ui/components/recipient/recipient-role-select.tsx:73
 msgid "Needs to view"
-msgstr "需要檢視"
+msgstr "Necesita ver"
 
 #: packages/ui/primitives/document-flow/add-fields.tsx:686
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:504
 msgid "No recipient matching this description was found."
-msgstr "找不到符合此描述的收件人。"
+msgstr "No se encontró ningún destinatario que coincidiera con esta descripción."
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:215
 msgid "No recipients"
-msgstr "無收件人"
+msgstr "Sin destinatarios"
 
 #: packages/ui/primitives/document-flow/add-fields.tsx:701
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:519
 msgid "No recipients with this role"
-msgstr "此角色沒有收件人"
+msgstr "No hay destinatarios con este rol"
 
 #: packages/ui/components/document/document-global-auth-access-select.tsx:30
 #: packages/ui/components/document/document-global-auth-access-select.tsx:43
 #: packages/ui/components/document/document-global-auth-action-select.tsx:31
 #: packages/ui/components/document/document-global-auth-action-select.tsx:46
 msgid "No restrictions"
-msgstr "無限制"
+msgstr "Sin restricciones"
 
 #: packages/ui/primitives/data-table.tsx:148
 msgid "No results found"
-msgstr "找不到結果"
+msgstr "No se encontraron resultados"
 
 #: packages/ui/primitives/document-flow/missing-signature-field-dialog.tsx:30
 msgid "No signature field found"
-msgstr "未找到簽名欄位"
+msgstr "No se encontró campo de firma"
 
 #: packages/ui/primitives/combobox.tsx:60
 #: packages/ui/primitives/multi-select-combobox.tsx:153
 msgid "No value found."
-msgstr "未找到值。"
+msgstr "No se encontró valor."
 
 #: packages/lib/constants/document.ts:32
 msgid "None"
-msgstr "無"
+msgstr "Ninguno"
 
 #: packages/ui/primitives/document-flow/add-fields.tsx:979
 #: packages/ui/primitives/document-flow/types.ts:56
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:742
 msgid "Number"
-msgstr "號碼"
+msgstr "Número"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:103
 msgid "Number format"
-msgstr "數字格式"
+msgstr "Formato de número"
 
 #: packages/lib/constants/template.ts:9
 msgid "Once enabled, you can select any active recipient to be a direct link signing recipient, or create a new one. This recipient type cannot be edited or deleted."
-msgstr "啟用後，您可以選擇任何活躍接收者作為直接連結簽署接收者，或創建一個新的。此接收者類型無法編輯或刪除。"
+msgstr "Una vez habilitado, puede seleccionar cualquier destinatario activo para que sea un destinatario de firma por enlace directo, o crear uno nuevo. Este tipo de destinatario no puede ser editado ni eliminado."
 
 #: packages/lib/constants/template.ts:17
 msgid "Once your template is set up, share the link anywhere you want. The person who opens the link will be able to enter their information in the direct link recipient field and complete any other fields assigned to them."
-msgstr "一旦您的模板設定完成，您可以在任何地方分享該連結。開啟連結的人將能夠在「直接連結接收者」欄位中輸入他們的信息，並完成任何分配給他們的其他欄位。"
+msgstr "Una vez que su plantilla esté configurada, comparta el enlace donde desee. La persona que abra el enlace podrá ingresar su información en el campo de destinatario de enlace directo y completar cualquier otro campo que se le haya asignado."
 
 #: packages/ui/primitives/data-table-pagination.tsx:77
 msgid "Page {0} of {1}"
-msgstr "第 {0} 頁，共 {1} 頁"
+msgstr "Página {0} de {1}"
 
 #: packages/ui/primitives/pdf-viewer.tsx:259
 msgid "Page {0} of {numPages}"
-msgstr "第 {0} 頁，共 {numPages} 頁"
+msgstr "Página {0} de {numPages}"
 
 #: packages/ui/primitives/document-password-dialog.tsx:62
 msgid "Password Required"
-msgstr "需要密碼"
+msgstr "Se requiere contraseña"
 
 #: packages/email/templates/forgot-password.tsx:19
 msgid "Password Reset Requested"
-msgstr "已請求重設密碼"
+msgstr "Solicitud de restablecimiento de contraseña"
 
 #: packages/email/templates/reset-password.tsx:20
 msgid "Password Reset Successful"
-msgstr "密碼重置成功"
+msgstr "Restablecimiento de contraseña exitoso"
 
 #: packages/email/template-components/template-reset-password.tsx:22
 msgid "Password updated!"
-msgstr "密碼已更新！"
+msgstr "¡Contraseña actualizada!"
 
 #: packages/lib/constants/document.ts:16
 msgid "Pending"
-msgstr "待處理"
+msgstr "Pendiente"
 
 #: packages/email/templates/document-pending.tsx:19
 msgid "Pending Document"
-msgstr "待處理文件"
+msgstr "Documento pendiente"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/checkbox-field.tsx:156
 msgid "Pick a number"
-msgstr "選擇一個數字"
+msgstr "Seleccione un número"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:79
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:84
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/text-field.tsx:60
 msgid "Placeholder"
-msgstr "佔位符"
+msgstr "Marcador de posición"
 
 #: packages/email/template-components/template-document-invite.tsx:56
 msgid "Please {0} your document<0/>\"{documentName}\""
-msgstr "請{0}您的文件<0/>\\{documentName}\\"
+msgstr "Por favor {0} tu documento<0/>\"{documentName}\""
 
 #: packages/email/templates/document-invite.tsx:50
 msgid "Please {action} your document {documentName}"
-msgstr "請{action}您的文件 {documentName}"
+msgstr "Por favor {action} tu documento {documentName}"
 
 #: packages/lib/jobs/definitions/emails/send-signing-email.ts:111
 msgid "Please {recipientActionVerb} this document"
-msgstr "請{recipientActionVerb}此文件"
+msgstr "Por favor {recipientActionVerb} este documento"
 
 #: packages/lib/jobs/definitions/emails/send-signing-email.ts:125
 msgid "Please {recipientActionVerb} this document created by your direct template"
-msgstr "請{recipientActionVerb}這份由您的直接範本所建立的文件。"
+msgstr "Por favor {recipientActionVerb} este documento creado a partir de tu plantilla directa"
 
 #: packages/lib/jobs/definitions/emails/send-signing-email.ts:117
 msgid "Please {recipientActionVerb} your document"
-msgstr "請{recipientActionVerb}您的文件"
+msgstr "Por favor {recipientActionVerb} tu documento"
 
 #: packages/lib/server-only/auth/send-confirmation-email.ts:67
 msgid "Please confirm your email"
-msgstr "請確認您的電子郵件"
+msgstr "Por favor confirma tu correo electrónico"
 
 #: packages/email/templates/confirm-email.tsx:17
 msgid "Please confirm your email address"
-msgstr "請確認您的電子郵件地址"
+msgstr "Por favor confirma tu dirección de correo electrónico"
 
 #: packages/ui/primitives/pdf-viewer.tsx:223
 #: packages/ui/primitives/pdf-viewer.tsx:238
 msgid "Please try again or contact our support."
-msgstr "請再試一次或聯繫我們的支援。"
+msgstr "Por favor, inténtalo de nuevo o contacta a nuestro soporte."
 
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:768
 msgid "Radio"
-msgstr "收音機"
+msgstr "Radio"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/radio-field.tsx:133
 msgid "Radio values"
-msgstr "單選按鈕值"
+msgstr "Valores de radio"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/checkbox-field.tsx:186
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/dropdown-field.tsx:147
@@ -1141,75 +1184,75 @@ msgstr "單選按鈕值"
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/radio-field.tsx:122
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/text-field.tsx:133
 msgid "Read only"
-msgstr "唯讀"
+msgstr "Solo lectura"
 
 #: packages/email/template-components/template-document-rejected.tsx:32
 msgid "Reason for rejection: {rejectionReason}"
-msgstr ""
+msgstr "Razón del rechazo: {rejectionReason}"
 
 #: packages/ui/components/recipient/recipient-role-select.tsx:95
 msgid "Receives copy"
-msgstr "接收副本"
+msgstr "Recibe copia"
 
 #: packages/lib/utils/document-audit-logs.ts:338
 #: packages/lib/utils/document-audit-logs.ts:353
 msgid "Recipient"
-msgstr "收件者"
+msgstr "Destinatario"
 
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:39
 #: packages/ui/primitives/document-flow/add-settings.tsx:255
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:289
 msgid "Recipient action authentication"
-msgstr "收件者操作驗證"
+msgstr "Autenticación de acción de destinatario"
 
 #: packages/ui/components/document/document-email-checkboxes.tsx:89
 msgid "Recipient removed email"
-msgstr "收件者已刪除電子郵件"
+msgstr "Correo electrónico de destinatario eliminado"
 
 #: packages/ui/components/document/document-email-checkboxes.tsx:50
 msgid "Recipient signing request email"
-msgstr "收件者簽署請求電郵"
+msgstr "Correo electrónico de solicitud de firma de destinatario"
 
 #: packages/ui/primitives/signature-pad/signature-pad.tsx:384
 msgid "Red"
-msgstr "紅色"
+msgstr "Rojo"
 
 #: packages/ui/primitives/document-flow/add-settings.tsx:369
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:459
 msgid "Redirect URL"
-msgstr "重新導向 URL"
+msgstr "URL de redirección"
 
 #: packages/email/template-components/template-document-invite.tsx:96
 msgid "Reject Document"
-msgstr ""
+msgstr "Rechazar Documento"
 
 #: packages/email/template-components/template-document-rejection-confirmed.tsx:22
 msgid "Rejection Confirmed"
-msgstr ""
+msgstr "Rechazo Confirmado"
 
 #: packages/email/template-components/template-document-rejection-confirmed.tsx:34
 msgid "Rejection reason: {reason}"
-msgstr ""
+msgstr "Razón del rechazo: {reason}"
 
 #: packages/lib/server-only/document/resend-document.tsx:192
 msgid "Reminder: {0}"
-msgstr "提醒: {0}"
+msgstr "Recordatorio: {0}"
 
 #: packages/lib/server-only/document/resend-document.tsx:132
 msgid "Reminder: {0} invited you to {recipientActionVerb} a document"
-msgstr "提醒：{0} 邀請您{recipientActionVerb}文件"
+msgstr "Recordatorio: {0} te invitó a {recipientActionVerb} un documento"
 
 #: packages/lib/server-only/document/resend-document.tsx:121
 msgid "Reminder: Please {recipientActionVerb} this document"
-msgstr "提醒：請{recipientActionVerb}此文件"
+msgstr "Recordatorio: Por favor {recipientActionVerb} este documento"
 
 #: packages/lib/server-only/document/resend-document.tsx:127
 msgid "Reminder: Please {recipientActionVerb} your document"
-msgstr "提醒：請{recipientActionVerb}您的文件"
+msgstr "Recordatorio: Por favor {recipientActionVerb} tu documento"
 
 #: packages/ui/primitives/document-flow/add-fields.tsx:1110
 msgid "Remove"
-msgstr "移除"
+msgstr "Eliminar"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/checkbox-field.tsx:176
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/dropdown-field.tsx:137
@@ -1217,115 +1260,115 @@ msgstr "移除"
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/radio-field.tsx:112
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/text-field.tsx:123
 msgid "Required field"
-msgstr "必填欄位"
+msgstr "Campo obligatorio"
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:84
 msgid "Resend"
-msgstr "重新發送"
+msgstr "Reenviar"
 
 #: packages/email/template-components/template-forgot-password.tsx:33
 msgid "Reset Password"
-msgstr "重置密碼"
+msgstr "Restablecer contraseña"
 
 #: packages/ui/components/document/document-share-button.tsx:147
 msgid "Rest assured, your document is strictly confidential and will never be shared. Only your signing experience will be highlighted. Share your personalized signing card to showcase your signature!"
-msgstr "請放心，您的文件是嚴格保密的，絕不會被分享。我們只會突顯您的簽署體驗。分享您的個性化簽署卡以展示您的簽名！"
+msgstr "Ten la seguridad de que tu documento es estrictamente confidencial y nunca será compartido. Solo se destacará tu experiencia de firma. ¡Comparte tu tarjeta de firma personalizada para mostrar tu firma!"
 
 #: packages/ui/primitives/data-table-pagination.tsx:55
 msgid "Rows per page"
-msgstr "每頁列數"
+msgstr "Filas por página"
 
 #: packages/ui/primitives/document-flow/field-item-advanced-settings.tsx:355
 msgid "Save"
-msgstr "儲存"
+msgstr "Guardar"
 
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:854
 msgid "Save Template"
-msgstr "儲存模板"
+msgstr "Guardar plantilla"
 
 #: packages/ui/components/common/language-switcher-dialog.tsx:34
 msgid "Search languages..."
-msgstr "搜尋語言…"
+msgstr "Buscar idiomas..."
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/dropdown-field.tsx:115
 msgid "Select"
-msgstr "選擇"
+msgstr "Seleccionar"
 
 #: packages/ui/primitives/combobox.tsx:38
 msgid "Select an option"
-msgstr "選擇一個選項"
+msgstr "Seleccionar una opción"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/checkbox-field.tsx:139
 msgid "Select at least"
-msgstr "至少選擇"
+msgstr "Seleccionar al menos"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/dropdown-field.tsx:105
 msgid "Select default option"
-msgstr "選擇預設選項"
+msgstr "Seleccionar opción predeterminada"
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:82
 #: packages/ui/primitives/document-flow/add-subject.tsx:85
 #: packages/ui/primitives/document-flow/send-document-action-dialog.tsx:34
 #: packages/ui/primitives/document-flow/send-document-action-dialog.tsx:64
 msgid "Send"
-msgstr "傳送"
+msgstr "Enviar"
 
 #: packages/ui/primitives/document-flow/send-document-action-dialog.tsx:41
 msgid "Send Document"
-msgstr "傳送文件"
+msgstr "Enviar documento"
 
 #: packages/ui/components/document/document-email-checkboxes.tsx:158
 msgid "Send document completed email"
-msgstr "發送文件完成電子郵件"
+msgstr "Enviar correo electrónico de documento completado"
 
 #: packages/ui/components/document/document-email-checkboxes.tsx:197
 msgid "Send document deleted email"
-msgstr "發送檔案刪除的電子郵件"
+msgstr "Enviar correo electrónico de documento eliminado"
 
 #: packages/ui/components/document/document-email-checkboxes.tsx:118
 msgid "Send document pending email"
-msgstr "發送待處理文件的電子郵件"
+msgstr "Enviar correo electrónico de documento pendiente"
 
 #: packages/email/templates/confirm-team-email.tsx:101
 msgid "Send documents on behalf of the team using the email address"
-msgstr "使用電子郵件地址代表團隊發送文件"
+msgstr "Enviar documentos en nombre del equipo usando la dirección de correo electrónico"
 
 #: packages/ui/components/document/document-email-checkboxes.tsx:79
 msgid "Send recipient removed email"
-msgstr "發送收件人已刪除的電子郵件"
+msgstr "Enviar correo electrónico de destinatario eliminado"
 
 #: packages/ui/components/document/document-email-checkboxes.tsx:40
 msgid "Send recipient signing request email"
-msgstr "傳送收件者簽署請求電子郵件"
+msgstr "Enviar correo electrónico de solicitud de firma de destinatario"
 
 #: packages/ui/components/document/document-share-button.tsx:135
 msgid "Share Signature Card"
-msgstr "分享簽名卡"
+msgstr "Compartir tarjeta de firma"
 
 #: packages/lib/constants/template.ts:16
 msgid "Share the Link"
-msgstr "分享連結"
+msgstr "Compartir el enlace"
 
 #: packages/ui/components/document/document-share-button.tsx:143
 msgid "Share your signing experience!"
-msgstr "分享您的簽署體驗！"
+msgstr "¡Comparte tu experiencia de firma!"
 
 #: packages/ui/primitives/document-flow/add-signers.tsx:709
 #: packages/ui/primitives/template-flow/add-template-placeholder-recipients.tsx:655
 msgid "Show advanced settings"
-msgstr "顯示進階設定"
+msgstr "Mostrar configuraciones avanzadas"
 
 #: packages/lib/constants/recipient-roles.ts:22
 msgid "Sign"
-msgstr "註冊/登入"
+msgstr "Firmar"
 
 #: packages/email/template-components/template-document-invite.tsx:104
 msgid "Sign Document"
-msgstr "簽署文件"
+msgstr "Firmar Documento"
 
 #: packages/email/template-components/template-reset-password.tsx:34
 msgid "Sign In"
-msgstr "登入"
+msgstr "Iniciar sesión"
 
 #: packages/ui/primitives/document-flow/add-fields.tsx:823
 #: packages/ui/primitives/document-flow/add-signature.tsx:323
@@ -1333,418 +1376,435 @@ msgstr "登入"
 #: packages/ui/primitives/document-flow/types.ts:49
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:586
 msgid "Signature"
-msgstr "簽名"
+msgstr "Firma"
 
 #: packages/lib/constants/recipient-roles.ts:23
 msgid "Signed"
-msgstr "簽署"
+msgstr "Firmado"
 
 #: packages/lib/constants/recipient-roles.ts:25
 msgid "Signer"
-msgstr "簽署者"
+msgstr "Firmante"
 
 #: packages/lib/constants/recipient-roles.ts:26
 msgid "Signers"
-msgstr "簽署者"
+msgstr "Firmantes"
 
 #: packages/ui/primitives/document-flow/add-signers.types.ts:36
 msgid "Signers must have unique emails"
-msgstr "簽署者必須擁有唯一的電子郵件地址"
+msgstr "Los firmantes deben tener correos electrónicos únicos"
 
 #: packages/lib/constants/recipient-roles.ts:24
 msgid "Signing"
-msgstr "簽署"
+msgstr "Firmando"
 
 #: packages/lib/server-only/document/send-completed-email.ts:114
 #: packages/lib/server-only/document/send-completed-email.ts:194
 msgid "Signing Complete!"
-msgstr "簽署完成！"
+msgstr "¡Firma completa!"
+
+#: packages/lib/constants/recipient-roles.ts:66
+#~ msgid "SIGNING_REQUEST"
+#~ msgstr "SIGNING_REQUEST"
 
 #: packages/ui/primitives/document-flow/missing-signature-field-dialog.tsx:34
 msgid "Some signers have not been assigned a signature field. Please assign at least 1 signature field to each signer before proceeding."
-msgstr "某些簽署者尚未被分配簽名欄位。請在繼續前為每位簽署者分配至少一個簽名欄位。"
+msgstr "Algunos firmantes no han sido asignados a un campo de firma. Asigne al menos 1 campo de firma a cada firmante antes de continuar."
 
 #: packages/ui/components/document/document-share-button.tsx:51
 msgid "Something went wrong"
-msgstr "發生錯誤"
+msgstr "Algo salió mal"
 
 #: packages/ui/primitives/pdf-viewer.tsx:220
 #: packages/ui/primitives/pdf-viewer.tsx:235
 msgid "Something went wrong while loading the document."
-msgstr "載入文件時發生錯誤。"
+msgstr "Algo salió mal al cargar el documento."
 
 #: packages/ui/primitives/data-table.tsx:136
 msgid "Something went wrong."
-msgstr "發生錯誤。"
+msgstr "Algo salió mal."
 
 #: packages/ui/primitives/document-flow/document-flow-root.tsx:107
 msgid "Step <0>{step} of {maxStep}</0>"
-msgstr "第 <0>{step}</0> 步（共 {maxStep} 步）"
+msgstr "Paso <0>{step} de {maxStep}</0>"
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:143
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:316
 msgid "Subject <0>(Optional)</0>"
-msgstr "主題 <0>（選填）</0>"
+msgstr "Asunto <0>(Opcional)</0>"
 
 #: packages/ui/primitives/document-password-dialog.tsx:97
 msgid "Submit"
-msgstr "提交"
+msgstr "Enviar"
 
 #: packages/lib/server-only/team/delete-team.ts:124
 msgid "Team \"{0}\" has been deleted on Documenso"
-msgstr "團隊 \\{0}\\ 已在 Documenso 上被刪除"
+msgstr "El equipo \"{0}\" ha sido eliminado en Documenso"
 
 #: packages/lib/server-only/team/delete-team-email.ts:104
 msgid "Team email has been revoked for {0}"
-msgstr "團隊電子郵件已被撤銷給 {0}"
+msgstr "El correo electrónico del equipo ha sido revocado para {0}"
 
 #: packages/email/templates/team-email-removed.tsx:59
 msgid "Team email removed"
-msgstr "團隊電子郵件已移除"
+msgstr "Correo electrónico del equipo eliminado"
 
 #: packages/email/templates/team-email-removed.tsx:29
 msgid "Team email removed for {teamName} on Documenso"
-msgstr "Documenso 上 {teamName} 的團隊電子郵件已被移除"
+msgstr "Correo electrónico del equipo eliminado para {teamName} en Documenso"
 
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:145
 msgid "Template title"
-msgstr "範本標題"
+msgstr "Título de plantilla"
 
 #: packages/ui/primitives/document-flow/add-fields.tsx:953
 #: packages/ui/primitives/document-flow/types.ts:52
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:716
 msgid "Text"
-msgstr "文字"
+msgstr "Texto"
 
 #: packages/email/template-components/template-forgot-password.tsx:25
 msgid "That's okay, it happens! Click the button below to reset your password."
-msgstr "沒關係，這種情況時有發生！請點擊下面的按鈕來重設您的密碼。"
+msgstr "Está bien, ¡sucede! Haz clic en el botón de abajo para restablecer tu contraseña."
 
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:44
 msgid "The authentication required for recipients to sign fields"
-msgstr "要求簽署欄位的接收者進行身份驗證"
+msgstr "La autenticación requerida para que los destinatarios firmen campos"
 
 #: packages/ui/components/document/document-global-auth-action-select.tsx:68
 msgid "The authentication required for recipients to sign the signature field."
-msgstr "簽署欄位的簽名需要身份驗證。"
+msgstr "La autenticación requerida para que los destinatarios firmen el campo de firma."
 
 #: packages/ui/components/document/document-global-auth-access-select.tsx:67
 msgid "The authentication required for recipients to view the document."
-msgstr "查看文件需要接收者進行身份驗證。"
+msgstr "La autenticación requerida para que los destinatarios vean el documento."
+
+#~ msgid "The document owner has been notified of this rejection. No further action is required from you at this time."
+#~ msgstr "The document owner has been notified of this rejection. No further action is required from you at this time."
 
 #: packages/email/template-components/template-document-rejection-confirmed.tsx:39
 msgid "The document owner has been notified of this rejection. No further action is required from you at this time. The document owner may contact you with any questions regarding this rejection."
-msgstr ""
+msgstr "El propietario del documento ha sido notificado de este rechazo. No se requiere ninguna acción adicional de su parte en este momento. El propietario del documento puede contactarlo con cualquier pregunta relacionada con este rechazo."
 
 #: packages/ui/components/document/document-send-email-message-helper.tsx:31
 msgid "The document's name"
-msgstr "文件名稱"
+msgstr "El nombre del documento"
 
 #: packages/email/templates/team-delete.tsx:37
 msgid "The following team has been deleted by its owner. You will no longer be able to access this team and its documents"
-msgstr "該團隊已被其擁有者刪除。您將無法再訪問此團隊及其文件。"
+msgstr "El siguiente equipo ha sido eliminado por su propietario. Ya no podrás acceder a este equipo y sus documentos"
 
 #: packages/email/templates/team-delete.tsx:36
 msgid "The following team has been deleted by you"
-msgstr "您已刪除以下團隊"
+msgstr "El siguiente equipo ha sido eliminado por ti"
 
 #: packages/ui/primitives/document-password-dialog.tsx:52
 msgid "The password you have entered is incorrect. Please try again."
-msgstr "您輸入的密碼不正確。請再試一次。"
+msgstr "La contraseña que ha ingresado es incorrecta. Por favor, inténtelo de nuevo."
 
 #: packages/email/template-components/template-document-super-delete.tsx:38
 msgid "The reason provided for deletion is the following:"
-msgstr "刪除的原因如下："
+msgstr "La razón proporcionada para la eliminación es la siguiente:"
 
 #: packages/ui/components/recipient/recipient-role-select.tsx:103
 msgid "The recipient is not required to take any action and receives a copy of the document after it is completed."
-msgstr "收件人無需採取任何行動，文件完成後將收到一份副本。"
+msgstr "El destinatario no está obligado a tomar ninguna acción y recibe una copia del documento una vez completado."
 
 #: packages/ui/components/recipient/recipient-role-select.tsx:60
 msgid "The recipient is required to approve the document for it to be completed."
-msgstr "需要收件人批准文件才能完成。"
+msgstr "El destinatario debe aprobar el documento para que se complete."
 
 #: packages/ui/components/recipient/recipient-role-select.tsx:39
 msgid "The recipient is required to sign the document for it to be completed."
-msgstr "接收者需簽署此文件以完成流程。"
+msgstr "El destinatario debe firmar el documento para que se complete."
 
 #: packages/ui/components/recipient/recipient-role-select.tsx:81
 msgid "The recipient is required to view the document for it to be completed."
-msgstr "收件者需要查看文件以完成。"
+msgstr "El destinatario debe ver el documento para que se complete."
 
 #: packages/ui/components/document/document-share-button.tsx:52
 msgid "The sharing link could not be created at this time. Please try again."
-msgstr "目前無法創建共享鏈接。請再試一次。"
+msgstr "El enlace de compartición no se pudo crear en este momento. Por favor, inténtelo de nuevo."
 
 #: packages/ui/components/document/document-share-button.tsx:47
 msgid "The sharing link has been copied to your clipboard."
-msgstr "分享連結已複製到您的剪貼簿。"
+msgstr "El enlace de compartición ha sido copiado a su portapapeles."
 
 #: packages/ui/components/document/document-send-email-message-helper.tsx:25
 msgid "The signer's email"
-msgstr "簽署者的電子郵件"
+msgstr "El correo electrónico del firmante"
 
 #: packages/ui/components/document/document-send-email-message-helper.tsx:19
 msgid "The signer's name"
-msgstr "簽署者的姓名"
+msgstr "El nombre del firmante"
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:243
 msgid "The signing link has been copied to your clipboard."
-msgstr "簽署連結已複製到您的剪貼簿。"
+msgstr "El enlace de firma ha sido copiado a tu portapapeles."
 
 #: packages/email/templates/team-email-removed.tsx:63
 msgid "The team email <0>{teamEmail}</0> has been removed from the following team"
-msgstr "團隊電子郵件 <0>{teamEmail}</0> 已從以下團隊中移除"
+msgstr "El correo electrónico del equipo <0>{teamEmail}</0> ha sido eliminado del siguiente equipo"
 
 #: packages/ui/components/document/document-global-auth-action-select.tsx:72
 msgid "This can be overriden by setting the authentication requirements directly on each recipient in the next step."
-msgstr "這可以通過在下一步直接為每個接收者設定身份驗證要求來覆寫。"
+msgstr "Esto se puede anular configurando los requisitos de autenticación directamente en cada destinatario en el siguiente paso."
 
 #: packages/email/template-components/template-document-super-delete.tsx:31
 msgid "This document can not be recovered, if you would like to dispute the reason for future documents please contact support."
-msgstr "此文件無法恢復，如果您想要對未來文件的原因提出異議，請聯絡支援。"
+msgstr "Este documento no se puede recuperar, si deseas impugnar la razón para documentos futuros, por favor contacta con el soporte."
 
 #: packages/ui/primitives/document-flow/add-fields.tsx:757
 msgid "This document has already been sent to this recipient. You can no longer edit this recipient."
-msgstr "此文件已經發送給此接收者。您無法再編輯此接收者。"
+msgstr "Este documento ya ha sido enviado a este destinatario. Ya no puede editar a este destinatario."
 
 #: packages/ui/primitives/document-password-dialog.tsx:66
 msgid "This document is password protected. Please enter the password to view the document."
-msgstr "此文件受密碼保護。請輸入密碼以查看文件。"
+msgstr "Este documento está protegido por contraseña. Por favor ingrese la contraseña para ver el documento."
 
 #: packages/email/template-components/template-footer.tsx:17
 msgid "This document was sent using <0>Documenso.</0>"
-msgstr "此文件是使用 <0>Documenso。</0>發送的。"
+msgstr "Este documento fue enviado usando <0>Documenso.</0>"
+
+#~ msgid "This email confirms that you have rejected the document \"{documentName}\" sent by {documentOwnerName}."
+#~ msgstr "This email confirms that you have rejected the document \"{documentName}\" sent by {documentOwnerName}."
 
 #: packages/email/template-components/template-document-rejection-confirmed.tsx:26
 msgid "This email confirms that you have rejected the document <0>\"{documentName}\"</0> sent by {documentOwnerName}."
-msgstr ""
+msgstr "Este correo electrónico confirma que ha rechazado el documento <0>\"{documentName}\"</0> enviado por {documentOwnerName}."
 
 #: packages/ui/components/document/document-email-checkboxes.tsx:94
 msgid "This email is sent to the recipient if they are removed from a pending document."
-msgstr "如果收件人從待處理文件中被移除，將會收到此電子郵件。"
+msgstr "Este correo electrónico se envía al destinatario si es eliminado de un documento pendiente."
 
 #: packages/ui/components/document/document-email-checkboxes.tsx:55
 msgid "This email is sent to the recipient requesting them to sign the document."
-msgstr "此電子郵件發送給接收者，請求他們簽署該文件。"
+msgstr "Este correo electrónico se envía al destinatario solicitando que firme el documento."
 
 #: packages/ui/components/document/document-email-checkboxes.tsx:133
 msgid "This email will be sent to the recipient who has just signed the document, if there are still other recipients who have not signed yet."
-msgstr "如果仍然有其他接收者尚未簽署文件，則此電子郵件將發送給剛剛簽署文件的接收者。"
+msgstr "Este correo electrónico se enviará al destinatario que acaba de firmar el documento, si todavía hay otros destinatarios que no han firmado."
 
 #: packages/ui/primitives/template-flow/add-template-placeholder-recipients.tsx:573
 msgid "This field cannot be modified or deleted. When you share this template's direct link or add it to your public profile, anyone who accesses it can input their name and email, and fill in the fields assigned to them."
-msgstr "此欄位無法修改或刪除。當您分享此範本的直接連結或將其新增至您的公開個人資料時，任何訪問此連結的人都可以輸入他們的姓名和電子郵件，並填寫分配給他們的欄位。"
+msgstr "Este campo no se puede modificar ni eliminar. Cuando comparta el enlace directo de esta plantilla o lo agregue a su perfil público, cualquiera que acceda podrá ingresar su nombre y correo electrónico, y completar los campos que se le hayan asignado."
 
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:231
 msgid "This is how the document will reach the recipients once the document is ready for signing."
-msgstr "這是文件準備好進行簽署後將如何送達給收件人的方式。"
+msgstr "Así es como el documento llegará a los destinatarios una vez que esté listo para firmarse."
 
 #: packages/ui/primitives/document-flow/add-fields.tsx:1090
 msgid "This recipient can no longer be modified as they have signed a field, or completed the document."
-msgstr "此收件人已經簽署了一個欄位或完成了文件，因此無法再進行修改。"
+msgstr "Este destinatario ya no puede ser modificado ya que ha firmado un campo o completado el documento."
 
 #: packages/ui/primitives/document-flow/add-signers.tsx:194
 msgid "This signer has already signed the document."
-msgstr "此簽署者已經簽署該文件。"
+msgstr "Este firmante ya ha firmado el documento."
 
 #: packages/ui/components/document/document-email-checkboxes.tsx:212
 msgid "This will be sent to all recipients if a pending document has been deleted."
-msgstr "如果有待處理文件被刪除，這將發送給所有收件人。"
+msgstr "Esto se enviará a todos los destinatarios si un documento pendiente ha sido eliminado."
 
 #: packages/ui/components/document/document-email-checkboxes.tsx:173
 msgid "This will be sent to all recipients once the document has been fully completed."
-msgstr "文件完成後，這將會寄送給所有收件者。"
+msgstr "Esto se enviará a todos los destinatarios una vez que el documento esté completamente completado."
 
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:48
 msgid "This will override any global settings."
-msgstr "這將覆蓋任何全域設定。"
+msgstr "Esto anulará cualquier configuración global."
 
 #: packages/ui/primitives/document-flow/add-settings.tsx:345
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:436
 msgid "Time Zone"
-msgstr "時區"
+msgstr "Zona horaria"
 
 #: packages/ui/primitives/document-flow/add-settings.tsx:155
 msgid "Title"
-msgstr "標題"
+msgstr "Título"
 
 #: packages/ui/primitives/document-flow/add-fields.tsx:1073
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:834
 msgid "To proceed further, please set at least one value for the {0} field."
-msgstr "若要繼續，請至少為 {0} 欄位設定一個值。"
+msgstr "Para continuar, por favor establezca al menos un valor para el campo {0}."
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:86
 msgid "Update"
-msgstr "更新"
+msgstr "Actualizar"
 
 #: packages/lib/constants/template.ts:13
 msgid "Update the role and add fields as required for the direct recipient. The individual who uses the direct link will sign the document as the direct recipient."
-msgstr "更新角色並根據需要為直接收件人新增欄位。使用直接連結的個人將作為直接收件人簽署文件。"
+msgstr "Actualizar el rol y agregar campos según sea necesario para el destinatario directo. La persona que utilice el enlace directo firmará el documento como destinatario directo."
 
 #: packages/ui/primitives/document-dropzone.tsx:168
 msgid "Upgrade"
-msgstr "升級"
+msgstr "Actualizar"
 
 #: packages/ui/primitives/document-dropzone.tsx:70
 msgid "Upload Template Document"
-msgstr "上傳範本文件"
+msgstr "Cargar Documento Plantilla"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/checkbox-field.tsx:132
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:167
 msgid "Validation"
-msgstr "驗證"
+msgstr "Validación"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:91
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:96
 msgid "Value"
-msgstr "值"
+msgstr "Valor"
 
 #: packages/email/templates/confirm-team-email.tsx:71
 msgid "Verify your team email address"
-msgstr "驗證您的團隊電子郵件地址"
+msgstr "Verifica tu dirección de correo electrónico del equipo"
 
 #: packages/lib/constants/recipient-roles.ts:29
 msgid "View"
-msgstr "檢視"
+msgstr "Ver"
 
 #: packages/email/templates/confirm-team-email.tsx:95
 msgid "View all documents sent to and from this email address"
-msgstr "查看從此電子郵件地址發送和接收的所有文件"
+msgstr "Ver todos los documentos enviados hacia y desde esta dirección de correo electrónico"
 
 #: packages/email/templates/document-created-from-direct-template.tsx:75
 msgid "View document"
-msgstr "檢視文件"
+msgstr "Ver documento"
 
 #: packages/email/template-components/template-document-invite.tsx:105
 #: packages/email/template-components/template-document-rejected.tsx:44
 #: packages/ui/primitives/document-flow/add-subject.tsx:90
 #: packages/ui/primitives/document-flow/add-subject.tsx:91
 msgid "View Document"
-msgstr "檢視文件"
+msgstr "Ver Documento"
 
 #: packages/email/template-components/template-document-self-signed.tsx:79
 msgid "View plans"
-msgstr "查看方案"
+msgstr "Ver planes"
+
+#: packages/lib/constants/recipient-roles.ts:67
+#~ msgid "VIEW_REQUEST"
+#~ msgstr "VIEW_REQUEST"
 
 #: packages/lib/constants/recipient-roles.ts:30
 msgid "Viewed"
-msgstr "已查看"
+msgstr "Visto"
 
 #: packages/lib/constants/recipient-roles.ts:32
 msgid "Viewer"
-msgstr "檢視者"
+msgstr "Visor"
 
 #: packages/lib/constants/recipient-roles.ts:33
 msgid "Viewers"
-msgstr "觀眾"
+msgstr "Espectadores"
 
 #: packages/lib/constants/recipient-roles.ts:31
 msgid "Viewing"
-msgstr "檢視中"
+msgstr "Viendo"
 
 #: packages/email/template-components/template-document-pending.tsx:31
 msgid "Waiting for others"
-msgstr "正在等待其他人"
+msgstr "Esperando a otros"
 
 #: packages/lib/server-only/document/send-pending-email.ts:96
 msgid "Waiting for others to complete signing."
-msgstr "等待其他人完成簽署。"
+msgstr "Esperando a que otros completen la firma."
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:205
 msgid "We will generate signing links for with you, which you can send to the recipients through your method of choice."
-msgstr "我們將為您生成簽署連結，您可以透過您選擇的方法將其發送給收件人。"
+msgstr "Generaremos enlaces de firma para ti, que podrás enviar a los destinatarios a través de tu método preferido."
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:201
 msgid "We won't send anything to notify recipients."
-msgstr "我們不會發送任何東西來通知接收者。"
+msgstr "No enviaremos nada para notificar a los destinatarios."
 
 #: packages/email/template-components/template-document-pending.tsx:41
 msgid "We're still waiting for other signers to sign this document.<0/>We'll notify you as soon as it's ready."
-msgstr "我們仍在等待其他簽署人簽署此文件。<0/>一旦準備好，我們會立刻通知您。"
+msgstr "Aún estamos esperando a que otros firmantes firmen este documento.<0/>Te notificaremos tan pronto como esté listo."
 
 #: packages/email/templates/reset-password.tsx:65
 msgid "We've changed your password as you asked. You can now sign in with your new password."
-msgstr "我們已經按照您的要求更改了您的密碼。您現在可以使用新密碼登入。"
+msgstr "Hemos cambiado tu contraseña como solicitaste. Ahora puedes iniciar sesión con tu nueva contraseña."
 
 #: packages/email/template-components/template-confirmation-email.tsx:21
 msgid "Welcome to Documenso!"
-msgstr "歡迎來到 Documenso！"
+msgstr "¡Bienvenido a Documenso!"
 
 #: packages/lib/utils/document-audit-logs.ts:258
 msgid "You"
-msgstr "您"
+msgstr "Tú"
 
 #: packages/ui/primitives/document-flow/send-document-action-dialog.tsx:44
 msgid "You are about to send this document to the recipients. Are you sure you want to continue?"
-msgstr "您即將把此文件發送給收件人。確定要繼續嗎？"
+msgstr "Está a punto de enviar este documento a los destinatarios. ¿Está seguro de que desea continuar?"
 
 #: packages/email/template-components/template-confirmation-email.tsx:38
 msgid "You can also copy and paste this link into your browser: {confirmationLink} (link expires in 1 hour)"
-msgstr "您也可以將此連結複製並貼上到您的瀏覽器中：{confirmationLink}（連結在1小時後失效）"
+msgstr "También puedes copiar y pegar este enlace en tu navegador: {confirmationLink} (el enlace expira en 1 hora)"
 
 #: packages/email/templates/confirm-team-email.tsx:106
 msgid "You can revoke access at any time in your team settings on Documenso <0>here.</0>"
-msgstr "您可以隨時在您的團隊設置中撤銷在 Documenso 上的訪問權限，請點擊<0>這裡。</0>"
+msgstr "Puedes revocar el acceso en cualquier momento en la configuración de tu equipo en Documenso <0>aquí.</0>"
 
 #: packages/ui/components/document/document-send-email-message-helper.tsx:11
 msgid "You can use the following variables in your message:"
-msgstr "您可以在您的訊息中使用以下變數："
+msgstr "Puede usar las siguientes variables en su mensaje:"
 
 #: packages/email/template-components/template-document-rejected.tsx:37
 msgid "You can view the document and its status by clicking the button below."
-msgstr ""
+msgstr "Puede ver el documento y su estado haciendo clic en el botón de abajo."
 
 #: packages/ui/primitives/document-dropzone.tsx:43
 msgid "You cannot upload documents at this time."
-msgstr "您目前無法上傳文件。"
+msgstr "No puede cargar documentos en este momento."
 
 #: packages/email/template-components/template-document-cancel.tsx:35
 msgid "You don't need to sign it anymore."
-msgstr "您不再需要簽署。"
+msgstr "Ya no necesitas firmarlo."
 
 #: packages/lib/server-only/team/create-team-member-invites.ts:186
 msgid "You have been invited to join {0} on Documenso"
-msgstr "您已受邀加入 {0} 上的 Documenso"
+msgstr "Te han invitado a unirte a {0} en Documenso"
 
 #: packages/email/templates/team-invite.tsx:76
 msgid "You have been invited to join the following team"
-msgstr "您已被邀請加入以下團隊"
+msgstr "Te han invitado a unirte al siguiente equipo"
 
 #: packages/lib/server-only/recipient/set-recipients-for-document.ts:329
 msgid "You have been removed from a document"
-msgstr "您已從檔案中移除"
+msgstr "Te han eliminado de un documento"
 
 #: packages/lib/server-only/team/request-team-ownership-transfer.ts:114
 msgid "You have been requested to take ownership of team {0} on Documenso"
-msgstr "您已被請求接管團隊 {0} 的擁有權於 Documenso"
+msgstr "Se te ha solicitado asumir la propiedad del equipo {0} en Documenso"
 
 #: packages/lib/jobs/definitions/emails/send-signing-email.ts:115
 #: packages/lib/server-only/document/resend-document.tsx:125
 msgid "You have initiated the document {0} that requires you to {recipientActionVerb} it."
-msgstr "您已啟動文件{0}，需要您{recipientActionVerb}它。"
+msgstr "Has iniciado el documento {0} que requiere que {recipientActionVerb}."
 
 #: packages/ui/primitives/document-dropzone.tsx:69
 msgid "You have reached your document limit."
-msgstr "您已達到文件上限。"
+msgstr "Ha alcanzado su límite de documentos."
 
 #: packages/email/templates/document-rejection-confirmed.tsx:27
 msgid "You have rejected the document '{documentName}'"
-msgstr ""
+msgstr "Ha rechazado el documento '{documentName}'"
+
+#~ msgid "You have rejected the document \"{documentName}\""
+#~ msgstr "You have rejected the document \"{documentName}\""
 
 #: packages/email/template-components/template-document-self-signed.tsx:42
 msgid "You have signed “{documentName}”"
-msgstr "您已簽署“{documentName}”"
+msgstr "Has firmado “{documentName}”"
 
 #: packages/email/template-components/template-document-super-delete.tsx:23
 msgid "Your document has been deleted by an admin!"
-msgstr "您的文件已被管理員刪除！"
+msgstr "¡Tu documento ha sido eliminado por un administrador!"
 
 #: packages/email/template-components/template-reset-password.tsx:26
 msgid "Your password has been updated."
-msgstr "您的密碼已更新。"
+msgstr "Tu contraseña ha sido actualizada."
 
 #: packages/email/templates/team-delete.tsx:28
 #: packages/email/templates/team-delete.tsx:32
 msgid "Your team has been deleted"
-msgstr "您的團隊已被刪除"
+msgstr "Tu equipo ha sido eliminado"
