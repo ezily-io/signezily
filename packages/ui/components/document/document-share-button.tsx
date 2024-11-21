@@ -152,7 +152,7 @@ export const DocumentShareButton = ({
         </DialogHeader>
 
         <div className="flex w-full flex-col">
-          <div className="rounded-md border p-4">
+          {/* <div className="rounded-md border p-4">
             I just {token ? 'signed' : 'sent'} a document in style with{' '}
             <span className="font-medium text-blue-400">@documenso</span>
             . Check it out!
@@ -180,7 +180,7 @@ export const DocumentShareButton = ({
                 />
               )}
             </div>
-          </div>
+          </div> */}
 
           <div className="mt-6 flex items-center gap-4">
             <Button variant="outline" className="flex-1" onClick={onTweetClick}>
