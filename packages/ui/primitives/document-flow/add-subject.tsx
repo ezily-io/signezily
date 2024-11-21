@@ -327,6 +327,21 @@ export const AddSubjectFormPartial = ({
                         We will generate signing links for you, which you can send to the recipients
                         through your method of choice.
                       </Trans>
+                      <br />
+                      <br />
+                      <p>想要和 LINE 整合嗎? 請提供您的 email 我們會盡快與您聯繫 </p>
+                      <br />
+                      <div className="flex items-center">
+                        <Input placeholder="abc@ezily.io" value={''} onChange={(e) => {}} />
+                        <button
+                          className="ml-2 w-32 rounded bg-blue-500 px-6 py-2 text-white"
+                          onClick={() => {
+                            /* TODO: send google analytics */
+                          }}
+                        >
+                          提交
+                        </button>
+                      </div>
                     </p>
                   </div>
                 ) : (
