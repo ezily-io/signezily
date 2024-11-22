@@ -70,7 +70,6 @@ jobs:
           docker build \
             -f ./docker/Dockerfile \
             --progress=plain \
-            -t $THIS_TAG \
             -t $IMAGE:latest \
             .
 
