@@ -54,6 +54,7 @@ jobs:
           THIS_TAG="$IMAGE:$(git rev-parse --short $GIT_SHA)"
           TAGS="$IMAGE:latest,$THIS_TAG"
 
+          echo "image=$IMAGE" >> $GITHUB_OUTPUT
           echo "this_tag=$THIS_TAG" >> $GITHUB_OUTPUT
 
           if [ '${{ github.event_name }}' = 'pull_request' ]; then
@@ -69,6 +70,7 @@ jobs:
           docker build \
             -f ./docker/Dockerfile \
             --progress=plain \
+            -t $THIS_TAG \
             -t $IMAGE:latest \
             .
 
