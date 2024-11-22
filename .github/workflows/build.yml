@@ -76,8 +76,7 @@ jobs:
       - name: Push
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
-          docker push $THIS_TAG \
-          docker push $IMAGE:latest
+          docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:latest
 
       - name: Deploy
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
