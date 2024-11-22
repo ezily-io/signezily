@@ -70,7 +70,7 @@ jobs:
           docker build \
             -f ./docker/Dockerfile \
             --progress=plain \
-            -t $IMAGE:latest \
+            -t 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:latest \
             .
 
       - name: Push
