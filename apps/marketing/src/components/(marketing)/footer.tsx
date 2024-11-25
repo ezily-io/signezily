@@ -40,13 +40,7 @@ export const Footer = ({ className, ...props }: FooterProps) => {
       <div className="mx-auto flex w-full max-w-screen-xl flex-wrap items-start justify-between gap-8 px-8">
         <div className="flex-shrink-0">
           <Link href="/">
-            <Image
-              src={LogoImage}
-              alt="Documenso Logo"
-              className="dark:invert"
-              width={170}
-              height={0}
-            />
+            <Image src={LogoImage} alt="Logo" className="dark:invert" width={170} height={0} />
           </Link>
 
           <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-4">
