@@ -64,6 +64,7 @@
   "dependencies": {
     "@documenso/pdf-sign": "^0.1.0",
     "@lingui/core": "^4.11.3",
+    "@next/third-parties": "^15.0.3",
     "inngest-cli": "^0.29.1",
     "next-runtime-env": "^3.2.0",
     "react": "^18"
