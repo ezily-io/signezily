@@ -618,16 +618,16 @@ msgstr "Continuez en signant le document."
 msgid "Continue by viewing the document."
 msgstr "Continuez en visualisant le document."
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:254
+#: packages/ui/primitives/document-flow/add-subject.tsx:274
 msgid "Copied"
 msgstr "Copié"
 
 #: packages/ui/components/document/document-share-button.tsx:46
-#: packages/ui/primitives/document-flow/add-subject.tsx:241
+#: packages/ui/primitives/document-flow/add-subject.tsx:261
 msgid "Copied to clipboard"
 msgstr "Copié dans le presse-papiers"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:249
+#: packages/ui/primitives/document-flow/add-subject.tsx:269
 msgid "Copy"
 msgstr "Copier"
 
@@ -953,6 +953,10 @@ msgstr "Je suis un approuveur de ce document"
 msgid "I am required to receive a copy of this document"
 msgstr "Je dois recevoir une copie de ce document"
 
+#: packages/ui/primitives/document-flow/add-subject.tsx:212
+msgid "If you wish to send through LINE, the integration have been moved to seperate platform. Please leave your email and we will be contact you shortly"
+msgstr ""
+
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:29
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:87
 msgid "Inherit authentication method"
@@ -1044,7 +1048,7 @@ msgstr "Nécessite une visualisation"
 msgid "No recipient matching this description was found."
 msgstr "Aucun destinataire correspondant à cette description n'a été trouvé."
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:215
+#: packages/ui/primitives/document-flow/add-subject.tsx:235
 msgid "No recipients"
 msgstr "Aucun destinataire"
 
@@ -1538,7 +1542,7 @@ msgstr "L'email du signataire"
 msgid "The signer's name"
 msgstr "Le nom du signataire"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:243
+#: packages/ui/primitives/document-flow/add-subject.tsx:263
 msgid "The signing link has been copied to your clipboard."
 msgstr "Le lien de signature a été copié dans votre presse-papiers."
 

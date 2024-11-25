@@ -180,7 +180,7 @@ msgstr "將會建立草稿文件"
 msgid "A means to print or download documents for your records"
 msgstr "一種列印或下載文件以供您保存記錄的方法"
 
-#: apps/web/src/components/forms/token.tsx:127
+#: apps/web/src/components/forms/token.tsx:128
 msgid "A new token was created successfully."
 msgstr "一個新的Token 已成功創建。"
 
@@ -430,7 +430,7 @@ msgstr "已發送要求轉移此團隊的電子郵件。"
 #: apps/web/src/components/forms/profile.tsx:81
 #: apps/web/src/components/forms/reset-password.tsx:81
 #: apps/web/src/components/forms/signup.tsx:107
-#: apps/web/src/components/forms/token.tsx:137
+#: apps/web/src/components/forms/token.tsx:138
 #: apps/web/src/components/forms/v2/signup.tsx:154
 msgid "An error occurred"
 msgstr "發生錯誤"
@@ -579,7 +579,7 @@ msgstr "上傳文件時發生錯誤。"
 #: apps/web/src/components/forms/signup.tsx:113
 #: apps/web/src/components/forms/signup.tsx:128
 #: apps/web/src/components/forms/signup.tsx:142
-#: apps/web/src/components/forms/token.tsx:143
+#: apps/web/src/components/forms/token.tsx:144
 #: apps/web/src/components/forms/v2/signup.tsx:160
 #: apps/web/src/components/forms/v2/signup.tsx:183
 #: apps/web/src/components/forms/v2/signup.tsx:197
@@ -834,7 +834,7 @@ msgstr "選擇直接連結接收者"
 msgid "Choose how the document will reach recipients"
 msgstr "選擇文件傳遞給收件人的方式"
 
-#: apps/web/src/components/forms/token.tsx:200
+#: apps/web/src/components/forms/token.tsx:229
 msgid "Choose..."
 msgstr "選擇..."
 
@@ -1038,7 +1038,7 @@ msgstr "複製可分享連結"
 msgid "Copy Signing Links"
 msgstr "複製簽署連結"
 
-#: apps/web/src/components/forms/token.tsx:288
+#: apps/web/src/components/forms/token.tsx:320
 msgid "Copy token"
 msgstr "複製權杖"
 
@@ -1111,8 +1111,8 @@ msgstr "建立團隊"
 msgid "Create the document as pending and ready to sign."
 msgstr "將文件創建為待處理並準備簽署。"
 
-#: apps/web/src/components/forms/token.tsx:250
-#: apps/web/src/components/forms/token.tsx:259
+#: apps/web/src/components/forms/token.tsx:279
+#: apps/web/src/components/forms/token.tsx:288
 msgid "Create token"
 msgstr "建立 token "
 
@@ -1157,8 +1157,8 @@ msgstr "建立者"
 msgid "Created on"
 msgstr "建立於"
 
-#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:67
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:88
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:58
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:123
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:100
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:93
 msgid "Created on {0}"
@@ -1215,8 +1215,8 @@ msgstr "刪除"
 #: apps/web/src/app/(dashboard)/documents/delete-document-dialog.tsx:200
 #: apps/web/src/app/(dashboard)/settings/security/passkeys/user-passkeys-data-table-actions.tsx:177
 #: apps/web/src/app/(dashboard)/settings/security/passkeys/user-passkeys-data-table-actions.tsx:211
-#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:83
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:100
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:74
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:137
 #: apps/web/src/app/(dashboard)/templates/data-table-action-dropdown.tsx:94
 #: apps/web/src/app/(dashboard)/templates/delete-template-dialog.tsx:90
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:116
@@ -1363,7 +1363,7 @@ msgstr "停用 2FA"
 msgid "Disable Two Factor Authentication before deleting your account."
 msgstr "刪除帳號前需停用雙重驗證。"
 
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:74
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:109
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:79
 msgid "Disabled"
 msgstr "停用"
@@ -1611,7 +1611,7 @@ msgstr "重複"
 #: apps/web/src/app/(dashboard)/documents/data-table-action-button.tsx:102
 #: apps/web/src/app/(dashboard)/documents/data-table-action-dropdown.tsx:156
 #: apps/web/src/app/(dashboard)/settings/security/passkeys/user-passkeys-data-table-actions.tsx:111
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:95
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:132
 #: apps/web/src/app/(dashboard)/templates/data-table-action-dropdown.tsx:65
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/team-email-dropdown.tsx:77
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:100
@@ -1708,7 +1708,7 @@ msgstr "啟用直接連結簽署"
 
 #: apps/web/src/app/(dashboard)/admin/site-settings/banner-form.tsx:123
 #: apps/web/src/app/(dashboard)/settings/webhooks/[id]/page.tsx:138
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:74
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:109
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/[id]/page.tsx:142
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:79
 #: apps/web/src/components/(dashboard)/settings/webhooks/create-webhook-dialog.tsx:166
@@ -1804,7 +1804,7 @@ msgstr "超過超時限制"
 msgid "Expired"
 msgstr "已過期"
 
-#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:71
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:62
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:104
 msgid "Expires on {0}"
 msgstr "到期日為 {0}"
@@ -2122,7 +2122,7 @@ msgstr "連結範本"
 msgid "Links Generated"
 msgstr "生成的連結"
 
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:79
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:114
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:84
 msgid "Listening to {0}"
 msgstr "正在收聽{0}"
@@ -2322,7 +2322,7 @@ msgstr "需要簽署文件嗎？"
 msgid "Never"
 msgstr "從不"
 
-#: apps/web/src/components/forms/token.tsx:224
+#: apps/web/src/components/forms/token.tsx:253
 msgid "Never expire"
 msgstr "永不過期"
 
@@ -2418,17 +2418,17 @@ msgid "On this page, you can create a new webhook."
 msgstr "在此頁面，您可以建立一個新的 webhook。"
 
 #: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:26
-msgid "On this page, you can create new API tokens and manage the existing ones. <0/>Also see our <1>Documentation</1>."
-msgstr "在此頁面上，您可以創建新的 API 令牌並管理現有的令牌。<0/>另請參閱我們的<1>文件</1>。"
+# msgid "On this page, you can create new API tokens and manage the existing ones."
+# msgstr "在此頁面上，您可以創建新的 API token 並管理現有的 token。"
 
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:60
 msgid "On this page, you can create new API tokens and manage the existing ones. <0/>You can view our swagger docs <1>here</1>"
 msgstr "在此頁面，您可以創建新的 API Token 並管理現有的 Token。<0/>您可以在<1>此處</1>查看我們的 swagger 文件。"
 
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:29
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:63
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:34
 msgid "On this page, you can create new Webhooks and manage the existing ones."
-msgstr "在此頁面，您可以創建新的 Webhooks 並管理現有的。"
+msgstr "在此頁面，您可以創建新的 Webhooks 並管理現有的 webhooks。"
 
 #: apps/web/src/app/(dashboard)/settings/webhooks/[id]/page.tsx:95
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/[id]/page.tsx:101
@@ -2615,7 +2615,7 @@ msgstr "請選擇您的新密碼"
 msgid "Please contact support if you would like to revert this action."
 msgstr "如果您想撤銷此操作，請聯繫支援。"
 
-#: apps/web/src/components/forms/token.tsx:175
+#: apps/web/src/components/forms/token.tsx:204
 msgid "Please enter a meaningful name for your token. This will help you identify it later."
 msgstr "請為您的 Token 輸入有意義的名稱。這將幫助您日後識別它。"
 
@@ -3360,6 +3360,11 @@ msgstr "統計資料"
 msgid "Status"
 msgstr "狀態"
 
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:161
+#: apps/web/src/components/forms/token.tsx:342
+msgid "submit"
+msgstr "提交"
+
 #: apps/web/src/app/(dashboard)/settings/billing/billing-plans.tsx:129
 msgid "Subscribe"
 msgstr "訂閱"
@@ -3711,7 +3716,7 @@ msgstr "您的個人資料中的範本將被移除"
 msgid "The template you are looking for may have been disabled, deleted or may have never existed."
 msgstr "您正在尋找的模板可能已被停用、刪除或可能從未存在。"
 
-#: apps/web/src/components/forms/token.tsx:106
+#: apps/web/src/components/forms/token.tsx:107
 msgid "The token was copied to your clipboard."
 msgstr "此憑證已複製到您的剪貼簿。"
 
@@ -3925,11 +3930,11 @@ msgstr "切換開關以公開顯示您的個人資料。"
 msgid "Token"
 msgstr "Token"
 
-#: apps/web/src/components/forms/token.tsx:105
+#: apps/web/src/components/forms/token.tsx:106
 msgid "Token copied to clipboard"
 msgstr "Token 已複製到剪貼簿"
 
-#: apps/web/src/components/forms/token.tsx:126
+#: apps/web/src/components/forms/token.tsx:127
 msgid "Token created"
 msgstr "Token已建立"
 
@@ -3937,18 +3942,22 @@ msgstr "Token已建立"
 msgid "Token deleted"
 msgstr "Token 已刪除"
 
-#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:75
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:66
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:108
 msgid "Token doesn't have an expiration date"
 msgstr "Token 沒有過期日期"
 
-#: apps/web/src/components/forms/token.tsx:193
+#: apps/web/src/components/forms/token.tsx:222
 msgid "Token expiration date"
 msgstr "Token 有效期限"
 
-#: apps/web/src/components/forms/token.tsx:165
+#: apps/web/src/components/forms/token.tsx:194
 msgid "Token name"
 msgstr "Token 名稱"
+
+#: apps/web/src/components/forms/token.tsx:330
+msgid "Token related features have been move to a seperate platform, please leave your email and we will contact you shortly."
+msgstr "Token 的相關功能已經移到另一個平台, 如您有興趣請提供信箱我們將很快跟您聯絡"
 
 #: apps/web/src/app/(dashboard)/admin/stats/page.tsx:65
 msgid "Total Documents"
@@ -4043,7 +4052,7 @@ msgstr "目前無法更改語言。請稍後再試。"
 msgid "Unable to copy recovery code"
 msgstr "無法複製恢復碼"
 
-#: apps/web/src/components/forms/token.tsx:110
+#: apps/web/src/components/forms/token.tsx:111
 msgid "Unable to copy token"
 msgstr "無法複製token"
 
@@ -4412,7 +4421,7 @@ msgstr "在移除直接模板連結時遇到錯誤。請稍後再試。"
 msgid "We encountered an error while updating the webhook. Please try again later."
 msgstr "在更新 webhook 時遇到錯誤。請稍後再試。"
 
-#: apps/web/src/components/forms/token.tsx:145
+#: apps/web/src/components/forms/token.tsx:146
 msgid "We encountered an unknown error while attempting create the new token. Please try again later."
 msgstr "在嘗試創建新 token 時遇到未知錯誤。請稍後再試。"
 
@@ -4537,7 +4546,7 @@ msgstr "在嘗試更新團隊電子郵件時遇到未知錯誤。請稍後再試
 msgid "We have sent a confirmation email for verification."
 msgstr "我們已發送確認電子郵件進行驗證。"
 
-#: apps/web/src/components/forms/token.tsx:111
+#: apps/web/src/components/forms/token.tsx:112
 msgid "We were unable to copy the token to your clipboard. Please try again."
 msgstr "我們無法將權杖複製到您的剪貼板。請再試一次。"
 
@@ -4600,7 +4609,7 @@ msgstr "我們不會發送任何通知給接收者。"
 #: apps/web/src/app/(dashboard)/documents/empty-state.tsx:29
 #: apps/web/src/app/(dashboard)/templates/empty-state.tsx:11
 msgid "We're all empty"
-msgstr "我們都空了"
+msgstr "此處為空的"
 
 #: apps/web/src/components/(dashboard)/layout/verify-email-banner.tsx:116
 msgid "We've sent a confirmation email to <0>{email}</0>. Please check your inbox and click the link in the email to verify your account."
@@ -4614,6 +4623,10 @@ msgstr "Webhook 已建立"
 msgid "Webhook deleted"
 msgstr "Webhook 已刪除"
 
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:149
+msgid "Webhook related features have been move to a seperate platform, please leave your email and we will contact you shortly."
+msgstr "Webhook 相關功能已經移到另一個平台, 如您有興趣請提供信箱我們將很快跟您聯絡"
+
 #: apps/web/src/app/(dashboard)/settings/webhooks/[id]/page.tsx:74
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/[id]/page.tsx:80
 msgid "Webhook updated"
@@ -4624,7 +4637,7 @@ msgstr "Webhook 已更新"
 msgid "Webhook URL"
 msgstr "Webhook URL"
 
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:28
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:61
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:33
 #: apps/web/src/components/(dashboard)/settings/layout/desktop-nav.tsx:103
 #: apps/web/src/components/(dashboard)/settings/layout/mobile-nav.tsx:106
@@ -4799,7 +4812,7 @@ msgstr "您已被 <0>{0}</0> 邀請加入他們的團隊。"
 msgid "You have declined the invitation from <0>{0}</0> to join their team."
 msgstr "您已拒絕來自<0>{0}</0>的邀請加入他們的團隊。"
 
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:44
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:79
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:49
 msgid "You have no webhooks yet. Your webhooks will be shown here once you create them."
 msgstr "您尚未有任何 Webhooks。當您創建 Webhooks 後，它們將顯示在此處。"
@@ -4972,7 +4985,7 @@ msgstr "您的電子郵件已成功確認！您現在可以使用 Documenso 的�
 msgid "Your email is currently being used by team <0>{0}</0> ({1})."
 msgstr "您的電子郵件目前正在被團隊<0>{0}</0>（{1}）使用。"
 
-#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:47
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:38
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:80
 msgid "Your existing tokens"
 msgstr "您現有的 token "
@@ -5043,11 +5056,11 @@ msgstr "您的範本已成功儲存。"
 msgid "Your token has expired!"
 msgstr "您的憑證已過期！"
 
-#: apps/web/src/components/forms/token.tsx:277
+#: apps/web/src/components/forms/token.tsx:306
 msgid "Your token was created successfully! Make sure to copy it because you won't be able to see it again!"
 msgstr "您的 Token 已成功建立！請確保複製它，因為您將無法再次查看！"
 
-#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:53
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:44
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:86
 msgid "Your tokens will be shown here once you create them."
 msgstr "您創建 Token 後，它們將顯示在此處。"

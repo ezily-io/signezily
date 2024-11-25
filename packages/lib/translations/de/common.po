@@ -618,16 +618,16 @@ msgstr "Fahre fort, indem du das Dokument signierst."
 msgid "Continue by viewing the document."
 msgstr "Fahre fort, indem du das Dokument ansiehst."
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:254
+#: packages/ui/primitives/document-flow/add-subject.tsx:274
 msgid "Copied"
 msgstr "Kopiert"
 
 #: packages/ui/components/document/document-share-button.tsx:46
-#: packages/ui/primitives/document-flow/add-subject.tsx:241
+#: packages/ui/primitives/document-flow/add-subject.tsx:261
 msgid "Copied to clipboard"
 msgstr "In die Zwischenablage kopiert"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:249
+#: packages/ui/primitives/document-flow/add-subject.tsx:269
 msgid "Copy"
 msgstr "Kopieren"
 
@@ -953,6 +953,10 @@ msgstr "Ich bin ein Genehmiger dieses Dokuments"
 msgid "I am required to receive a copy of this document"
 msgstr "Ich bin verpflichtet, eine Kopie dieses Dokuments zu erhalten"
 
+#: packages/ui/primitives/document-flow/add-subject.tsx:212
+msgid "If you wish to send through LINE, the integration have been moved to seperate platform. Please leave your email and we will be contact you shortly"
+msgstr ""
+
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:29
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:87
 msgid "Inherit authentication method"
@@ -1044,7 +1048,7 @@ msgstr "Muss sehen"
 msgid "No recipient matching this description was found."
 msgstr "Kein passender Empfänger mit dieser Beschreibung gefunden."
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:215
+#: packages/ui/primitives/document-flow/add-subject.tsx:235
 msgid "No recipients"
 msgstr "Keine Empfänger"
 
@@ -1538,7 +1542,7 @@ msgstr "Die E-Mail des Unterzeichners"
 msgid "The signer's name"
 msgstr "Der Name des Unterzeichners"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:243
+#: packages/ui/primitives/document-flow/add-subject.tsx:263
 msgid "The signing link has been copied to your clipboard."
 msgstr "Der Signierlink wurde in die Zwischenablage kopiert."
 

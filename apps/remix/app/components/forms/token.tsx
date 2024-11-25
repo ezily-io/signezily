@@ -6,9 +6,10 @@ import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import type { ApiToken } from '@prisma/client';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { match } from 'ts-pattern';
-import type { z } from 'zod';
+import { z } from 'zod';
 
 import { useCopyToClipboard } from '@documenso/lib/client-only/hooks/use-copy-to-clipboard';
 import { AppError, AppErrorCode } from '@documenso/lib/errors/app-error';
@@ -143,6 +144,32 @@ export const ApiTokenForm = ({ className, tokens }: ApiTokenFormProps) => {
       });
     }
   };
+
+  const { data: session } = useSession();
+
+  // Define ZWaitlistFormSchema as a Zod object
+  const ZWaitlistFormSchema = z.object({
+    email: z.string().email().optional(), // Add email field to the schema
+  });
+
+  // Update the type to include email
+  type TWaitlistFormSchema = z.infer<typeof ZWaitlistFormSchema>;
+
+  const waitlist = useForm<TWaitlistFormSchema>({
+    resolver: zodResolver(ZWaitlistFormSchema),
+    defaultValues: {
+      email: '',
+    },
+  });
+
+  const onJoinWaitlist = ({ email }: { email?: string }) => {
+    // Update parameter type
+    console.log(email);
+  };
+
+  if (!session) {
+    return <div>Please log in to access this feature.</div>;
+  }
 
   return (
     <div className={cn(className)}>

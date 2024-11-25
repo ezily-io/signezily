@@ -581,16 +581,16 @@ msgstr "繼續簽署文件。"
 msgid "Continue by viewing the document."
 msgstr "繼續查看文件。"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:254
+#: packages/ui/primitives/document-flow/add-subject.tsx:274
 msgid "Copied"
 msgstr "已複製"
 
 #: packages/ui/components/document/document-share-button.tsx:46
-#: packages/ui/primitives/document-flow/add-subject.tsx:241
+#: packages/ui/primitives/document-flow/add-subject.tsx:261
 msgid "Copied to clipboard"
 msgstr "已複製到剪貼簿"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:249
+#: packages/ui/primitives/document-flow/add-subject.tsx:269
 msgid "Copy"
 msgstr "複製"
 
@@ -910,6 +910,10 @@ msgstr "我是此文件的審核者"
 msgid "I am required to receive a copy of this document"
 msgstr "我需要收到此文件的副本。"
 
+#: packages/ui/primitives/document-flow/add-subject.tsx:212
+msgid "If you wish to send through LINE, the integration have been moved to seperate platform. Please leave your email and we will be contact you shortly"
+msgstr ""
+
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:29
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:87
 msgid "Inherit authentication method"
@@ -1001,7 +1005,7 @@ msgstr "需要檢視"
 msgid "No recipient matching this description was found."
 msgstr "找不到符合此描述的收件人。"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:215
+#: packages/ui/primitives/document-flow/add-subject.tsx:235
 msgid "No recipients"
 msgstr "無收件人"
 
@@ -1488,7 +1492,7 @@ msgstr "簽署者的電子郵件"
 msgid "The signer's name"
 msgstr "簽署者的姓名"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:243
+#: packages/ui/primitives/document-flow/add-subject.tsx:263
 msgid "The signing link has been copied to your clipboard."
 msgstr "簽署連結已複製到您的剪貼簿。"
 

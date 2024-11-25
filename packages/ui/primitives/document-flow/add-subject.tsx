@@ -328,8 +328,13 @@ export const AddSubjectFormPartial = ({
                         through your method of choice.
                       </Trans>
                       <br />
+                      <hr className="my-4 border-t border-gray-300" />
                       <br />
-                      <p>想要和 LINE 整合嗎? 請提供您的 email 我們會盡快與您聯繫 </p>
+                      <Trans>
+                        If you wish to send through LINE, the integration have been moved to
+                        seperate platform. Please leave your email and we will be contact you
+                        shortly
+                      </Trans>
                       <br />
                       <div className="flex items-center">
                         <Input placeholder="abc@ezily.io" value={''} onChange={(e) => {}} />
