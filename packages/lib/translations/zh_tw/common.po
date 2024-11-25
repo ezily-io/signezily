@@ -188,11 +188,11 @@ msgstr "{recipientName} {action} 了一份文件，使用了您的直接連結�
 
 #: packages/email/templates/document-rejected.tsx:27
 msgid "{recipientName} has rejected the document '{documentName}'"
-msgstr ""
+msgstr "{recipientName} 已經拒絕了這個文件 '{documentName}'"
 
 #: packages/email/template-components/template-document-rejected.tsx:25
 msgid "{signerName} has rejected the document \"{documentName}\"."
-msgstr ""
+msgstr "{signerName} 已經拒絕了這個文件 \"{documentName}\"."
 
 #: packages/email/template-components/template-document-invite.tsx:68
 msgid "{teamName} has invited you to {0}"
@@ -220,7 +220,7 @@ msgstr "{userName} 完成了他們的任務"
 
 #: packages/lib/utils/document-audit-logs.ts:355
 msgid "{userName} rejected the document"
-msgstr ""
+msgstr "{userName} 已經拒絕了文件"
 
 #: packages/lib/utils/document-audit-logs.ts:341
 msgid "{userName} signed the document"
@@ -635,11 +635,11 @@ msgstr "直接連結接收者"
 
 #: packages/lib/jobs/definitions/emails/send-rejection-emails.ts:149
 msgid "Document \"{0}\" - Rejected by {1}"
-msgstr ""
+msgstr "文件 \"{0}\" - 被 {1} 拒絕"
 
 #: packages/lib/jobs/definitions/emails/send-rejection-emails.ts:109
 msgid "Document \"{0}\" - Rejection Confirmed"
-msgstr ""
+msgstr "文件 \"{0}\" - 拒絕已經確立"
 
 #: packages/ui/components/document/document-global-auth-access-select.tsx:62
 #: packages/ui/primitives/document-flow/add-settings.tsx:214
@@ -713,7 +713,7 @@ msgstr "文件待處理電子郵件"
 
 #: packages/email/template-components/template-document-rejected.tsx:21
 msgid "Document Rejected"
-msgstr ""
+msgstr "文件已被拒絕"
 
 #: packages/lib/utils/document-audit-logs.ts:330
 msgid "Document sent"
@@ -912,7 +912,7 @@ msgstr "我需要收到此文件的副本。"
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:212
 msgid "If you wish to send through LINE, the integration have been moved to seperate platform. Please leave your email and we will be contact you shortly"
-msgstr ""
+msgstr "如果您想要使用 LINE 整合功能, 請提供您的資訊我們會盡快與您聯絡"
 
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:29
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:87
@@ -1149,7 +1149,7 @@ msgstr "唯讀"
 
 #: packages/email/template-components/template-document-rejected.tsx:32
 msgid "Reason for rejection: {rejectionReason}"
-msgstr ""
+msgstr "拒絕理由 {rejectionReason}"
 
 #: packages/ui/components/recipient/recipient-role-select.tsx:95
 msgid "Receives copy"
@@ -1185,15 +1185,15 @@ msgstr "重新導向 URL"
 
 #: packages/email/template-components/template-document-invite.tsx:96
 msgid "Reject Document"
-msgstr ""
+msgstr "拒絕文件"
 
 #: packages/email/template-components/template-document-rejection-confirmed.tsx:22
 msgid "Rejection Confirmed"
-msgstr ""
+msgstr "確定拒絕"
 
 #: packages/email/template-components/template-document-rejection-confirmed.tsx:34
 msgid "Rejection reason: {reason}"
-msgstr ""
+msgstr "拒絕原因"
 
 #: packages/lib/server-only/document/resend-document.tsx:192
 msgid "Reminder: {0}"
@@ -1438,7 +1438,7 @@ msgstr "查看文件需要接收者進行身份驗證。"
 
 #: packages/email/template-components/template-document-rejection-confirmed.tsx:39
 msgid "The document owner has been notified of this rejection. No further action is required from you at this time. The document owner may contact you with any questions regarding this rejection."
-msgstr ""
+msgstr "此文件所有者已經被告知文件被拒絕,您不需要另外做任何事, 文件所有者可能會聯絡您"
 
 #: packages/ui/components/document/document-send-email-message-helper.tsx:31
 msgid "The document's name"
@@ -1518,11 +1518,11 @@ msgstr "此文件受密碼保護。請輸入密碼以查看文件。"
 
 #: packages/email/template-components/template-footer.tsx:17
 msgid "This document was sent using <0>Documenso.</0>"
-msgstr "此文件是使用 <0>Documenso。</0>發送的。"
+msgstr "此文件是使用 <0>Sign Ezily</0>發送的。"
 
 #: packages/email/template-components/template-document-rejection-confirmed.tsx:26
 msgid "This email confirms that you have rejected the document <0>\"{documentName}\"</0> sent by {documentOwnerName}."
-msgstr ""
+msgstr "這封郵件是確定您已經拒絕這個由{documentOwnerName} 所發送的文件 <0>\"{documentName}\"</0> "
 
 #: packages/ui/components/document/document-email-checkboxes.tsx:94
 msgid "This email is sent to the recipient if they are removed from a pending document."
@@ -1697,7 +1697,7 @@ msgstr "您可以在您的訊息中使用以下變數："
 
 #: packages/email/template-components/template-document-rejected.tsx:37
 msgid "You can view the document and its status by clicking the button below."
-msgstr ""
+msgstr "您可以使用以下內容看看查看文件和他的狀態"
 
 #: packages/ui/primitives/document-dropzone.tsx:43
 msgid "You cannot upload documents at this time."
@@ -1734,7 +1734,7 @@ msgstr "您已達到文件上限。"
 
 #: packages/email/templates/document-rejection-confirmed.tsx:27
 msgid "You have rejected the document '{documentName}'"
-msgstr ""
+msgstr "您已經拒絕了文件'{documentName}' "
 
 #: packages/email/template-components/template-document-self-signed.tsx:42
 msgid "You have signed “{documentName}”"
