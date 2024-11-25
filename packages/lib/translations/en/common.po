@@ -613,16 +613,16 @@ msgstr "Continue by signing the document."
 msgid "Continue by viewing the document."
 msgstr "Continue by viewing the document."
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:254
+#: packages/ui/primitives/document-flow/add-subject.tsx:274
 msgid "Copied"
 msgstr "Copied"
 
 #: packages/ui/components/document/document-share-button.tsx:46
-#: packages/ui/primitives/document-flow/add-subject.tsx:241
+#: packages/ui/primitives/document-flow/add-subject.tsx:261
 msgid "Copied to clipboard"
 msgstr "Copied to clipboard"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:249
+#: packages/ui/primitives/document-flow/add-subject.tsx:269
 msgid "Copy"
 msgstr "Copy"
 
@@ -948,6 +948,10 @@ msgstr "I am an approver of this document"
 msgid "I am required to receive a copy of this document"
 msgstr "I am required to receive a copy of this document"
 
+#: packages/ui/primitives/document-flow/add-subject.tsx:212
+msgid "If you wish to send through LINE, the integration have been moved to seperate platform. Please leave your email and we will be contact you shortly"
+msgstr "If you wish to send through LINE, the integration have been moved to seperate platform. Please leave your email and we will be contact you shortly"
+
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:29
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:87
 msgid "Inherit authentication method"
@@ -1039,7 +1043,7 @@ msgstr "Needs to view"
 msgid "No recipient matching this description was found."
 msgstr "No recipient matching this description was found."
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:215
+#: packages/ui/primitives/document-flow/add-subject.tsx:235
 msgid "No recipients"
 msgstr "No recipients"
 
@@ -1533,7 +1537,7 @@ msgstr "The signer's email"
 msgid "The signer's name"
 msgstr "The signer's name"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:243
+#: packages/ui/primitives/document-flow/add-subject.tsx:263
 msgid "The signing link has been copied to your clipboard."
 msgstr "The signing link has been copied to your clipboard."
 

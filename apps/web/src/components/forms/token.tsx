@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Trans, msg } from '@lingui/macro';
 import { useLingui } from '@lingui/react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -151,147 +152,198 @@ export const ApiTokenForm = ({ className, teamId, tokens }: ApiTokenFormProps) =
     }
   };
 
+  const { data: session } = useSession();
+
+  // Define ZWaitlistFormSchema as a Zod object
+  const ZWaitlistFormSchema = z.object({
+    email: z.string().email().optional(), // Add email field to the schema
+  });
+
+  // Update the type to include email
+  type TWaitlistFormSchema = z.infer<typeof ZWaitlistFormSchema>;
+
+  const waitlist = useForm<TWaitlistFormSchema>({
+    resolver: zodResolver(ZWaitlistFormSchema),
+    defaultValues: {
+      email: '',
+    },
+  });
+
+  const onJoinWaitlist = ({ email }: { email?: string }) => {
+    // Update parameter type
+    console.log(email);
+  };
+
+  if (!session) {
+    return <div>Please log in to access this feature.</div>;
+  }
+
   return (
-    <div className={cn(className)}>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <fieldset className="mt-6 flex w-full flex-col gap-4">
-            <FormField
-              control={form.control}
-              name="tokenName"
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel className="text-muted-foreground">
-                    <Trans>Token name</Trans>
-                  </FormLabel>
+    <>
+      {session?.user.email === ' ' ? (
+        <div className={cn(className)}>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <fieldset className="mt-6 flex w-full flex-col gap-4">
+                <FormField
+                  control={form.control}
+                  name="tokenName"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel className="text-muted-foreground">
+                        <Trans>Token name</Trans>
+                      </FormLabel>
 
-                  <div className="flex items-center gap-x-4">
-                    <FormControl className="flex-1">
-                      <Input type="text" {...field} />
-                    </FormControl>
-                  </div>
-
-                  <FormDescription className="text-xs italic">
-                    <Trans>
-                      Please enter a meaningful name for your token. This will help you identify it
-                      later.
-                    </Trans>
-                  </FormDescription>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="flex flex-col gap-4 md:flex-row">
-              <FormField
-                control={form.control}
-                name="expirationDate"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel className="text-muted-foreground">
-                      <Trans>Token expiration date</Trans>
-                    </FormLabel>
-
-                    <div className="flex items-center gap-x-4">
-                      <FormControl className="flex-1">
-                        <Select onValueChange={field.onChange} disabled={noExpirationDate}>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder={_(msg`Choose...`)} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {Object.entries(EXPIRATION_DATES).map(([key, date]) => (
-                              <SelectItem key={key} value={key}>
-                                {_(date)}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                    </div>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="enabled"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel className="text-muted-foreground mt-2">
-                      <Trans>Never expire</Trans>
-                    </FormLabel>
-                    <FormControl>
-                      <div className="block md:py-1.5">
-                        <Switch
-                          className="bg-background"
-                          checked={field.value}
-                          onCheckedChange={(val) => {
-                            setNoExpirationDate((prev) => !prev);
-                            field.onChange(val);
-                          }}
-                        />
+                      <div className="flex items-center gap-x-4">
+                        <FormControl className="flex-1">
+                          <Input type="text" {...field} />
+                        </FormControl>
                       </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
 
-            <Button
-              type="submit"
-              className="hidden md:inline-flex"
-              disabled={!form.formState.isDirty}
-              loading={form.formState.isSubmitting || isTransitionPending}
-            >
-              <Trans>Create token</Trans>
-            </Button>
+                      <FormDescription className="text-xs italic">
+                        <Trans>
+                          Please enter a meaningful name for your token. This will help you identify
+                          it later.
+                        </Trans>
+                      </FormDescription>
 
-            <div className="md:hidden">
-              <Button
-                type="submit"
-                disabled={!form.formState.isDirty}
-                loading={form.formState.isSubmitting || isTransitionPending}
-              >
-                <Trans>Create token</Trans>
-              </Button>
-            </div>
-          </fieldset>
-        </form>
-      </Form>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-      <AnimatePresence initial={!hasNewlyCreatedToken}>
-        {newlyCreatedToken && hasNewlyCreatedToken && (
-          <motion.div
-            className="mt-8"
-            initial={{ opacity: 0, y: -40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 40 }}
-          >
-            <Card gradient>
-              <CardContent className="p-4">
-                <p className="text-muted-foreground mt-2 text-sm">
-                  <Trans>
-                    Your token was created successfully! Make sure to copy it because you won't be
-                    able to see it again!
-                  </Trans>
-                </p>
+                <div className="flex flex-col gap-4 md:flex-row">
+                  <FormField
+                    control={form.control}
+                    name="expirationDate"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel className="text-muted-foreground">
+                          <Trans>Token expiration date</Trans>
+                        </FormLabel>
 
-                <p className="bg-muted-foreground/10 my-4 rounded-md px-2.5 py-1 font-mono text-sm">
-                  {newlyCreatedToken.token}
-                </p>
+                        <div className="flex items-center gap-x-4">
+                          <FormControl className="flex-1">
+                            <Select onValueChange={field.onChange} disabled={noExpirationDate}>
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder={_(msg`Choose...`)} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {Object.entries(EXPIRATION_DATES).map(([key, date]) => (
+                                  <SelectItem key={key} value={key}>
+                                    {_(date)}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                        </div>
 
-                <Button variant="outline" onClick={() => void copyToken(newlyCreatedToken.token)}>
-                  <Trans>Copy token</Trans>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="enabled"
+                    render={({ field }) => (
+                      <FormItem className="">
+                        <FormLabel className="text-muted-foreground mt-2">
+                          <Trans>Never expire</Trans>
+                        </FormLabel>
+                        <FormControl>
+                          <div className="block md:py-1.5">
+                            <Switch
+                              className="bg-background"
+                              checked={field.value}
+                              onCheckedChange={(val) => {
+                                setNoExpirationDate((prev) => !prev);
+                                field.onChange(val);
+                              }}
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  className="hidden md:inline-flex"
+                  disabled={!form.formState.isDirty}
+                  loading={form.formState.isSubmitting || isTransitionPending}
+                >
+                  <Trans>Create token</Trans>
                 </Button>
-              </CardContent>
-            </Card>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+
+                <div className="md:hidden">
+                  <Button
+                    type="submit"
+                    disabled={!form.formState.isDirty}
+                    loading={form.formState.isSubmitting || isTransitionPending}
+                  >
+                    <Trans>Create token</Trans>
+                  </Button>
+                </div>
+              </fieldset>
+            </form>
+          </Form>
+
+          <AnimatePresence initial={!hasNewlyCreatedToken}>
+            {newlyCreatedToken && hasNewlyCreatedToken && (
+              <motion.div
+                className="mt-8"
+                initial={{ opacity: 0, y: -40 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 40 }}
+              >
+                <Card gradient>
+                  <CardContent className="p-4">
+                    <p className="text-muted-foreground mt-2 text-sm">
+                      <Trans>
+                        Your token was created successfully! Make sure to copy it because you won't
+                        be able to see it again!
+                      </Trans>
+                    </p>
+
+                    <p className="bg-muted-foreground/10 my-4 rounded-md px-2.5 py-1 font-mono text-sm">
+                      {newlyCreatedToken.token}
+                    </p>
+
+                    <Button
+                      variant="outline"
+                      onClick={() => void copyToken(newlyCreatedToken.token)}
+                    >
+                      <Trans>Copy token</Trans>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      ) : (
+        <form onSubmit={waitlist.handleSubmit(onJoinWaitlist)}>
+          <Trans>
+            Token related features have been move to a seperate platform, please leave your email
+            and we will contact you shortly.
+          </Trans>
+          <div className="mt-4 flex items-center gap-2">
+            <Input
+              type="text"
+              placeholder="your email"
+              {...waitlist.register('email')}
+              className="flex-1"
+            />
+            <Button type="submit">
+              <Trans>submit</Trans>
+            </Button>
+          </div>
+        </form>
+      )}
+    </>
   );
 };
