@@ -194,13 +194,13 @@ msgid "A request to transfer the ownership of this team has been sent to <0>{0} 
 msgstr "已向 <0>{0} ({1})</0> 發送了團隊所有權轉移的請求。"
 
 #: apps/web/src/components/(dashboard)/settings/webhooks/create-webhook-dialog.tsx:228
-msgid "A secret that will be sent to your URL so you can verify that the request has been sent by Documenso"
-msgstr "一個將會發送到您的 URL 的密碼，以便您可以驗證該請求是由 Documenso 發送的。"
+msgid "A secret that will be sent to your URL so you can verify that the request has been sent by signEzily"
+msgstr "一個將會發送到您的 URL 的密碼，以便您可以驗證該請求是由 signEzily 發送的。"
 
 #: apps/web/src/app/(dashboard)/settings/webhooks/[id]/page.tsx:196
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/[id]/page.tsx:198
-msgid "A secret that will be sent to your URL so you can verify that the request has been sent by Documenso."
-msgstr "一個秘密將被發送到您的 URL，以便您可以驗證該請求已由 Documenso 發送。"
+msgid "A secret that will be sent to your URL so you can verify that the request has been sent by signEzily."
+msgstr "一個秘密將被發送到您的 URL，以便您可以驗證該請求已由 signEzily 發送。"
 
 #: apps/web/src/app/(unauthenticated)/articles/signature-disclosure/page.tsx:64
 msgid "A stable internet connection"
@@ -754,8 +754,8 @@ msgid "By enabling 2FA, you will be required to enter a code from your authentic
 msgstr "啟用 2FA 後，您每次登入時都需要從驗證器應用程式輸入代碼。"
 
 #: apps/web/src/app/(unauthenticated)/articles/signature-disclosure/page.tsx:142
-msgid "By proceeding to use the electronic signature service provided by Documenso, you affirm that you have read and understood this disclosure. You agree to all terms and conditions related to the use of electronic signatures and electronic transactions as outlined herein."
-msgstr "繼續使用由 Documenso 提供的電子簽名服務，即表示您確認已閱讀並理解此聲明。您同意本文所述有關使用電子簽名和電子交易的所有條款及條件。"
+msgid "By proceeding to use the electronic signature service provided by signEzily, you affirm that you have read and understood this disclosure. You agree to all terms and conditions related to the use of electronic signatures and electronic transactions as outlined herein."
+msgstr "繼續使用由 signEzily 提供的電子簽名服務，即表示您確認已閱讀並理解此聲明。您同意本文所述有關使用電子簽名和電子交易的所有條款及條件。"
 
 #: apps/web/src/components/general/signing-disclosure.tsx:14
 msgid "By proceeding with your electronic signature, you acknowledge and consent that it will be used to sign the given document and holds the same legal validity as a handwritten signature. By completing the electronic signing process, you affirm your understanding and acceptance of these conditions."
@@ -1389,8 +1389,8 @@ msgid "Do you want to duplicate this template?"
 msgstr "您想要複製此模板嗎？"
 
 #: apps/web/src/app/(dashboard)/settings/profile/delete-account-dialog.tsx:122
-msgid "Documenso will delete <0>all of your documents</0>, along with all of your completed documents, signatures, and all other resources belonging to your Account."
-msgstr "Documenso 將刪除 <0>您所有的文件</0>，包括您所有已完成的文件、簽名以及屬於您帳戶的所有其他資源。"
+msgid "signEzily will delete <0>all of your documents</0>, along with all of your completed documents, signatures, and all other resources belonging to your Account."
+msgstr "signEzily 將刪除 <0>您所有的文件</0>，包括您所有已完成的文件、簽名以及屬於您帳戶的所有其他資源。"
 
 #: apps/web/src/app/(dashboard)/documents/[id]/logs/document-logs-page-view.tsx:119
 #: apps/web/src/app/(dashboard)/templates/[id]/template-page-view-documents-table.tsx:38
@@ -3603,8 +3603,8 @@ msgid "Text Color"
 msgstr "文字顏色"
 
 #: apps/web/src/app/(unauthenticated)/articles/signature-disclosure/page.tsx:24
-msgid "Thank you for using Documenso to perform your electronic document signing. The purpose of this disclosure is to inform you about the process, legality, and your rights regarding the use of electronic signatures on our platform. By opting to use an electronic signature, you are agreeing to the terms and conditions outlined below."
-msgstr "感謝您使用 Documenso 進行電子文件簽署。本披露的目的是告知您有關在我們平台上使用電子簽名的過程、合法性以及您的權利。選擇使用電子簽名，即表示您同意以下列出的條款和條件。"
+msgid "Thank you for using signEzily to perform your electronic document signing. The purpose of this disclosure is to inform you about the process, legality, and your rights regarding the use of electronic signatures on our platform. By opting to use an electronic signature, you are agreeing to the terms and conditions outlined below."
+msgstr "感謝您使用 signEzily 進行電子文件簽署。本披露的目的是告知您有關在我們平台上使用電子簽名的過程、合法性以及您的權利。選擇使用電子簽名，即表示您同意以下列出的條款和條件。"
 
 #: apps/web/src/app/(dashboard)/admin/users/[id]/delete-user-dialog.tsx:52
 msgid "The account has been deleted successfully."
@@ -3731,8 +3731,8 @@ msgstr "您用來重設密碼的令牌已過期或不存在。如果您仍忘記
 #: apps/web/src/app/(dashboard)/settings/webhooks/[id]/page.tsx:124
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/[id]/page.tsx:128
 #: apps/web/src/components/(dashboard)/settings/webhooks/create-webhook-dialog.tsx:152
-msgid "The URL for Documenso to send webhook events to."
-msgstr "用於將 webhook 事件發送至 Documenso 的 URL。"
+msgid "The URL for signEzily to send webhook events to."
+msgstr "用於將 webhook 事件發送至 signEzily 的 URL。"
 
 #: apps/web/src/components/(dashboard)/settings/webhooks/delete-webhook-dialog.tsx:79
 msgid "The webhook has been successfully deleted."
@@ -4391,8 +4391,8 @@ msgid "Waiting for Your Turn"
 msgstr "等待輪到您"
 
 #: apps/web/src/app/(signing)/sign/[token]/no-longer-available.tsx:61
-msgid "Want to send slick signing links like this one? <0>Check out Documenso.</0>"
-msgstr "想要發送像這樣的流暢簽署連結嗎？<0>查看 Documenso。</0>"
+msgid "Want to send slick signing links like this one? <0>Check out signEzily.</0>"
+msgstr "想要發送像這樣的流暢簽署連結嗎？<0>查看 signEzily。</0>"
 
 #: apps/web/src/app/(profile)/profile-header.tsx:68
 msgid "Want your own public profile?"
@@ -4667,12 +4667,12 @@ msgid "When you click continue, you will be prompted to add the first available 
 msgstr "當您點擊繼續時，系統會提示您新增系統上第一個可用的驗證器。"
 
 #: apps/web/src/app/(unauthenticated)/articles/signature-disclosure/page.tsx:36
-msgid "When you use our platform to affix your electronic signature to documents, you are consenting to do so under the Electronic Signatures in Global and National Commerce Act (E-Sign Act) and other applicable laws. This action indicates your agreement to use electronic means to sign documents and receive notifications."
-msgstr "當您使用我們的平台在文件上附加您的電子簽名時，即表示您同意根據《全球與國家商業電子簽名法案》（E-Sign Act）及其他適用法律這樣做。此操作顯示您同意使用電子方式簽署文件並接收通知。"
+msgid "When you use our platform to affix your electronic signature to documents, you are consenting to do so under the Electronic Signatures Act and other applicable laws. This action indicates your agreement to use electronic means to sign documents and receive notifications."
+msgstr "當您使用我們的平台在文件上附加您的電子簽名時，即表示您同意根據《電子簽章法案》及其他適用法律這樣做。此操作顯示您同意使用電子方式簽署文件並接收通知。"
 
 #: apps/web/src/app/(profile)/p/[url]/page.tsx:139
-msgid "While waiting for them to do so you can create your own Documenso account and get started with document signing right away."
-msgstr "在等待他們的過程中，您可以創建自己的 Documenso 帳戶，立即開始文件簽署。"
+msgid "While waiting for them to do so you can create your own signEzily account and get started with document signing right away."
+msgstr "在等待他們的過程中，您可以創建自己的 Sign Ezily 帳戶，立即開始文件簽署。"
 
 #: apps/web/src/app/(dashboard)/documents/_action-items/resend-document.tsx:126
 msgid "Who do you want to remind?"
@@ -4902,8 +4902,8 @@ msgid "You need to setup 2FA to mark this document as viewed."
 msgstr "您需要設置 2FA 才能將此文件標記為已查看。"
 
 #: apps/web/src/components/forms/v2/signup.tsx:283
-msgid "You will get notified & be able to set up your documenso public profile when we launch the feature."
-msgstr "當我們推出此功能時，您將收到通知並能夠設定您的 documenso 公開個人檔案。"
+msgid "You will get notified & be able to set up your signEzily public profile when we launch the feature."
+msgstr "當我們推出此功能時，您將收到通知並能夠設定您的 sign ezily 公開個人檔案。"
 
 #: apps/web/src/components/forms/2fa/enable-authenticator-app-dialog.tsx:96
 msgid "You will now be required to enter a code from your authenticator app when signing in."
@@ -4978,8 +4978,8 @@ msgid "Your documents"
 msgstr "您的文件"
 
 #: apps/web/src/app/(unauthenticated)/verify-email/[token]/client.tsx:40
-msgid "Your email has been successfully confirmed! You can now use all features of Documenso."
-msgstr "您的電子郵件已成功確認！您現在可以使用 Documenso 的所有功能。"
+msgid "Your email has been successfully confirmed! You can now use all features of signEzily."
+msgstr "您的電子郵件已成功確認！您現在可以使用 signEzily 的所有功能。"
 
 #: apps/web/src/app/(dashboard)/settings/teams/team-email-usage.tsx:62
 msgid "Your email is currently being used by team <0>{0}</0> ({1})."
