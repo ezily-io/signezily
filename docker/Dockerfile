@@ -86,6 +86,9 @@ USER nextjs
 
 COPY --from=installer /app/apps/web/next.config.js .
 COPY --from=installer /app/apps/web/package.json .
+# Copy the certificate file into the image
+# TODO: change it later to a proper cert
+COPY --from=installer /app/apps/web/example/cert.p12 /opt/documenso/cert.p12
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
@@ -107,4 +110,7 @@ RUN ln -s /app/node_modules/prisma/build/index.js ./node_modules/.bin/prisma
 # Get the start script from docker/start.sh
 COPY --chown=nextjs:nodejs ./docker/start.sh ./start.sh
 
+
+
 CMD ["sh", "start.sh"]
+
