@@ -15,27 +15,27 @@ msgstr ""
 
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/preferences/document-preferences.tsx:214
 msgid "\"{0}\" has invited you to sign \"example document\"."
-msgstr "\"{0}\" 已邀請您簽署 \\example document\\。"
+msgstr "\"{0}\" 已邀請您簽署 \"example document\"。"
 
 #: apps/web/src/app/(signing)/sign/[token]/date-field.tsx:69
 msgid "\"{0}\" will appear on the document as it has a timezone of \"{timezone}\"."
-msgstr "\\{0}\\ 會顯示在文件上，因為它具有 \\{timezone}\\ 的時區。"
+msgstr "\"{0}\" 會顯示在文件上，因為它具有 \"{timezone}\" 的時區。"
 
 #: apps/web/src/app/(dashboard)/documents/delete-document-dialog.tsx:60
 msgid "\"{documentTitle}\" has been successfully deleted"
-msgstr "\\{documentTitle}\\ 已成功刪除"
+msgstr "\"{documentTitle}\" 已成功刪除"
 
 #: apps/web/src/components/(teams)/forms/update-team-form.tsx:234
 msgid "\"{email}\" on behalf of \"{teamName}\" has invited you to sign \"example document\"."
-msgstr "\\{email}\\ 代表 \\{teamName}\\ 邀請您簽署 \\example document\\。"
+msgstr "\"{email}\" 代表 \"{teamName}\" 邀請您簽署 \"example document\"。"
 
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/preferences/document-preferences.tsx:209
 msgid "\"{placeholderEmail}\" on behalf of \"{0}\" has invited you to sign \"example document\"."
-msgstr "\\{placeholderEmail}\\ 代表 \\{0}\\ 邀請您簽署 \\example document\\。"
+msgstr "\"{placeholderEmail}\" 代表 \"{0}\" 邀請您簽署 \"example document\"。"
 
 #: apps/web/src/components/(teams)/forms/update-team-form.tsx:241
 msgid "\"{teamUrl}\" has invited you to sign \"example document\"."
-msgstr "\\{teamUrl}\\ 已邀請您簽署 \\example document\\。"
+msgstr "\"{teamUrl}\" 已邀請您簽署 \"example document\"。"
 
 #: apps/web/src/app/(signing)/sign/[token]/signing-page-view.tsx:79
 msgid "({0}) has invited you to approve this document"
@@ -122,7 +122,7 @@ msgstr "{remaningLength, plural, one {剩餘 # 個字元} other {剩餘 # 個字
 
 #: apps/web/src/app/(signing)/sign/[token]/no-longer-available.tsx:45
 msgid "<0>\"{0}\"</0>is no longer available to sign"
-msgstr "<0>\\{0}\\</0>已無法簽署"
+msgstr "<0>\"{0}\"</0>已無法簽署"
 
 #: apps/web/src/app/(dashboard)/documents/data-table-sender-filter.tsx:57
 msgid "<0>Sender:</0> All"
@@ -194,13 +194,13 @@ msgid "A request to transfer the ownership of this team has been sent to <0>{0} 
 msgstr "已向 <0>{0} ({1})</0> 發送了團隊所有權轉移的請求。"
 
 #: apps/web/src/components/(dashboard)/settings/webhooks/create-webhook-dialog.tsx:228
-msgid "A secret that will be sent to your URL so you can verify that the request has been sent by signEzily"
-msgstr "一個將會發送到您的 URL 的密碼，以便您可以驗證該請求是由 signEzily 發送的。"
+msgid "A secret that will be sent to your URL so you can verify that the request has been sent by Documenso"
+ msgstr "一個 secret 將會發送到您的 URL，以便您可以驗證該請求是由 signEzily 發送的。"
 
 #: apps/web/src/app/(dashboard)/settings/webhooks/[id]/page.tsx:196
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/[id]/page.tsx:198
-msgid "A secret that will be sent to your URL so you can verify that the request has been sent by signEzily."
-msgstr "一個秘密將被發送到您的 URL，以便您可以驗證該請求已由 signEzily 發送。"
+msgid "A secret that will be sent to your URL so you can verify that the request has been sent by Documenso."
+msgstr "一個 secret 將被發送到您的 URL，以便您可以驗證該請求已由 signEzily 發送。"
 
 #: apps/web/src/app/(unauthenticated)/articles/signature-disclosure/page.tsx:64
 msgid "A stable internet connection"
@@ -754,7 +754,7 @@ msgid "By enabling 2FA, you will be required to enter a code from your authentic
 msgstr "啟用 2FA 後，您每次登入時都需要從驗證器應用程式輸入代碼。"
 
 #: apps/web/src/app/(unauthenticated)/articles/signature-disclosure/page.tsx:142
-msgid "By proceeding to use the electronic signature service provided by signEzily, you affirm that you have read and understood this disclosure. You agree to all terms and conditions related to the use of electronic signatures and electronic transactions as outlined herein."
+msgid "By proceeding to use the electronic signature service provided by Documenso, you affirm that you have read and understood this disclosure. You agree to all terms and conditions related to the use of electronic signatures and electronic transactions as outlined herein."
 msgstr "繼續使用由 signEzily 提供的電子簽名服務，即表示您確認已閱讀並理解此聲明。您同意本文所述有關使用電子簽名和電子交易的所有條款及條件。"
 
 #: apps/web/src/components/general/signing-disclosure.tsx:14
@@ -1389,8 +1389,8 @@ msgid "Do you want to duplicate this template?"
 msgstr "您想要複製此模板嗎？"
 
 #: apps/web/src/app/(dashboard)/settings/profile/delete-account-dialog.tsx:122
-msgid "signEzily will delete <0>all of your documents</0>, along with all of your completed documents, signatures, and all other resources belonging to your Account."
-msgstr "signEzily 將刪除 <0>您所有的文件</0>，包括您所有已完成的文件、簽名以及屬於您帳戶的所有其他資源。"
+msgid "Documenso will delete <0>all of your documents</0>, along with all of your completed documents, signatures, and all other resources belonging to your Account."
+msgstr ""
 
 #: apps/web/src/app/(dashboard)/documents/[id]/logs/document-logs-page-view.tsx:119
 #: apps/web/src/app/(dashboard)/templates/[id]/template-page-view-documents-table.tsx:38
@@ -2418,8 +2418,8 @@ msgid "On this page, you can create a new webhook."
 msgstr "在此頁面，您可以建立一個新的 webhook。"
 
 #: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:26
-# msgid "On this page, you can create new API tokens and manage the existing ones."
-# msgstr "在此頁面上，您可以創建新的 API token 並管理現有的 token。"
+msgid "On this page, you can create new API tokens and manage the existing ones. <0/>"
+msgstr ""
 
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:60
 msgid "On this page, you can create new API tokens and manage the existing ones. <0/>You can view our swagger docs <1>here</1>"
@@ -3163,7 +3163,7 @@ msgid "Sign in to your account"
 msgstr "登入您的帳戶"
 
 #: apps/web/src/components/(dashboard)/layout/menu-switcher.tsx:297
-#: apps/web/src/components/(dashboard)/layout/mobile-navigation.tsx:84
+#: apps/web/src/components/(dashboard)/layout/mobile-navigation.tsx:78
 msgid "Sign Out"
 msgstr "登出"
 
@@ -3223,6 +3223,10 @@ msgstr "已簽署"
 #: apps/web/src/app/(internal)/%5F%5Fhtmltopdf/certificate/page.tsx:176
 msgid "Signer Events"
 msgstr "簽署者事件"
+
+#: apps/web/src/app/(dashboard)/settings/profile/delete-account-dialog.tsx:122
+#~ msgid "signEzily will delete <0>all of your documents</0>, along with all of your completed documents, signatures, and all other resources belonging to your Account."
+#~ msgstr "signEzily 將刪除 <0>您所有的文件</0>，包括您所有已完成的文件、簽名以及屬於您帳戶的所有其他資源。"
 
 #: apps/web/src/app/(internal)/%5F%5Fhtmltopdf/certificate/page.tsx:168
 msgid "Signing Certificate"
@@ -3603,7 +3607,7 @@ msgid "Text Color"
 msgstr "文字顏色"
 
 #: apps/web/src/app/(unauthenticated)/articles/signature-disclosure/page.tsx:24
-msgid "Thank you for using signEzily to perform your electronic document signing. The purpose of this disclosure is to inform you about the process, legality, and your rights regarding the use of electronic signatures on our platform. By opting to use an electronic signature, you are agreeing to the terms and conditions outlined below."
+msgid "Thank you for using Documenso to perform your electronic document signing. The purpose of this disclosure is to inform you about the process, legality, and your rights regarding the use of electronic signatures on our platform. By opting to use an electronic signature, you are agreeing to the terms and conditions outlined below."
 msgstr "感謝您使用 signEzily 進行電子文件簽署。本披露的目的是告知您有關在我們平台上使用電子簽名的過程、合法性以及您的權利。選擇使用電子簽名，即表示您同意以下列出的條款和條件。"
 
 #: apps/web/src/app/(dashboard)/admin/users/[id]/delete-user-dialog.tsx:52
@@ -3731,7 +3735,7 @@ msgstr "您用來重設密碼的令牌已過期或不存在。如果您仍忘記
 #: apps/web/src/app/(dashboard)/settings/webhooks/[id]/page.tsx:124
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/[id]/page.tsx:128
 #: apps/web/src/components/(dashboard)/settings/webhooks/create-webhook-dialog.tsx:152
-msgid "The URL for signEzily to send webhook events to."
+msgid "The URL for Documenso to send webhook events to."
 msgstr "用於將 webhook 事件發送至 signEzily 的 URL。"
 
 #: apps/web/src/components/(dashboard)/settings/webhooks/delete-webhook-dialog.tsx:79
@@ -4391,7 +4395,7 @@ msgid "Waiting for Your Turn"
 msgstr "等待輪到您"
 
 #: apps/web/src/app/(signing)/sign/[token]/no-longer-available.tsx:61
-msgid "Want to send slick signing links like this one? <0>Check out signEzily.</0>"
+msgid "Want to send slick signing links like this one? <0>Check out Documenso.</0>"
 msgstr "想要發送像這樣的流暢簽署連結嗎？<0>查看 signEzily。</0>"
 
 #: apps/web/src/app/(profile)/profile-header.tsx:68
@@ -4667,11 +4671,11 @@ msgid "When you click continue, you will be prompted to add the first available 
 msgstr "當您點擊繼續時，系統會提示您新增系統上第一個可用的驗證器。"
 
 #: apps/web/src/app/(unauthenticated)/articles/signature-disclosure/page.tsx:36
-msgid "When you use our platform to affix your electronic signature to documents, you are consenting to do so under the Electronic Signatures Act and other applicable laws. This action indicates your agreement to use electronic means to sign documents and receive notifications."
+msgid "When you use our platform to affix your electronic signature to documents, you are consenting to do so under the Electronic Signatures in Global and National Commerce Act (E-Sign Act) and other applicable laws. This action indicates your agreement to use electronic means to sign documents and receive notifications."
 msgstr "當您使用我們的平台在文件上附加您的電子簽名時，即表示您同意根據《電子簽章法案》及其他適用法律這樣做。此操作顯示您同意使用電子方式簽署文件並接收通知。"
 
 #: apps/web/src/app/(profile)/p/[url]/page.tsx:139
-msgid "While waiting for them to do so you can create your own signEzily account and get started with document signing right away."
+msgid "While waiting for them to do so you can create your own Documenso account and get started with document signing right away."
 msgstr "在等待他們的過程中，您可以創建自己的 Sign Ezily 帳戶，立即開始文件簽署。"
 
 #: apps/web/src/app/(dashboard)/documents/_action-items/resend-document.tsx:126
@@ -4701,19 +4705,19 @@ msgstr "您"
 
 #: apps/web/src/app/(signing)/sign/[token]/sign-dialog.tsx:93
 msgid "You are about to complete approving \"{truncatedTitle}\".<0/> Are you sure?"
-msgstr "您即將完成批准 \\{truncatedTitle}\\.<0/> 您確定嗎？"
+msgstr "您即將完成批准 \"{truncatedTitle}\".<0/> 您確定嗎？"
 
 #: apps/web/src/app/(signing)/sign/[token]/sign-dialog.tsx:85
 msgid "You are about to complete signing \"{truncatedTitle}\".<0/> Are you sure?"
-msgstr "您即將完成簽署 \\{truncatedTitle}\\.<0/> 您確定嗎？"
+msgstr "您即將完成簽署 \"{truncatedTitle}\".<0/> 您確定嗎？"
 
 #: apps/web/src/app/(signing)/sign/[token]/sign-dialog.tsx:77
 msgid "You are about to complete viewing \"{truncatedTitle}\".<0/> Are you sure?"
-msgstr "您即將完成查看 \\{truncatedTitle}\\.<0/> 您確定嗎？"
+msgstr "您即將完成查看 \"{truncatedTitle}\".<0/> 您確定嗎？"
 
 #: apps/web/src/app/(dashboard)/documents/delete-document-dialog.tsx:103
 msgid "You are about to delete <0>\"{documentTitle}\"</0>"
-msgstr "您即將刪除 <0>\\{documentTitle}\\</0>"
+msgstr "您即將刪除 <0>\"{documentTitle}\"</0>"
 
 #: apps/web/src/components/(teams)/dialogs/remove-team-email-dialog.tsx:120
 msgid "You are about to delete the following team email from <0>{teamName}</0>."
@@ -4721,7 +4725,7 @@ msgstr "您即將從 <0>{teamName}</0> 刪除以下團隊電子郵件。"
 
 #: apps/web/src/app/(dashboard)/documents/delete-document-dialog.tsx:107
 msgid "You are about to hide <0>\"{documentTitle}\"</0>"
-msgstr "您即將隱藏 <0>\\{documentTitle}\\</0>"
+msgstr "您即將隱藏 <0>\"{documentTitle}\"</0>"
 
 #: apps/web/src/components/(teams)/dialogs/leave-team-dialog.tsx:85
 msgid "You are about to leave the following team."
@@ -4902,7 +4906,7 @@ msgid "You need to setup 2FA to mark this document as viewed."
 msgstr "您需要設置 2FA 才能將此文件標記為已查看。"
 
 #: apps/web/src/components/forms/v2/signup.tsx:283
-msgid "You will get notified & be able to set up your signEzily public profile when we launch the feature."
+msgid "You will get notified & be able to set up your documenso public profile when we launch the feature."
 msgstr "當我們推出此功能時，您將收到通知並能夠設定您的 sign ezily 公開個人檔案。"
 
 #: apps/web/src/components/forms/2fa/enable-authenticator-app-dialog.tsx:96
@@ -4978,7 +4982,7 @@ msgid "Your documents"
 msgstr "您的文件"
 
 #: apps/web/src/app/(unauthenticated)/verify-email/[token]/client.tsx:40
-msgid "Your email has been successfully confirmed! You can now use all features of signEzily."
+msgid "Your email has been successfully confirmed! You can now use all features of Documenso."
 msgstr "您的電子郵件已成功確認！您現在可以使用 signEzily 的所有功能。"
 
 #: apps/web/src/app/(dashboard)/settings/teams/team-email-usage.tsx:62

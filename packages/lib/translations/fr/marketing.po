@@ -430,12 +430,12 @@ msgstr "Ancienneté"
 msgid "Sign"
 msgstr "Signer"
 
-#: apps/marketing/src/components/(marketing)/header.tsx:43
+#: apps/marketing/src/components/(marketing)/header.tsx:37
 #: apps/marketing/src/components/(marketing)/mobile-navigation.tsx:28
 msgid "Sign in"
 msgstr "Se connecter"
 
-#: apps/marketing/src/components/(marketing)/header.tsx:48
+#: apps/marketing/src/components/(marketing)/header.tsx:42
 #: apps/marketing/src/components/(marketing)/mobile-navigation.tsx:24
 msgid "Sign up"
 msgstr "S'inscrire"

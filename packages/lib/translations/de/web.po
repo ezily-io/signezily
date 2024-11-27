@@ -3229,7 +3229,7 @@ msgid "Sign in to your account"
 msgstr "Melden Sie sich bei Ihrem Konto an"
 
 #: apps/web/src/components/(dashboard)/layout/menu-switcher.tsx:297
-#: apps/web/src/components/(dashboard)/layout/mobile-navigation.tsx:84
+#: apps/web/src/components/(dashboard)/layout/mobile-navigation.tsx:78
 msgid "Sign Out"
 msgstr "Ausloggen"
 
