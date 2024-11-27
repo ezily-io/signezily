@@ -139,7 +139,7 @@ msgstr "這是一個社群合作的計畫，旨在圍繞一個每個人都可以
 
 #: apps/marketing/src/app/(marketing)/open/typefully.tsx:28
 msgid "Documenso on X"
-msgstr ""
+msgstr "Sign Ezily on X"
 
 #: apps/marketing/src/components/(marketing)/hero.tsx:38
 msgid "Document signing,<0/>finally open source."
@@ -198,7 +198,7 @@ msgstr "財務"
 
 #: apps/marketing/src/app/(marketing)/open/typefully.tsx:38
 msgid "Follow us on X"
-msgstr ""
+msgstr "在 X 上跟隨我們"
 
 #: apps/marketing/src/components/(marketing)/pricing-table.tsx:172
 msgid "For companies looking to scale across multiple teams."
@@ -429,12 +429,12 @@ msgstr "資歷"
 msgid "Sign"
 msgstr "簽名"
 
-#: apps/marketing/src/components/(marketing)/header.tsx:43
+#: apps/marketing/src/components/(marketing)/header.tsx:37
 #: apps/marketing/src/components/(marketing)/mobile-navigation.tsx:28
 msgid "Sign in"
 msgstr "登入"
 
-#: apps/marketing/src/components/(marketing)/header.tsx:48
+#: apps/marketing/src/components/(marketing)/header.tsx:42
 #: apps/marketing/src/components/(marketing)/mobile-navigation.tsx:24
 msgid "Sign up"
 msgstr "註冊帳號"
@@ -570,7 +570,7 @@ msgstr "我可以在哪裡獲得支援？"
 
 #: apps/marketing/src/app/(marketing)/pricing/page.tsx:177
 msgid "Why should I prefer Documenso over DocuSign or some other signing tool?"
-msgstr ""
+msgstr "為什麼 Sign Ezily 會更好"
 
 #: apps/marketing/src/app/(marketing)/pricing/page.tsx:177
 #~ msgid "Why should I prefer SignEzily over DocuSign or some other signing tool?"

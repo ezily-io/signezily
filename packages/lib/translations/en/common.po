@@ -33,11 +33,11 @@ msgstr "“{documentName}” was signed by all signers"
 #~ msgid "{0} Document"
 #~ msgstr "{0} Document"
 
-#: packages/lib/jobs/definitions/emails/send-signing-email.ts:137
+#: packages/lib/jobs/definitions/emails/send-signing-email.ts:136
 msgid "{0} has invited you to {recipientActionVerb} the document \"{1}\"."
 msgstr "{0} has invited you to {recipientActionVerb} the document \"{1}\"."
 
-#: packages/lib/jobs/definitions/emails/send-signing-email.ts:130
+#: packages/lib/jobs/definitions/emails/send-signing-email.ts:129
 msgid "{0} invited you to {recipientActionVerb} a document"
 msgstr "{0} invited you to {recipientActionVerb} a document"
 
@@ -53,7 +53,7 @@ msgstr "{0} left the team {teamName} on Documenso"
 msgid "{0} of {1} row(s) selected."
 msgstr "{0} of {1} row(s) selected."
 
-#: packages/lib/jobs/definitions/emails/send-signing-email.ts:136
+#: packages/lib/jobs/definitions/emails/send-signing-email.ts:135
 #: packages/lib/server-only/document/resend-document.tsx:137
 msgid "{0} on behalf of {1} has invited you to {recipientActionVerb} the document \"{2}\"."
 msgstr "{0} on behalf of {1} has invited you to {recipientActionVerb} the document \"{2}\"."
@@ -62,7 +62,7 @@ msgstr "{0} on behalf of {1} has invited you to {recipientActionVerb} the docume
 #~ msgid "{0}<0/>\"{documentName}\""
 #~ msgstr "{0}<0/>\"{documentName}\""
 
-#: packages/email/templates/document-invite.tsx:94
+#: packages/email/templates/document-invite.tsx:90
 msgid "{inviterName} <0>({inviterEmail})</0>"
 msgstr "{inviterName} <0>({inviterEmail})</0>"
 
@@ -82,7 +82,7 @@ msgstr "{inviterName} has invited you to {0}<0/>\"{documentName}\""
 msgid "{inviterName} has invited you to {action} {documentName}"
 msgstr "{inviterName} has invited you to {action} {documentName}"
 
-#: packages/email/templates/document-invite.tsx:106
+#: packages/email/templates/document-invite.tsx:102
 msgid "{inviterName} has invited you to {action} the document \"{documentName}\"."
 msgstr "{inviterName} has invited you to {action} the document \"{documentName}\"."
 
@@ -90,7 +90,7 @@ msgstr "{inviterName} has invited you to {action} the document \"{documentName}\
 msgid "{inviterName} has removed you from the document {documentName}."
 msgstr "{inviterName} has removed you from the document {documentName}."
 
-#: packages/email/templates/recipient-removed-from-document.tsx:49
+#: packages/email/templates/recipient-removed-from-document.tsx:45
 msgid "{inviterName} has removed you from the document<0/>\"{documentName}\""
 msgstr "{inviterName} has removed you from the document<0/>\"{documentName}\""
 
@@ -198,7 +198,7 @@ msgstr "{prefix} updated the document title"
 msgid "{prefix} updated the document visibility"
 msgstr "{prefix} updated the document visibility"
 
-#: packages/email/templates/document-created-from-direct-template.tsx:61
+#: packages/email/templates/document-created-from-direct-template.tsx:57
 msgid "{recipientName} {action} a document by using one of your direct links"
 msgstr "{recipientName} {action} a document by using one of your direct links"
 
@@ -304,7 +304,7 @@ msgstr "<0>Require account</0> - The recipient must be signed in to view the doc
 msgid "<0>Require passkey</0> - The recipient must have an account and passkey configured via their settings"
 msgstr "<0>Require passkey</0> - The recipient must have an account and passkey configured via their settings"
 
-#: packages/lib/jobs/definitions/emails/send-signing-email.ts:122
+#: packages/lib/jobs/definitions/emails/send-signing-email.ts:121
 msgid "A document was created by your direct template that requires you to {recipientActionVerb} it."
 msgstr "A document was created by your direct template that requires you to {recipientActionVerb} it."
 
@@ -657,7 +657,7 @@ msgstr "Date Format"
 msgid "Decline"
 msgstr "Decline"
 
-#: packages/email/templates/reset-password.tsx:71
+#: packages/email/templates/reset-password.tsx:67
 msgid "Didn't request a password change? We are here to help you secure your account, just <0>contact us.</0>"
 msgstr "Didn't request a password change? We are here to help you secure your account, just <0>contact us.</0>"
 
@@ -928,7 +928,7 @@ msgstr "Green"
 #~ msgid "Hello {recipientName},"
 #~ msgstr "Hello {recipientName},"
 
-#: packages/email/templates/reset-password.tsx:56
+#: packages/email/templates/reset-password.tsx:52
 msgid "Hi, {userName} <0>({userEmail})</0>"
 msgstr "Hi, {userName} <0>({userEmail})</0>"
 
@@ -1144,15 +1144,15 @@ msgstr "Please {0} your document<0/>\"{documentName}\""
 msgid "Please {action} your document {documentName}"
 msgstr "Please {action} your document {documentName}"
 
-#: packages/lib/jobs/definitions/emails/send-signing-email.ts:111
+#: packages/lib/jobs/definitions/emails/send-signing-email.ts:110
 msgid "Please {recipientActionVerb} this document"
 msgstr "Please {recipientActionVerb} this document"
 
-#: packages/lib/jobs/definitions/emails/send-signing-email.ts:125
+#: packages/lib/jobs/definitions/emails/send-signing-email.ts:124
 msgid "Please {recipientActionVerb} this document created by your direct template"
 msgstr "Please {recipientActionVerb} this document created by your direct template"
 
-#: packages/lib/jobs/definitions/emails/send-signing-email.ts:117
+#: packages/lib/jobs/definitions/emails/send-signing-email.ts:116
 msgid "Please {recipientActionVerb} your document"
 msgstr "Please {recipientActionVerb} your document"
 
@@ -1664,7 +1664,7 @@ msgstr "View"
 msgid "View all documents sent to and from this email address"
 msgstr "View all documents sent to and from this email address"
 
-#: packages/email/templates/document-created-from-direct-template.tsx:75
+#: packages/email/templates/document-created-from-direct-template.tsx:71
 msgid "View document"
 msgstr "View document"
 
@@ -1719,13 +1719,17 @@ msgstr "We won't send anything to notify recipients."
 msgid "We're still waiting for other signers to sign this document.<0/>We'll notify you as soon as it's ready."
 msgstr "We're still waiting for other signers to sign this document.<0/>We'll notify you as soon as it's ready."
 
-#: packages/email/templates/reset-password.tsx:65
+#: packages/email/templates/reset-password.tsx:61
 msgid "We've changed your password as you asked. You can now sign in with your new password."
 msgstr "We've changed your password as you asked. You can now sign in with your new password."
 
 #: packages/email/template-components/template-confirmation-email.tsx:21
-msgid "Welcome to Documenso!"
-msgstr "Welcome to Documenso!"
+#~ msgid "Welcome to Documenso!"
+#~ msgstr "Welcome to Documenso!"
+
+#: packages/email/template-components/template-confirmation-email.tsx:21
+msgid "Welcome to Sign Ezily!"
+msgstr "Welcome to Sign Ezily!"
 
 #: packages/lib/utils/document-audit-logs.ts:258
 msgid "You"
@@ -1775,7 +1779,7 @@ msgstr "You have been removed from a document"
 msgid "You have been requested to take ownership of team {0} on Documenso"
 msgstr "You have been requested to take ownership of team {0} on Documenso"
 
-#: packages/lib/jobs/definitions/emails/send-signing-email.ts:115
+#: packages/lib/jobs/definitions/emails/send-signing-email.ts:114
 #: packages/lib/server-only/document/resend-document.tsx:125
 msgid "You have initiated the document {0} that requires you to {recipientActionVerb} it."
 msgstr "You have initiated the document {0} that requires you to {recipientActionVerb} it."

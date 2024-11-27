@@ -25,11 +25,11 @@ msgstr "“{documentName}” 已簽署"
 msgid "“{documentName}” was signed by all signers"
 msgstr "“{documentName}” 已由所有簽署者簽署完畢"
 
-#: packages/lib/jobs/definitions/emails/send-signing-email.ts:137
+#: packages/lib/jobs/definitions/emails/send-signing-email.ts:136
 msgid "{0} has invited you to {recipientActionVerb} the document \"{1}\"."
 msgstr "{0} 已邀請您{recipientActionVerb}文件 \"{1}\"。"
 
-#: packages/lib/jobs/definitions/emails/send-signing-email.ts:130
+#: packages/lib/jobs/definitions/emails/send-signing-email.ts:129
 msgid "{0} invited you to {recipientActionVerb} a document"
 msgstr "{0} 邀請您{recipientActionVerb}文件"
 
@@ -45,12 +45,12 @@ msgstr "{0} 已離開 Documenso 上的團隊 {teamName}"
 msgid "{0} of {1} row(s) selected."
 msgstr "已選擇 {0} 筆中的 {1} 筆資料。"
 
-#: packages/lib/jobs/definitions/emails/send-signing-email.ts:136
+#: packages/lib/jobs/definitions/emails/send-signing-email.ts:135
 #: packages/lib/server-only/document/resend-document.tsx:137
 msgid "{0} on behalf of {1} has invited you to {recipientActionVerb} the document \"{2}\"."
-msgstr "{0} 代表 {1} 邀請您{recipientActionVerb}檔案 \\{2}\\。"
+msgstr "{0} 代表 {1} 邀請您{recipientActionVerb}檔案 \"{2}\"。"
 
-#: packages/email/templates/document-invite.tsx:94
+#: packages/email/templates/document-invite.tsx:90
 msgid "{inviterName} <0>({inviterEmail})</0>"
 msgstr "{inviterName} <0>（{inviterEmail}）</0>"
 
@@ -60,27 +60,27 @@ msgstr "{inviterName} 已取消文件 {documentName}，您不再需要簽署。"
 
 #: packages/email/template-components/template-document-cancel.tsx:24
 msgid "{inviterName} has cancelled the document<0/>\"{documentName}\""
-msgstr "{inviterName} 已取消文件<0/>\\{documentName}\\"
+msgstr "{inviterName} 已取消文件<0/>\"{documentName}\""
 
 #: packages/email/template-components/template-document-invite.tsx:75
 msgid "{inviterName} has invited you to {0}<0/>\"{documentName}\""
-msgstr "{inviterName} 已邀請您加入 {0}<0/>\\{documentName}\\"
+msgstr "{inviterName} 已邀請您加入 {0}<0/>\"{documentName}\""
 
 #: packages/email/templates/document-invite.tsx:41
 msgid "{inviterName} has invited you to {action} {documentName}"
 msgstr "{inviterName} 邀請您{action} {documentName}"
 
-#: packages/email/templates/document-invite.tsx:106
+#: packages/email/templates/document-invite.tsx:102
 msgid "{inviterName} has invited you to {action} the document \"{documentName}\"."
-msgstr "{inviterName} 邀請您{action}文件 \\{documentName}\\。"
+msgstr "{inviterName} 邀請您{action}文件 \"{documentName}\"。"
 
 #: packages/email/templates/recipient-removed-from-document.tsx:20
 msgid "{inviterName} has removed you from the document {documentName}."
 msgstr "{inviterName} 已將您從文件 {documentName} 中移除。"
 
-#: packages/email/templates/recipient-removed-from-document.tsx:49
+#: packages/email/templates/recipient-removed-from-document.tsx:45
 msgid "{inviterName} has removed you from the document<0/>\"{documentName}\""
-msgstr "{inviterName} 已將您從文件中移除<0/>\\{documentName}\\"
+msgstr "{inviterName} 已將您從文件中移除<0/>\"{documentName}\""
 
 #: packages/email/template-components/template-document-invite.tsx:63
 msgid "{inviterName} on behalf of {teamName} has invited you to {0}"
@@ -182,7 +182,7 @@ msgstr "{prefix} 已更新文件標題"
 msgid "{prefix} updated the document visibility"
 msgstr "{prefix} 已更新文件可見性"
 
-#: packages/email/templates/document-created-from-direct-template.tsx:61
+#: packages/email/templates/document-created-from-direct-template.tsx:57
 msgid "{recipientName} {action} a document by using one of your direct links"
 msgstr "{recipientName} {action} 了一份文件，使用了您的直接連結。"
 
@@ -248,7 +248,7 @@ msgstr "<0>電子郵件</0> - 收件人將通過電子郵件收到文件以進�
 
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:53
 msgid "<0>Inherit authentication method</0> - Use the global action signing authentication method configured in the \"General Settings\" step"
-msgstr "<0>繼承驗證方法</0> - 使用在\\一般設定\\步驟中配置的全域動作簽署驗證方法"
+msgstr "<0>繼承驗證方法</0> - 使用在\"一般設定\"步驟中配置的全域動作簽署驗證方法"
 
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:245
 msgid "<0>Links</0> - We will generate links which you can send to the recipients manually."
@@ -284,7 +284,7 @@ msgstr "<0>需要帳戶</0> - 接收者必須登入才能查看文件"
 msgid "<0>Require passkey</0> - The recipient must have an account and passkey configured via their settings"
 msgstr "<0>需要通行碼</0> - 接收者必須擁有一個帳戶，並在其設置中配置通行碼。"
 
-#: packages/lib/jobs/definitions/emails/send-signing-email.ts:122
+#: packages/lib/jobs/definitions/emails/send-signing-email.ts:121
 msgid "A document was created by your direct template that requires you to {recipientActionVerb} it."
 msgstr "一份文件已由您的直接模板創建，需您{recipientActionVerb}。"
 
@@ -625,7 +625,7 @@ msgstr "日期格式"
 msgid "Decline"
 msgstr "拒絕"
 
-#: packages/email/templates/reset-password.tsx:71
+#: packages/email/templates/reset-password.tsx:67
 msgid "Didn't request a password change? We are here to help you secure your account, just <0>contact us.</0>"
 msgstr "未請求更改密碼？我們在這裡幫助您保護帳戶，只需<0>聯絡我們。</0>"
 
@@ -890,7 +890,7 @@ msgstr "返回"
 msgid "Green"
 msgstr "綠色"
 
-#: packages/email/templates/reset-password.tsx:56
+#: packages/email/templates/reset-password.tsx:52
 msgid "Hi, {userName} <0>({userEmail})</0>"
 msgstr "嗨，{userName} <0>（{userEmail}）</0>"
 
@@ -1100,21 +1100,21 @@ msgstr "佔位符"
 
 #: packages/email/template-components/template-document-invite.tsx:56
 msgid "Please {0} your document<0/>\"{documentName}\""
-msgstr "請{0}您的文件<0/>\\{documentName}\\"
+msgstr "請{0}您的文件<0/>\"{documentName}\""
 
 #: packages/email/templates/document-invite.tsx:50
 msgid "Please {action} your document {documentName}"
 msgstr "請{action}您的文件 {documentName}"
 
-#: packages/lib/jobs/definitions/emails/send-signing-email.ts:111
+#: packages/lib/jobs/definitions/emails/send-signing-email.ts:110
 msgid "Please {recipientActionVerb} this document"
 msgstr "請{recipientActionVerb}此文件"
 
-#: packages/lib/jobs/definitions/emails/send-signing-email.ts:125
+#: packages/lib/jobs/definitions/emails/send-signing-email.ts:124
 msgid "Please {recipientActionVerb} this document created by your direct template"
 msgstr "請{recipientActionVerb}這份由您的直接範本所建立的文件。"
 
-#: packages/lib/jobs/definitions/emails/send-signing-email.ts:117
+#: packages/lib/jobs/definitions/emails/send-signing-email.ts:116
 msgid "Please {recipientActionVerb} your document"
 msgstr "請{recipientActionVerb}您的文件"
 
@@ -1396,7 +1396,7 @@ msgstr "提交"
 
 #: packages/lib/server-only/team/delete-team.ts:124
 msgid "Team \"{0}\" has been deleted on Documenso"
-msgstr "團隊 \\{0}\\ 已在 Documenso 上被刪除"
+msgstr "團隊 \"{0}\" 已在 Documenso 上被刪除"
 
 #: packages/lib/server-only/team/delete-team-email.ts:104
 msgid "Team email has been revoked for {0}"
@@ -1616,7 +1616,7 @@ msgstr "檢視"
 msgid "View all documents sent to and from this email address"
 msgstr "查看從此電子郵件地址發送和接收的所有文件"
 
-#: packages/email/templates/document-created-from-direct-template.tsx:75
+#: packages/email/templates/document-created-from-direct-template.tsx:71
 msgid "View document"
 msgstr "檢視文件"
 
@@ -1667,13 +1667,17 @@ msgstr "我們不會發送任何東西來通知接收者。"
 msgid "We're still waiting for other signers to sign this document.<0/>We'll notify you as soon as it's ready."
 msgstr "我們仍在等待其他簽署人簽署此文件。<0/>一旦準備好，我們會立刻通知您。"
 
-#: packages/email/templates/reset-password.tsx:65
+#: packages/email/templates/reset-password.tsx:61
 msgid "We've changed your password as you asked. You can now sign in with your new password."
 msgstr "我們已經按照您的要求更改了您的密碼。您現在可以使用新密碼登入。"
 
 #: packages/email/template-components/template-confirmation-email.tsx:21
-msgid "Welcome to Documenso!"
-msgstr "歡迎來到 Documenso！"
+#~ msgid "Welcome to Documenso!"
+#~ msgstr "歡迎來到 Documenso！"
+
+#: packages/email/template-components/template-confirmation-email.tsx:21
+msgid "Welcome to Sign Ezily!"
+msgstr ""
 
 #: packages/lib/utils/document-audit-logs.ts:258
 msgid "You"
@@ -1723,7 +1727,7 @@ msgstr "您已從檔案中移除"
 msgid "You have been requested to take ownership of team {0} on Documenso"
 msgstr "您已被請求接管團隊 {0} 的擁有權於 Documenso"
 
-#: packages/lib/jobs/definitions/emails/send-signing-email.ts:115
+#: packages/lib/jobs/definitions/emails/send-signing-email.ts:114
 #: packages/lib/server-only/document/resend-document.tsx:125
 msgid "You have initiated the document {0} that requires you to {recipientActionVerb} it."
 msgstr "您已啟動文件{0}，需要您{recipientActionVerb}它。"
