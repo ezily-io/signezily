@@ -1,7 +1,5 @@
 import fontkit from '@pdf-lib/fontkit';
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
-
-import { CAVEAT_FONT_PATH } from '../../constants/pdf';
+import { PDFDocument, rgb } from 'pdf-lib';
 
 export async function insertTextInPDF(
   pdfAsBase64: string,
@@ -12,15 +10,14 @@ export async function insertTextInPDF(
   useHandwritingFont = true,
   customFontSize?: number,
 ): Promise<string> {
-  // Fetch the font file from the public URL.
-  const fontResponse = await fetch(CAVEAT_FONT_PATH());
-  const fontCaveat = await fontResponse.arrayBuffer();
-
   const pdfDoc = await PDFDocument.load(pdfAsBase64);
 
+  const fontNoto = await fetch(process.env.NEXT_PUBLIC_WEBAPP_URL + '/static/PMingLiU.ttf').then(
+    async (res) => res.arrayBuffer(),
+  );
   pdfDoc.registerFontkit(fontkit);
 
-  const font = await pdfDoc.embedFont(useHandwritingFont ? fontCaveat : StandardFonts.Helvetica);
+  const font = await pdfDoc.embedFont(fontNoto);
 
   const pages = pdfDoc.getPages();
   const pdfPage = pages[page];
