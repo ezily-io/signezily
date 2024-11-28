@@ -35,10 +35,12 @@ import {
 } from '../../types/field-meta';
 
 export const insertFieldInPDF = async (pdf: PDFDocument, field: FieldWithSignature) => {
-  const [fontCaveat, fontNoto] = await Promise.all([
-    fetch(`${NEXT_PUBLIC_WEBAPP_URL()}/fonts/caveat.ttf`).then(async (res) => res.arrayBuffer()),
-    fetch(`${NEXT_PUBLIC_WEBAPP_URL()}/fonts/noto-sans.ttf`).then(async (res) => res.arrayBuffer()),
-  ]);
+  const fontCaveat = await fetch(process.env.FONT_CAVEAT_URI).then(async (res) =>
+    res.arrayBuffer(),
+  );
+
+  const uri = process.env.NEXT_PUBLIC_WEBAPP_URL + '/static/PMingLiU.ttf';
+  const fontNoto = await fetch(uri).then(async (res) => res.arrayBuffer());
 
   const isSignatureField = isSignatureFieldType(field.type);
 
