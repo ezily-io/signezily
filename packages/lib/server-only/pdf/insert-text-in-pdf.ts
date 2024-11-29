@@ -1,5 +1,5 @@
 import fontkit from '@pdf-lib/fontkit';
-import { PDFDocument, rgb } from 'pdf-lib';
+import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 
 import { NEXT_PUBLIC_WEBAPP_URL } from '@documenso/lib/constants/app';
 
@@ -25,7 +25,7 @@ export async function insertTextInPDF(
   const fontNoto = await fetch(uri).then(async (res) => res.arrayBuffer());
   pdfDoc.registerFontkit(fontkit);
 
-  const font = await pdfDoc.embedFont(useHandwritingFont ? fontCaveat : fontNoto);
+  const font = await pdfDoc.embedFont(useHandwritingFont ? fontCaveat : StandardFonts.Helvetica);
 
   const pages = pdfDoc.getPages();
   const pdfPage = pages[page];
