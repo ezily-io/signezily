@@ -31,6 +31,7 @@ export const insertFieldInPDF = async (pdf: PDFDocument, field: FieldWithSignatu
   );
 
   const uri = process.env.NEXT_PUBLIC_WEBAPP_URL + '/static/PMingLiU.ttf';
+  console.log(uri);
   const fontNoto = await fetch(uri).then(async (res) => res.arrayBuffer());
 
   const isSignatureField = isSignatureFieldType(field.type);
