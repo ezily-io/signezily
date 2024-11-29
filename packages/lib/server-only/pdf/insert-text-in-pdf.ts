@@ -1,6 +1,8 @@
 import fontkit from '@pdf-lib/fontkit';
 import { PDFDocument, rgb } from 'pdf-lib';
 
+import { NEXT_PUBLIC_WEBAPP_URL } from '@documenso/lib/constants/app';
+
 import { CAVEAT_FONT_PATH } from '../../constants/pdf';
 
 export async function insertTextInPDF(
@@ -18,7 +20,7 @@ export async function insertTextInPDF(
   const fontResponse = await fetch(CAVEAT_FONT_PATH());
   const fontCaveat = await fontResponse.arrayBuffer();
 
-  const uri = process.env.NEXT_PUBLIC_WEBAPP_URL + '/static/PMingLiU.ttf';
+  const uri = `${NEXT_PUBLIC_WEBAPP_URL()}/static/PMingLiU.ttf`;
   console.log(uri);
   const fontNoto = await fetch(uri).then(async (res) => res.arrayBuffer());
   pdfDoc.registerFontkit(fontkit);
