@@ -7,3 +7,5 @@ export const MIN_STANDARD_FONT_SIZE = 8;
 export const MIN_HANDWRITING_FONT_SIZE = 20;
 
 export const CAVEAT_FONT_PATH = () => `${NEXT_PUBLIC_WEBAPP_URL()}/fonts/caveat.ttf`;
+
+export const PMINGLIU_FONT_PATH = () => `${NEXT_PUBLIC_WEBAPP_URL()}/static/pming-liu.ttf`;

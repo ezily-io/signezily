@@ -12,7 +12,7 @@ import {
 } from 'pdf-lib';
 import { P, match } from 'ts-pattern';
 
-import { NEXT_PUBLIC_WEBAPP_URL } from '@documenso/lib/constants/app';
+import { PMINGLIU_FONT_PATH } from '@documenso/lib/constants/pdf';
 import {
   DEFAULT_HANDWRITING_FONT_SIZE,
   DEFAULT_STANDARD_FONT_SIZE,
@@ -39,11 +39,13 @@ export const insertFieldInPDF = async (pdf: PDFDocument, field: FieldWithSignatu
   const fontCaveat = await fetch(process.env.FONT_CAVEAT_URI).then(async (res) =>
     res.arrayBuffer(),
   );
-  const uri = `${NEXT_PUBLIC_WEBAPP_URL()}/static/PMingLiU.ttf`;
 
-  console.log(uri);
-  const fontNoto = await fetch(uri).then(async (res) => res.arrayBuffer());
+  console.log(PMINGLIU_FONT_PATH());
+  const fontPming = await fetch(PMINGLIU_FONT_PATH()).then(async (res) => {
+    return res.arrayBuffer();
+  });
 
+  console.log(PMINGLIU_FONT_PATH());
   const isSignatureField = isSignatureFieldType(field.type);
 
   /**
@@ -132,7 +134,7 @@ export const insertFieldInPDF = async (pdf: PDFDocument, field: FieldWithSignatu
   }
 
   const font = await pdf.embedFont(
-    isSignatureField ? fontCaveat : fontNoto,
+    isSignatureField ? fontCaveat : fontPming,
     isSignatureField ? { features: { calt: false } } : undefined,
   );
 
