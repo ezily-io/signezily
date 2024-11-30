@@ -40,7 +40,7 @@ export const insertFieldInPDF = async (pdf: PDFDocument, field: FieldWithSignatu
     res.arrayBuffer(),
   );
 
-  console.log(PMINGLIU_FONT_PATH());
+  console.log(`Using pming- ${PMINGLIU_FONT_PATH()}`);
   const fontPming = await fetch(PMINGLIU_FONT_PATH()).then(async (res) => {
     return res.arrayBuffer();
   });
