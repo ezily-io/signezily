@@ -23,7 +23,7 @@ const FONT_NOTO_SANS_BYTES = fs.readFileSync(
 );
 
 const FONT_PMING_BYTES = fs.readFileSync(
-  path.join(__dirname, '../../packages/assets/fonts/pming-liu.ttf'),
+  path.join(__dirname, '../../packages/assets/fonts/noto-sans-tc.ttf'),
 );
 
 /** @type {import('next').NextConfig} */
