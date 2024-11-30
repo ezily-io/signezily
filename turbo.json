@@ -2,12 +2,20 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "build": {
-      "dependsOn": ["prebuild", "^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "dependsOn": [
+        "prebuild",
+        "^build"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**"
+      ]
     },
     "prebuild": {
       "cache": false,
-      "dependsOn": ["^prebuild"]
+      "dependsOn": [
+        "^prebuild"
+      ]
     },
     "lint": {
       "cache": false
@@ -23,7 +31,9 @@
       "persistent": true
     },
     "start": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build"
+      ],
       "cache": false,
       "persistent": true
     },
@@ -31,11 +41,15 @@
       "cache": false
     },
     "test:e2e": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build"
+      ],
       "cache": false
     }
   },
-  "globalDependencies": ["**/.env.*local"],
+  "globalDependencies": [
+    "**/.env.*local"
+  ],
   "globalEnv": [
     "APP_VERSION",
     "NEXT_PRIVATE_ENCRYPTION_KEY",
@@ -109,6 +123,10 @@
     "NEXT_PRIVATE_INNGEST_EVENT_KEY",
     "CI",
     "NODE_ENV",
+    "DEPLOYMENT_TARGET",
+    "FONT_CAVEAT_URI",
+    "FONT_NOTO_SANS_URI",
+    "FONT_PMING_URI",
     "POSTGRES_URL",
     "DATABASE_URL",
     "DATABASE_URL_UNPOOLED",

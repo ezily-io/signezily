@@ -79,6 +79,18 @@ declare namespace NodeJS {
     NEXT_PRIVATE_INNGEST_APP_ID?: string;
     NEXT_PRIVATE_INNGEST_EVENT_KEY?: string;
 
+    /**
+     * Vercel environment variables
+     */
+    VERCEL?: string;
+    VERCEL_ENV?: 'production' | 'development' | 'preview';
+    VERCEL_URL?: string;
+
+    DEPLOYMENT_TARGET?: 'webapp' | 'marketing';
+    FONT_CAVEAT_URI: string;
+    FONT_NOTO_SANS_URI: string;
+    FONT_PMING_URI: string;
+
     POSTGRES_URL?: string;
     DATABASE_URL?: string;
     POSTGRES_PRISMA_URL?: string;

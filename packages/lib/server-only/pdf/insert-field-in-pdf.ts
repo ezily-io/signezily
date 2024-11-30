@@ -12,7 +12,6 @@ import {
 } from 'pdf-lib';
 import { P, match } from 'ts-pattern';
 
-import { PMINGLIU_FONT_PATH } from '@documenso/lib/constants/pdf';
 import {
   DEFAULT_HANDWRITING_FONT_SIZE,
   DEFAULT_STANDARD_FONT_SIZE,
@@ -39,13 +38,8 @@ export const insertFieldInPDF = async (pdf: PDFDocument, field: FieldWithSignatu
   const fontCaveat = await fetch(process.env.FONT_CAVEAT_URI).then(async (res) =>
     res.arrayBuffer(),
   );
+  const fontPming = await fetch(process.env.FONT_PMING_URI).then(async (res) => res.arrayBuffer());
 
-  console.log(`Using pming- ${PMINGLIU_FONT_PATH()}`);
-  const fontPming = await fetch(PMINGLIU_FONT_PATH()).then(async (res) => {
-    return res.arrayBuffer();
-  });
-
-  console.log(PMINGLIU_FONT_PATH());
   const isSignatureField = isSignatureFieldType(field.type);
 
   /**
