@@ -1,11 +1,11 @@
-name: Build Docker
+name: Build Docker Marketing
 
 on:
   workflow_call:
   push:
     branches: ['main']
-  # pull_request:
-  #   branches: ['main']
+  pull_request:
+    branches: ['main']
 env:
   AWS_REGION: ap-northeast-1
   AWS_ACCOUNT: 898622234277
@@ -67,16 +67,17 @@ jobs:
           BUILD_PLATFORM: 'amd64'
         run: |
           docker build \
-            -f ./docker/Dockerfile \
+            -f ./docker/Dockerfile.marketing \
             --progress=plain \
-            -t "documenso/documenso-$BUILD_PLATFORM:latest" \
+            -t "documenso/documenso-$BUILD_PLATFORM:marketing" \
             .
 
       - name: Push
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/main'
+        #  && github.event_name == 'push'
         run: |
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:marketing
 
       - name: Deploy
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
