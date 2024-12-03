@@ -22,6 +22,10 @@ const FONT_NOTO_SANS_BYTES = fs.readFileSync(
   path.join(__dirname, '../../packages/assets/fonts/noto-sans.ttf'),
 );
 
+const FONT_PMING_BYTES = fs.readFileSync(
+  path.join(__dirname, '../../packages/assets/fonts/noto-sans-tc.ttf'),
+);
+
 /** @type {import('next').NextConfig} */
 const config = {
   output: process.env.DOCKER_OUTPUT ? 'standalone' : undefined,
@@ -48,6 +52,7 @@ const config = {
     NEXT_PUBLIC_PROJECT: 'web',
     FONT_CAVEAT_URI: `data:font/ttf;base64,${FONT_CAVEAT_BYTES.toString('base64')}`,
     FONT_NOTO_SANS_URI: `data:font/ttf;base64,${FONT_NOTO_SANS_BYTES.toString('base64')}`,
+    FONT_PMING_URI: `data:font/ttf;base64,${FONT_PMING_BYTES.toString('base64')}`,
   },
   modularizeImports: {
     'lucide-react': {
