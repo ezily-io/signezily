@@ -77,15 +77,16 @@ jobs:
           docker build \
             -f ./docker/Dockerfile.documentation \
             --progress=plain \
-            -t "documenso/documenso-$BUILD_PLATFORM:documentation" \
+            -t "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:documentation" \
             .
 
       - name: Push
         # if: github.ref == 'refs/heads/main'
         #  && github.event_name == 'push'
         run: |
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:documentation
+            docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:documentation
+          # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          # docker push $ECR_REGISTRY/$ECR_REPOSITORY:documentation
 
       - name: Deploy
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
