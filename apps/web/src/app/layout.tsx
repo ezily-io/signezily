@@ -57,7 +57,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const flags = await getServerComponentAllFlags();
 
   const { i18n, lang, locales } = await setupI18nSSR();
-
+  // const lang = 'zh-tw';
   return (
     <html
       lang={lang}

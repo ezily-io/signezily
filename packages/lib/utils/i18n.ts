@@ -66,10 +66,10 @@ export const extractLocaleDataFromHeaders = (
 ): { lang: SupportedLanguageCodes | null; locales: string[] } => {
   const headerLocales = (headers.get('accept-language') ?? '').split(',');
 
-  const language = parseLanguageFromLocale(headerLocales[0]);
+  //const language = parseLanguageFromLocale(headerLocales[0]);
 
   return {
-    lang: language,
+    lang: 'zh-tw',
     locales: [headerLocales[0]],
   };
 };
