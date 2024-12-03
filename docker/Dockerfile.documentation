@@ -106,7 +106,9 @@ RUN mkdir node_modules/.bin
 RUN ln -s /app/node_modules/prisma/build/index.js ./node_modules/.bin/prisma
 
 
-# Get the start script from docker/start_documentation.sh
-COPY --chown=nextjs:nodejs ./docker/start_documentation.sh ./start_documentation.sh
 
-CMD ["sh", "start_documentation.sh"]
+# RUN mkdir /opt/documenso/
+# Get the start script from docker/start.sh
+COPY --chown=nextjs:nodejs ./docker/start.sh ./start.sh
+
+CMD ["sh", "start.sh", "documentation"]

@@ -106,11 +106,8 @@ COPY --from=installer --chown=nextjs:nodejs /app/node_modules/@prisma/ ./node_mo
 RUN mkdir node_modules/.bin
 RUN ln -s /app/node_modules/prisma/build/index.js ./node_modules/.bin/prisma
 
-
+# RUN mkdir /opt/documenso/
 # Get the start script from docker/start.sh
 COPY --chown=nextjs:nodejs ./docker/start.sh ./start.sh
 
-
-
-CMD ["sh", "start.sh"]
-
+CMD ["sh", "start.sh", "default"]
