@@ -77,15 +77,14 @@ jobs:
           docker build \
             -f ./docker/Dockerfile.marketing \
             --progress=plain \
-            -t "documenso/documenso-$BUILD_PLATFORM:marketing" \
+            -t "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:marketing" \
             .
 
       - name: Push
-        if: github.ref == 'refs/heads/main'
+        # if: github.ref == 'refs/heads/main'
         #  && github.event_name == 'push'
         run: |
-          # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:marketing
+          docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:marketing
 
       - name: Deploy
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
