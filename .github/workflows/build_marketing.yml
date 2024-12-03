@@ -4,8 +4,16 @@ on:
   workflow_call:
   push:
     branches: ['main']
+    paths:
+      - ".github/workflows/build_marketing.yml"
+      - "docker/Dockerfile.marketing"
+      - "apps/marketing/**"
   pull_request:
     branches: ['main']
+    paths:
+      - ".github/workflows/build_marketing.yml"
+      - "docker/Dockerfile.marketing"
+      - "apps/marketing/**"
 env:
   AWS_REGION: ap-northeast-1
   AWS_ACCOUNT: 898622234277
