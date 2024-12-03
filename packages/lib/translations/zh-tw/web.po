@@ -195,7 +195,7 @@ msgstr "已向 <0>{0} ({1})</0> 發送了團隊所有權轉移的請求。"
 
 #: apps/web/src/components/(dashboard)/settings/webhooks/create-webhook-dialog.tsx:228
 msgid "A secret that will be sent to your URL so you can verify that the request has been sent by Documenso"
- msgstr "一個 secret 將會發送到您的 URL，以便您可以驗證該請求是由 signEzily 發送的。"
+msgstr "一個 secret 將會發送到您的 URL，以便您可以驗證該請求是由 signEzily 發送的。"
 
 #: apps/web/src/app/(dashboard)/settings/webhooks/[id]/page.tsx:196
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/[id]/page.tsx:198
