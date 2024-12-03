@@ -60,7 +60,7 @@ jobs:
         run: |
           IMAGE=$AWS_ACCOUNT.dkr.ecr.ap-northeast-1.amazonaws.com/$ECR_REPOSITORY
           THIS_TAG="$IMAGE:$(git rev-parse --short $GIT_SHA)"
-          TAGS="$IMAGE:latest,$THIS_TAG"
+          TAGS="$IMAGE:documentation,$THIS_TAG"
 
           echo "this_tag=$THIS_TAG" >> $GITHUB_OUTPUT
 
@@ -84,7 +84,7 @@ jobs:
         # if: github.ref == 'refs/heads/main'
         #  && github.event_name == 'push'
         run: |
-          # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:documentation
 
       - name: Deploy
