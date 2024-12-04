@@ -55,7 +55,7 @@ jobs:
 
       - name: Debuging
         run: |
-          ls -la
+          ls -la ./.github/workflows
           pwd
 
       - name: Call Determine Changes Workflow
