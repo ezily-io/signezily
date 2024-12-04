@@ -69,6 +69,9 @@ jobs:
 
       - name: Determine Changes
         id: determine_changes
+        env:
+          GITHUB_EVENT_BEFORE: ${{ github.event.before || 'HEAD~1' }}
+          GITHUB_SHA: ${{ github.sha }}
         run: |
           ./.github/workflows/determine_changes.sh
       # chmod +x ./.github/workflows/determine_changes.sh
