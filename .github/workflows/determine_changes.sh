@@ -2,16 +2,16 @@
 
 # Detect changes for Marketing site
 if git diff --name-only "$GITHUB_EVENT_BEFORE" "$GITHUB_SHA" | grep -q "^apps/marketing/**"; then
-  echo "::set-output name=marketing_changed::true"
+  echo "{marketing_changed}={true}" >> $GITHUB_OUTPUT
 else
-  echo "::set-output name=marketing_changed::false"
+  echo "{marketing_changed}={false}" >> $GITHUB_OUTPUT
 fi
 
 # Detect changes for Documentation site
 if git diff --name-only "$GITHUB_EVENT_BEFORE" "$GITHUB_SHA" | grep -q "^apps/documentation/**"; then
-  echo "::set-output name=marketing_changed::true"
+  echo "{documentation_changed}={true}" >> $GITHUB_OUTPUT
 else
-  echo "::set-output name=marketing_changed::false"
+  echo "{documentation_changed}={false}" >> $GITHUB_OUTPUT
 fi
 
 # if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "^${{ inputs.documenso-web-path }}/"; then
