@@ -53,9 +53,14 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      - name: Debuging
+        run: |
+          ls
+          pwd
+
       - name: Call Determine Changes Workflow
         id: determine_changes
-        uses: .github/workflows/determine_changes.yml
+        uses: ./.github/workflows/determine_changes.yml
         with:
           documenso-web-path: "apps/web/**"
           documenso-marketing-path: "apps/marketing/**"
