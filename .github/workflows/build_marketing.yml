@@ -55,16 +55,23 @@ jobs:
 
       - name: Debuging
         run: |
-          ls -la ./.github/actions/determine_changes
+          ls -la .github/actions/determine_changes
           pwd
 
-      - name: Call Determine Changes Workflow
+      # - name: Call Determine Changes Workflow
+      #   id: determine_changes
+      #   uses: ./.github/actions/determine_changes
+      #   with:
+      #     documenso-web-path: "apps/web/**"
+      #     documenso-marketing-path: "apps/marketing/**"
+      #     documenso-documentation-path: "apps/documentation/**"
+
+
+      - name: Determine Changes
         id: determine_changes
-        uses: ./.github/actions/determine_changes
-        with:
-          documenso-web-path: "apps/web/**"
-          documenso-marketing-path: "apps/marketing/**"
-          documenso-documentation-path: "apps/documentation/**"
+        run: |
+          ./.github/workflows/determine_changes.sh
+      # chmod +x ./.github/workflows/determine_changes.sh
 
       - name: Build Documenso web
         if: steps.determine_changes.outputs.web_changed == 'true'
