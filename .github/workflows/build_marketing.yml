@@ -55,7 +55,7 @@ jobs:
 
       - name: Debuging
         run: |
-          ls -la ./.github/workflows
+          ls -la home/runner/work/signezily/signezily/./.github/actions/determine_changes
           pwd
 
       - name: Call Determine Changes Workflow

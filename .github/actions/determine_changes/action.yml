@@ -1,24 +1,26 @@
 name: Determine Changes on Docuemnso Apps to build
 
-on:
-  workflow_call:
-    inputs:
-      documenso-web-path:
-        description: Path for Documenso web
-        required: true
-        type: string
-      documenso-marketing-path:
-        description: Path for Documenso Marketing site
-        required: true
-        type: string
-      documenso-docs-path:
-        description: Path for Documenso Documentation site
-        required: true
-        type: string
+# on:
+#   workflow_call:
+inputs:
+  documenso-web-path:
+    description: Path for Documenso web
+    required: true
+    type: string
+  documenso-marketing-path:
+    description: Path for Documenso Marketing site
+    required: true
+    type: string
+  documenso-docs-path:
+    description: Path for Documenso Documentation site
+    required: true
+    type: string
 
-jobs:
-  detect-changes:
-    runs-on: ubuntu-latest
+# jobs:
+#   detect-changes:
+#     runs-on: ubuntu-latest
+runs:
+  using: 'composite'
     outputs:
       web_changed: ${{ steps.web_check.outputs.changed }}
       marketing_changed: ${{ steps.marketing_check.outputs.changed }}
