@@ -79,7 +79,7 @@ jobs:
       - name: Determine if Documentation site has changed
         id: docs_app_check
         run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "^apps/documentation/" && echo "changed=true" || echo "changed=false"
+          git diff --name-only ${{ github.event.pull_request.base.sha || github.event.before || 'HEAD~1' }} ${{ github.sha }} | grep -q "^apps/documentation/" && echo "changed=true" || echo "changed=false"
         shell: bash
 
       # - name: Build Documenso web
