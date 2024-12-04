@@ -53,24 +53,27 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Docker tags
-        id: tags
+      - name: Call Determine Changes Workflow
+        id: determine_changes
+        uses: ./.github/workflows/determine-changes.yml
+        with:
+          documenso-web-path: "apps/web/**"
+          documenso-marketing-path: "apps/marketing/**"
+          documenso-documentation-path: "apps/documentation/**"
+
+      - name: Build Documenso web
+        if: steps.determine_changes.outputs.web_changed == 'true'
         env:
-          GIT_SHA: ${{ github.sha }}
+          BUILD_PLATFORM: 'amd64'
         run: |
-          IMAGE=$AWS_ACCOUNT.dkr.ecr.ap-northeast-1.amazonaws.com/$ECR_REPOSITORY
-          THIS_TAG="$IMAGE:$(git rev-parse --short $GIT_SHA)"
-          TAGS="$IMAGE:latest,$THIS_TAG"
+          docker build \
+            -f ./docker/Dockerfile \
+            --progress=plain \
+            -t "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:latest" \
+            .
 
-          echo "this_tag=$THIS_TAG" >> $GITHUB_OUTPUT
-
-          if [ '${{ github.event_name }}' = 'pull_request' ]; then
-            echo "tags=$THIS_TAG" >> $GITHUB_OUTPUT
-          else
-            echo "tags=$TAGS" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Build
+      - name: Build Marketing
+        if: steps.determine_changes.outputs.marketing_changed == 'true'
         env:
           BUILD_PLATFORM: 'amd64'
         run: |
@@ -80,11 +83,37 @@ jobs:
             -t "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:marketing" \
             .
 
-      - name: Push
+      - name: Build Documentation
+        if: steps.determine_changes.outputs.documentation_changed == 'true'
+        env:
+          BUILD_PLATFORM: 'amd64'
+        run: |
+          docker build \
+            -f ./docker/Dockerfile.documentation \
+            --progress=plain \
+            -t "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:documentation" \
+            .
+
+      - name: Pushing documenso web image
+        if: steps.determine_changes.outputs.web_changed == 'true'
+        # if: github.ref == 'refs/heads/main'
+        #  && github.event_name == 'push'
+        run: |
+          docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:latest
+      
+      - name: Pushing documenso marketing image
+        if: steps.determine_changes.outputs.marketing_changed == 'true'
         # if: github.ref == 'refs/heads/main'
         #  && github.event_name == 'push'
         run: |
           docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:marketing
+
+      - name: Pushing documenso documentation image
+        if: steps.determine_changes.outputs.documentation_changed == 'true'
+        # if: github.ref == 'refs/heads/main'
+        #  && github.event_name == 'push'
+        run: |
+          docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:documentation
 
       - name: Deploy
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
