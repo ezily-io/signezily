@@ -55,7 +55,7 @@ jobs:
 
       - name: Debuging
         run: |
-          ls
+          ls -la
           pwd
 
       - name: Call Determine Changes Workflow
