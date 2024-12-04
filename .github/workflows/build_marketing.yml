@@ -67,39 +67,46 @@ jobs:
       #     documenso-documentation-path: "apps/documentation/**"
 
 
-      - name: Determine Changes
-        id: determine_changes
-        env:
-          GITHUB_EVENT_BEFORE: ${{ github.event.before || 'HEAD~1' }}
-          GITHUB_SHA: ${{ github.sha }}
-        run: |
-          ./.github/workflows/determine_changes.sh
-      # chmod +x ./.github/workflows/determine_changes.sh
+      # - name: Determine Changes
+      #   id: determine_changes
+      #   env:
+      #     GITHUB_EVENT_BEFORE: ${{ github.event.before || 'HEAD~1' }}
+      #     GITHUB_SHA: ${{ github.sha }}
+      #   run: |
+      #     ./.github/workflows/determine_changes.sh
+      # # chmod +x ./.github/workflows/determine_changes.sh
 
-      - name: Build Documenso web
-        if: steps.determine_changes.outputs.web_changed == 'true'
-        env:
-          BUILD_PLATFORM: 'amd64'
+      - name: Determine if Documentation site has changed
+        id: docs_app_check
         run: |
-          docker build \
-            -f ./docker/Dockerfile \
-            --progress=plain \
-            -t "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:latest" \
-            .
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "^${{ inputs.app1-path }}/" && echo "changed=true" || echo "changed=false"
+        shell: bash
 
-      - name: Build Marketing
-        if: steps.determine_changes.outputs.marketing_changed == 'true'
-        env:
-          BUILD_PLATFORM: 'amd64'
-        run: |
-          docker build \
-            -f ./docker/Dockerfile.marketing \
-            --progress=plain \
-            -t "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:marketing" \
-            .
+      # - name: Build Documenso web
+      #   if: steps.determine_changes.outputs.web_changed == 'true'
+      #   env:
+      #     BUILD_PLATFORM: 'amd64'
+      #   run: |
+      #     docker build \
+      #       -f ./docker/Dockerfile \
+      #       --progress=plain \
+      #       -t "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:latest" \
+      #       .
+
+      # - name: Build Marketing
+      #   if: steps.determine_changes.outputs.marketing_changed == 'true'
+      #   env:
+      #     BUILD_PLATFORM: 'amd64'
+      #   run: |
+      #     docker build \
+      #       -f ./docker/Dockerfile.marketing \
+      #       --progress=plain \
+      #       -t "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:marketing" \
+      #       .
 
       - name: Build Documentation
-        if: steps.determine_changes.outputs.documentation_changed == 'true'
+        if: steps.docs_app_check.outputs.changed == 'true'  
+        # if: steps.determine_changes.outputs.documentation_changed == 'true'
         env:
           BUILD_PLATFORM: 'amd64'
         run: |
@@ -109,22 +116,23 @@ jobs:
             -t "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:documentation" \
             .
 
-      - name: Pushing documenso web image
-        if: steps.determine_changes.outputs.web_changed == 'true'
-        # if: github.ref == 'refs/heads/main'
-        #  && github.event_name == 'push'
-        run: |
-          docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:latest
+      # - name: Pushing documenso web image
+      #   if: steps.determine_changes.outputs.web_changed == 'true'
+      #   # if: github.ref == 'refs/heads/main'
+      #   #  && github.event_name == 'push'
+      #   run: |
+      #     docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:latest
       
-      - name: Pushing documenso marketing image
-        if: steps.determine_changes.outputs.marketing_changed == 'true'
-        # if: github.ref == 'refs/heads/main'
-        #  && github.event_name == 'push'
-        run: |
-          docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:marketing
+      # - name: Pushing documenso marketing image
+      #   if: steps.determine_changes.outputs.marketing_changed == 'true'
+      #   # if: github.ref == 'refs/heads/main'
+      #   #  && github.event_name == 'push'
+      #   run: |
+      #     docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:marketing
 
       - name: Pushing documenso documentation image
-        if: steps.determine_changes.outputs.documentation_changed == 'true'
+        if: steps.docs_app_check.outputs.changed == 'true'  
+        # if: steps.determine_changes.outputs.documentation_changed == 'true'
         # if: github.ref == 'refs/heads/main'
         #  && github.event_name == 'push'
         run: |
