@@ -8,7 +8,7 @@ else
 fi
 
 # Detect changes for Documentation site
-if git diff --name-only "$GITHUB_EVENT_BEFORE" "$GITHUB_SHA" | grep -q "^apps/documentation/**"; then
+if git diff --name-only "${{ github.event.before }} ${{ github.sha }}" | grep -q "^apps/documentation/**"; then
   echo "{documentation_changed}={true}" >> $GITHUB_OUTPUT
 else
   echo "{documentation_changed}={false}" >> $GITHUB_OUTPUT
