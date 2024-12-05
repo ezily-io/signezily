@@ -12,15 +12,22 @@ check_openssl_installed() {
 }
 
 # Generate the PKCS#12 file
-generate_pkcs12() {
+generate_pkcs12() {   
+  cd apps
   echo "$SIGN_PRIV_KEY_FILE" > $PRIVATE_KEY
   echo "$SIGN_CERT_FILE" > $CERTIFICATE
+  chown nextjs:nodejs $PRIVATE_KEY
+  chown nextjs:nodejs $CERTIFICATE
+  chmod 600 $PRIVATE_KEY
+  chmod 600 $CERTIFICATE
   echo "Creating PKCS#12 file..."
   openssl pkcs12 -export -out "$NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH" \
     -inkey "$PRIVATE_KEY" \
     -in "$CERTIFICATE" \
     -name "$SIGN_CERT_NAME" \
     -passout pass:"$SIGN_PRIV_KEY_PASS"
+
+  # openssl pkcs12 -export -out "/app/apps/sing_ezily_cert.p12" -inkey sign_priv_key.key -in "sign_certificate.crt" -name "SIGN_EZLY" -passout pass:""
 
   if [ $? -ne 0 ]; then
     echo "Failed to create PKCS#12 file."
