@@ -76,6 +76,8 @@ jobs:
             marketing:
               - 'apps/marketing/**'
             documentation:
+              - '.github/workflows/build_marketing.yml'
+              - 'docker/Dockerfile.marketing'
               - 'apps/documentation/**'
 
       # - name: Build Documenso web

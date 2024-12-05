@@ -9,7 +9,7 @@ on:
       - "docker/Dockerfile.documentation"
       - "apps/documentation/**"
   pull_request:
-    branches: ['main']
+    branches: ['dev']
     paths:
       - ".github/workflows/build_docs.yml"
       - "docker/Dockerfile.documentation"

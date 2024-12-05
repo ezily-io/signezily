@@ -1,5 +1,8 @@
 #!/bin/bash
 
+PRIVATE_KEY="sign_priv_key.key"
+CERTIFICATE="sign_certificate.crt"
+
 # Function to check if OpenSSL is installed
 check_openssl_installed() {
   if ! command -v openssl &> /dev/null; then
@@ -10,10 +13,12 @@ check_openssl_installed() {
 
 # Generate the PKCS#12 file
 generate_pkcs12() {
+  echo "$SIGN_PRIV_KEY_FILE" > $PRIVATE_KEY
+  echo "$SIGN_CERT_FILE" > $CERTIFICATE
   echo "Creating PKCS#12 file..."
   openssl pkcs12 -export -out "$NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH" \
-    -inkey <(echo "$SIGN_PRIV_KEY_FILE") \
-    -in <(echo "$SIGN_CERT_FILE") \
+    -inkey "$PRIVATE_KEY" \
+    -in "$CERTIFICATE" \
     -name "$SIGN_CERT_NAME" \
     -passout pass:"$SIGN_PRIV_KEY_PASS"
 
@@ -22,6 +27,14 @@ generate_pkcs12() {
     exit 1
   fi
   echo "PKCS#12 file created: $NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH"
+
+  #Remove
+  # rm "$PRIVATE_KEY"
+  # rm "$CERTIFICATE"
+  # unset SIGN_PRIV_KEY_FILE
+  # unset SIGN_CERT_FILE
+  # unset SIGN_PRIV_KEY_PASS
+
 }
 
 # Main function
