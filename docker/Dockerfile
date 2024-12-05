@@ -78,6 +78,8 @@ FROM base AS runner
 
 WORKDIR /app
 
+RUN apk add --no-cache openssl
+
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
@@ -86,9 +88,6 @@ USER nextjs
 
 COPY --from=installer /app/apps/web/next.config.js .
 COPY --from=installer /app/apps/web/package.json .
-# Copy the certificate file into the image
-# TODO: change it later to a proper cert
-COPY --from=installer /app/apps/web/example/cert.p12 /opt/documenso/cert.p12
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
@@ -106,7 +105,7 @@ COPY --from=installer --chown=nextjs:nodejs /app/node_modules/@prisma/ ./node_mo
 RUN mkdir node_modules/.bin
 RUN ln -s /app/node_modules/prisma/build/index.js ./node_modules/.bin/prisma
 
-# RUN mkdir /opt/documenso/
+COPY --chown=nextjs:nodejs ./docker/generate_cert_p12.sh ./generate_cert_p12.sh
 # Get the start script from docker/start.sh
 COPY --chown=nextjs:nodejs ./docker/start.sh ./start.sh
 
