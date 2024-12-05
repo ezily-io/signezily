@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 
 import { Caveat, Inter } from 'next/font/google';
 
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { AxiomWebVitals } from 'next-axiom';
 import { PublicEnvScript } from 'next-runtime-env';
 
@@ -26,29 +27,28 @@ const fontCaveat = Caveat({ subsets: ['latin'], variable: '--font-signature' });
 export function generateMetadata() {
   return {
     title: {
-      template: '%s - Documenso',
-      default: 'Documenso',
+      template: '%s - SignEzily',
+      default: 'SignEzily',
     },
     description:
-      'Join Documenso, the open signing infrastructure, and get a 10x better signing experience. Pricing starts at $30/mo. forever! Sign in now and enjoy a faster, smarter, and more beautiful document signing process. Integrates with your favorite tools, customizable, and expandable. Support our mission and become a part of our open-source community.',
-    keywords:
-      'Documenso, open source, DocuSign alternative, document signing, open signing infrastructure, open-source community, fast signing, beautiful signing, smart templates',
-    authors: { name: 'Documenso, Inc.' },
+      'the open signing infrastructure, and get a 10x better signing experience. Sign in now and enjoy a faster, smarter, and more beautiful document signing process. Integrates with your favorite tools, customizable, and expandable. Support our mission and become a part of our open-source community.',
+    keywords: 'SignEzily',
+    authors: { name: 'SignEzily, Inc.' },
     robots: 'index, follow',
     metadataBase: new URL(NEXT_PUBLIC_WEBAPP_URL() ?? 'http://localhost:3000'),
     openGraph: {
-      title: 'Documenso - The Open Source DocuSign Alternative',
+      title: 'SignEzily - The Open Source DocuSign Alternative',
       description:
-        'Join Documenso, the open signing infrastructure, and get a 10x better signing experience. Pricing starts at $30/mo. forever! Sign in now and enjoy a faster, smarter, and more beautiful document signing process. Integrates with your favorite tools, customizable, and expandable. Support our mission and become a part of our open-source community.',
+        'Sign in now and enjoy a faster, smarter, and more beautiful document signing process. Integrates with your favorite tools, customizable, and expandable. Support our mission and become a part of our open-source community.',
       type: 'website',
       images: ['/opengraph-image.jpg'],
     },
     twitter: {
-      site: '@documenso',
+      site: '@signezily',
       card: 'summary_large_image',
       images: ['/opengraph-image.jpg'],
       description:
-        'Join Documenso, the open signing infrastructure, and get a 10x better signing experience. Pricing starts at $30/mo. forever! Sign in now and enjoy a faster, smarter, and more beautiful document signing process. Integrates with your favorite tools, customizable, and expandable. Support our mission and become a part of our open-source community.',
+        'Sign in now and enjoy a faster, smarter, and more beautiful document signing process. Integrates with your favorite tools, customizable, and expandable. Support our mission and become a part of our open-source community.',
     },
   };
 }
@@ -97,6 +97,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Toaster />
         </FeatureFlagProvider>
       </body>
+      <GoogleAnalytics gaId="G-LD3ST60L69" />
     </html>
   );
 }
