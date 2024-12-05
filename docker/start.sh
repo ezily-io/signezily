@@ -18,12 +18,12 @@ signing__file_creation() {
   fi
 
   # Cert File
-  cat <<CERT_P12 > cert.p12
+  cat <<CERT_P12 > apps/cert.p12
 $DOCUMENSO_SIGNING_CERT_FILE
 CERT_P12
 
   # Set appropriate permissions
-  chmod 755 cert.p12
+  chmod 755 apps/cert.p12
 }
 
 # Use a case statement to handle different values

@@ -78,10 +78,19 @@ jobs:
 
       - name: Determine if Documentation site has changed
         id: docs_app_check
+        # run: |
+        #   git diff --name-only ${{ github.event.pull_request.base.sha || github.event.before || 'HEAD~1' }} ${{ github.sha }} | grep -q "^apps/documentation/" && echo "changed=true" || echo "changed=false"
+        # shell: bash
         run: |
-          git diff --name-only ${{ github.event.pull_request.base.sha || github.event.before || 'HEAD~1' }} ${{ github.sha }} | grep -q "^apps/documentation/" && echo "changed=true" || echo "changed=false"
-        shell: bash
-
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "changed=true"
+          elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            if [[ "${{ github.event.pull_request.changed_files }}" =~ "apps/documentation/" ]]; then
+              echo "changed=true"
+            else
+              echo "changed=false"
+            fi
+          fi
       # - name: Build Documenso web
       #   if: steps.determine_changes.outputs.web_changed == 'true'
       #   env:
