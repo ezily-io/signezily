@@ -3,13 +3,13 @@ name: Build Docker marketing
 on:
   workflow_call:
   push:
-    branches: ['main']
+    branches: ['dev']
     paths:
       - ".github/workflows/build_docs.yml"
       - "docker/Dockerfile.marketing"
       - "apps/marketing/**"
   pull_request:
-    branches: ['main']
+    branches: ['dev']
     paths:
       - ".github/workflows/build_docs.yml"
       - "docker/Dockerfile.marketing"
