@@ -26,6 +26,7 @@ services:
     build:
       context: ../../
       dockerfile: docker/Dockerfile
+    # image: documenso:buildx
     depends_on:
       database:
         condition: service_healthy
@@ -50,5 +51,56 @@ services:
       - NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH=/opt/documenso/cert.p12
     ports:
       - 3000:3000
+    volumes:
+      - ../../apps/web/example/cert.p12:/opt/documenso/cert.p12
+  marketing:
+    build:
+      context: ../../
+      dockerfile: docker/Dockerfile.marketing
+    # image: marketing:buildx
+    depends_on:
+      database:
+        condition: service_healthy
+      inbucket:
+        condition: service_started
+    env_file:
+      - ../../.env.example
+    environment:
+      - PORT=3001
+      - NEXTAUTH_SECRET=secret
+      - NEXT_PRIVATE_ENCRYPTION_KEY=CAFEBABE
+      - NEXT_PRIVATE_ENCRYPTION_SECONDARY_KEY=DEADBEEF
+      - NEXT_PRIVATE_DATABASE_URL=postgres://documenso:password@database:5432/documenso
+      - NEXT_PRIVATE_DIRECT_DATABASE_URL=postgres://documenso:password@database:5432/documenso
+      - NEXT_PUBLIC_UPLOAD_TRANSPORT=database
+      - NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH=/opt/documenso/cert.p12
+    ports:
+      - 3001:3001
+    volumes:
+      - ../../apps/web/example/cert.p12:/opt/documenso/cert.p12
+  documentation:
+    build:
+      context: ../../
+      dockerfile: docker/Dockerfile.documentation
+    # image: documentation:buildx
+    depends_on:
+      database:
+        condition: service_healthy
+      inbucket:
+        condition: service_started
+    env_file:
+      - ../../.env.example
+    environment:
+      - PORT=3002
+      - NEXTAUTH_SECRET=secret
+      - NEXT_PRIVATE_ENCRYPTION_KEY=CAFEBABE
+      - NEXT_PRIVATE_ENCRYPTION_SECONDARY_KEY=DEADBEEF
+      - NEXT_PRIVATE_DATABASE_URL=postgres://documenso:password@database:5432/documenso
+      - NEXT_PRIVATE_DIRECT_DATABASE_URL=postgres://documenso:password@database:5432/documenso
+      - NEXT_PUBLIC_UPLOAD_TRANSPORT=database
+      - NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH=/opt/documenso/cert.p12
+      - DOCUMENSO_SIGNING_CERT_FILE="test cert string"
+    ports:
+      - 3002:3002
     volumes:
       - ../../apps/web/example/cert.p12:/opt/documenso/cert.p12

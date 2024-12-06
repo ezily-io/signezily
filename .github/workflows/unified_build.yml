@@ -1,0 +1,187 @@
+name: Unified Docker Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      site:
+        description: "Site to build"
+        required: true
+        default: "documentation"
+        type: choice
+        options:
+          - web
+          - marketing
+          - documentation
+      environment:
+        description: "Environment to run the action on"
+        required: true
+        default: "dev"
+        type: choice
+        options:
+          - dev
+          - qa
+          - prod
+      ExecutionType:
+        description: "Docker 'build' 'build/push' or 'deploy'"
+        type: choice
+        default: "build"
+        options:
+          - "build"
+          - "build-push"
+          - "deploy"
+  workflow_call:
+  push:
+    branches: ['main']
+    paths:
+      - ".github/workflows/build_marketing.yml"
+      - "docker/Dockerfile.marketing"
+      - "apps/marketing/**"
+  pull_request:
+    branches: ['main']
+    paths:
+      - ".github/workflows/build_marketing.yml"
+      - "docker/Dockerfile.marketing"
+      - "apps/marketing/**"
+env:
+  AWS_REGION: ap-northeast-1
+  AWS_ACCOUNT: 898622234277
+  ECR_REPOSITORY: "signezily"
+  SERVICE: "documenso-app-"
+  CLUSTER: "data"
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_and_publish_platform_containers:
+    name: Build container
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        environment:
+          - { name: "dev", docker_tag: "latest" }
+          - { name: "qa", docker_tag: "" }
+          - { name: "prod", docker_tag: "" }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT }}:role/Github-actions
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Filter Changed Files
+        uses: dorny/paths-filter@v3
+        id: filter
+        if: |
+          matrix.environment.name == 'dev' ||
+          (github.ref == 'refs/heads/main' && matrix.environment.name != 'dev')
+        with:
+          filters: |
+            web:
+              - '.github/workflows/unified_build.yml'
+              - 'docker/Dockerfile'
+              - 'apps/web/**'
+            marketing:
+              - '.github/workflows/unified_build.yml'
+              - 'docker/Dockerfile.marketing'
+              - 'apps/marketing/**'
+            documentation:
+              - '.github/workflows/unified_build.yml'
+              - 'docker/Dockerfile.documentation'
+              - 'apps/documentation/**'
+
+      - name: Build Signezily web
+        continue-on-error: true
+        if: |
+          steps.filter.outputs.web == 'true' ||
+          (github.event_name == 'workflow_dispatch' &&
+          github.event.inputs.environment == matrix.environment.name &&
+          (github.event.inputs.ExecutionType == 'build' || github.event.inputs.ExecutionType == 'build-push') &&
+          github.event.inputs.site == 'web')
+        env:
+          BUILD_PLATFORM: 'amd64'
+        run: |
+          docker build \
+            -f ./docker/Dockerfile \
+            --progress=plain \
+            -t "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:latest" \
+            .
+
+      - name: Build Signezily Marketing
+        continue-on-error: true
+        if: |
+          steps.filter.outputs.marketing == 'true' ||
+          (github.event_name == 'workflow_dispatch' &&
+          github.event.inputs.environment == matrix.environment.name &&
+          (github.event.inputs.ExecutionType == 'build' || github.event.inputs.ExecutionType == 'build-push') &&
+          github.event.inputs.site == 'marketing')
+        env:
+          BUILD_PLATFORM: 'amd64'
+        run: |
+          docker build \
+            -f ./docker/Dockerfile.marketing \
+            --progress=plain \
+            -t "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:${{ matrix.environment.name }}-marketing" \
+            .
+
+      - name: Build Signezily Documentation
+        continue-on-error: true
+        if: |
+          steps.filter.outputs.documentation == 'true' ||
+          (github.event_name == 'workflow_dispatch' &&
+          github.event.inputs.environment == matrix.environment.name &&
+          (github.event.inputs.ExecutionType == 'build' || github.event.inputs.ExecutionType == 'build-push') &&
+          github.event.inputs.site == 'documentation')
+        env:
+          BUILD_PLATFORM: 'amd64'
+        run: |
+          docker build \
+            -f ./docker/Dockerfile.documentation \
+            --progress=plain \
+            -t "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:documentation" \
+            .
+
+      - name: Pushing Signezily web image
+        continue-on-error: true
+        if: steps.filter.outputs.web == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push' || 
+          github.event.inputs.site == 'web' && github.event.inputs.ExecutionType == 'build-push'
+        run: |
+          docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:latest
+      
+      - name: Pushing Signezily marketing image
+        continue-on-error: true
+        if: steps.filter.outputs.marketing == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push' || 
+          github.event.inputs.site == 'marketing' && github.event.inputs.ExecutionType == 'build-push'
+        run: |
+          docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:marketing
+
+      - name: Pushing Signezily1 documentation image
+        continue-on-error: true
+        if: steps.filter.outputs.documentation == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push' || 
+          github.event.inputs.site == 'documentation' && github.event.inputs.ExecutionType == 'build-push'
+        run: |
+          docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:documentation
+
+      - name: Deploy
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push' || 
+          github.event.inputs.ExecutionType == 'deploy' && github.event.inputs.environment == matrix.environment.name
+        run: |
+          aws ecs update-service \
+            --cluster $CLUSTER --service $SERVICE${{ matrix.environment.name }} \
+            --force-new-deployment
