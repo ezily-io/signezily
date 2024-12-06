@@ -2,11 +2,10 @@
 
 # Check if a parameter is given
 if [ -z "$1" ]; then
-  echo "No value provided. Usage: ./start.sh <command>"
+  echo "No value provided. Usage: sh ./start.sh <command>"
   exit 1
 fi
 
-# Assign the first argument to a variable
 value=$1
 
 # Use a case statement to handle different values

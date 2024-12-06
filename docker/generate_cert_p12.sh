@@ -38,7 +38,6 @@ generate_pkcs12() {
 
 # Main function
 main() {
-  # openssl_installation
   check_openssl_installed
   generate_pkcs12
   echo "Process complete. PKCS#12 file: $NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH"
