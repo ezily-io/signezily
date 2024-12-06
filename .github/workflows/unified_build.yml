@@ -3,18 +3,28 @@ name: Unified Docker Build
 on:
   workflow_dispatch:
     inputs:
+      site:
+        description: "Site to build"
+        required: true
+        default: "documentation"
+        type: choice
+        options:
+          - web
+          - marketing
+          - documentation
       environment:
         description: "Environment to run the action on"
         required: true
+        default: "dev"
         type: choice
         options:
           - dev
           - qa
           - prod
       ExecutionType:
-        description: "Terraform 'plan' or 'apply'"
+        description: "Docker 'build' 'push' or 'deploy'"
         type: choice
-        default: "plan"
+        default: "build"
         options:
           - "build"
           - "push"
@@ -97,7 +107,11 @@ jobs:
               - 'apps/documentation/**'
 
       - name: Build Documenso web
-        if: steps.filter.outputs.web_changed == 'true'
+        if: |
+          steps.filter.outputs.web_changed == 'true' ||
+          ("${{ github.event_name }}" == "workflow_dispatch" &&
+          "${{ github.event.inputs.environment }}" == "${{ matrix.environment.name }}" &&
+          "${{ github.event.inputs.options }}" == "build" && "${{ github.event.inputs.site }}" == "web")
         env:
           BUILD_PLATFORM: 'amd64'
         run: |
@@ -108,7 +122,11 @@ jobs:
             .
 
       - name: Build Marketing
-        if: steps.filter.outputs.marketing_changed == 'true'
+        if: |
+          steps.filter.outputs.marketing_changed == 'true' ||
+          ("${{ github.event_name }}" == "workflow_dispatch" &&
+          "${{ github.event.inputs.environment }}" == "${{ matrix.environment.name }}" &&
+          "${{ github.event.inputs.options }}" == "build" && "${{ github.event.inputs.site }}" == "web")
         env:
           BUILD_PLATFORM: 'amd64'
         run: |
@@ -120,7 +138,11 @@ jobs:
 
       - name: Build Documentation
         continue-on-error: true
-        if: steps.filter.outputs.documentation == 'true'
+        if: |
+          steps.filter.outputs.documentation == 'true' ||
+          ("${{ github.event_name }}" == "workflow_dispatch" &&
+          "${{ github.event.inputs.environment }}" == "${{ matrix.environment.name }}" &&
+          "${{ github.event.inputs.options }}" == "build" && "${{ github.event.inputs.site }}" == "web")
         env:
           BUILD_PLATFORM: 'amd64'
         run: |
