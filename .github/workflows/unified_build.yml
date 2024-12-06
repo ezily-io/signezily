@@ -94,8 +94,8 @@ jobs:
         with:
           filters: |
             web:
-              # - '.github/workflows/unified_build.yml'
-              # - 'docker/Dockerfile'
+              - '.github/workflows/unified_build.yml'
+              - 'docker/Dockerfile'
               - 'apps/web/**'
             marketing:
               - '.github/workflows/unified_build.yml'
@@ -126,7 +126,7 @@ jobs:
       - name: Build Marketing
         continue-on-error: true
         if: |
-          steps.filter.outputs.marketing == 'false' ||
+          steps.filter.outputs.marketing == 'true' ||
           (github.event_name == 'workflow_dispatch' &&
           github.event.inputs.environment == matrix.environment.name &&
           (github.event.inputs.ExecutionType == 'build' || github.event.inputs.ExecutionType == 'build-push') &&
@@ -176,7 +176,8 @@ jobs:
           docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:documentation
 
       - name: Deploy
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push' || 
+          github.event.inputs.ExecutionType == 'deploy' && github.event.inputs.environment == matrix.environment.name
         run: |
           aws ecs update-service \
             --cluster $CLUSTER --service $SERVICE${{ matrix.environment.name }} \
