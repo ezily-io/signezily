@@ -72,12 +72,16 @@ jobs:
         with:
           filters: |
             web:
+              # - '.github/workflows/unified_build.yml'
+              # - 'docker/Dockerfile'
               - 'apps/web/**'
             marketing:
-              - 'apps/marketing/**'
+              - '.github/workflows/unified_build.yml'
+              # - 'docker/Dockerfile.marketing'
+              # - 'apps/marketing/**'
             documentation:
-              - '.github/workflows/build_marketing.yml'
-              - 'docker/Dockerfile.marketing'
+              - '.github/workflows/unified_build.yml'
+              - 'docker/Dockerfile.documentation'
               - 'apps/documentation/**'
 
       # - name: Build Documenso web
