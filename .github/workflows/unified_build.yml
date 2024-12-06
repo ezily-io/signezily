@@ -78,6 +78,9 @@ jobs:
       - name: Filter Changed Files
         uses: dorny/paths-filter@v3
         id: filter
+        if: |
+          matrix.environment.name == 'dev' ||
+          (github.ref == 'refs/heads/main' && matrix.environment.name != 'dev')
         with:
           filters: |
             web:
