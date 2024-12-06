@@ -50,10 +50,11 @@ jobs:
         env:
           GIT_SHA: ${{ github.sha }}
         run: |
-          IMAGE=$AWS_ACCOUNT.dkr.ecr.ap-northeast-1.amazonaws.com/$ECR_REPOSITORY
+          IMAGE=898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/$ECR_REPOSITORY
           THIS_TAG="$IMAGE:$(git rev-parse --short $GIT_SHA)"
           TAGS="$IMAGE:latest,$THIS_TAG"
 
+          echo "image=$IMAGE" >> $GITHUB_OUTPUT
           echo "this_tag=$THIS_TAG" >> $GITHUB_OUTPUT
 
           if [ '${{ github.event_name }}' = 'pull_request' ]; then
@@ -69,14 +70,13 @@ jobs:
           docker build \
             -f ./docker/Dockerfile \
             --progress=plain \
-            -t "documenso/documenso-$BUILD_PLATFORM:latest" \
+            -t 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:latest \
             .
 
       - name: Push
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:latest
 
       - name: Deploy
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
