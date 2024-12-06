@@ -27,20 +27,12 @@ generate_pkcs12() {
     -name "$SIGN_CERT_NAME" \
     -passout pass:"$SIGN_PRIV_KEY_PASS"
 
-  # openssl pkcs12 -export -out "/app/apps/sing_ezily_cert.p12" -inkey sign_priv_key.key -in "sign_certificate.crt" -name "SIGN_EZLY" -passout pass:""
 
   if [ $? -ne 0 ]; then
     echo "Failed to create PKCS#12 file."
     exit 1
   fi
   echo "PKCS#12 file created: $NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH"
-
-  #Remove
-  # rm "$PRIVATE_KEY"
-  # rm "$CERTIFICATE"
-  # unset SIGN_PRIV_KEY_FILE
-  # unset SIGN_CERT_FILE
-  # unset SIGN_PRIV_KEY_PASS
 
 }
 
