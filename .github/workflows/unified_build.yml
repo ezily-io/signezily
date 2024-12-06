@@ -106,7 +106,7 @@ jobs:
               - 'docker/Dockerfile.documentation'
               - 'apps/documentation/**'
 
-      - name: Build Documenso web
+      - name: Build Signezily web
         continue-on-error: true
         if: |
           steps.filter.outputs.web == 'true' ||
@@ -123,7 +123,7 @@ jobs:
             -t "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:latest" \
             .
 
-      - name: Build Marketing
+      - name: Build Signezily Marketing
         continue-on-error: true
         if: |
           steps.filter.outputs.marketing == 'true' ||
@@ -140,7 +140,7 @@ jobs:
             -t "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:${{ matrix.environment.name }}-marketing" \
             .
 
-      - name: Build Documentation
+      - name: Build Signezily Documentation
         continue-on-error: true
         if: |
           steps.filter.outputs.documentation == 'true' ||
@@ -157,20 +157,20 @@ jobs:
             -t "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:documentation" \
             .
 
-      - name: Pushing documenso web image
+      - name: Pushing Signezily web image
         if: steps.filter.outputs.web == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push' || 
           github.event.inputs.site == 'web' && github.event.inputs.ExecutionType == 'build-push'
         run: |
           docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:latest
       
-      - name: Pushing documenso marketing image
+      - name: Pushing Signezily marketing image
         if: steps.filter.outputs.marketing == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push' || 
           github.event.inputs.site == 'marketing' && github.event.inputs.ExecutionType == 'build-push'
         run: |
           docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:marketing
 
-      - name: Pushing documenso documentation image
-        if: steps.filter.outputs.documentation == 'true' || 
+      - name: Pushing Signezily1 documentation image
+        if: steps.filter.outputs.documentation == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push' || 
           github.event.inputs.site == 'documentation' && github.event.inputs.ExecutionType == 'build-push'
         run: |
           docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:documentation
