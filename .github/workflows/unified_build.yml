@@ -22,12 +22,12 @@ on:
           - qa
           - prod
       ExecutionType:
-        description: "Docker 'build' 'push' or 'deploy'"
+        description: "Docker 'build' 'build/push' or 'deploy'"
         type: choice
         default: "build"
         options:
           - "build"
-          - "push"
+          - "build-push"
           - "deploy"
   workflow_call:
   push:
@@ -112,7 +112,7 @@ jobs:
           steps.filter.outputs.web == 'true' ||
           (github.event_name == 'workflow_dispatch' &&
           github.event.inputs.environment == matrix.environment.name &&
-          github.event.inputs.options == 'build' &&
+          (github.event.inputs.ExecutionType == 'build' || github.event.inputs.ExecutionType == 'build-push') &&
           github.event.inputs.site == 'web')
         env:
           BUILD_PLATFORM: 'amd64'
@@ -129,7 +129,7 @@ jobs:
           steps.filter.outputs.marketing == 'false' ||
           (github.event_name == 'workflow_dispatch' &&
           github.event.inputs.environment == matrix.environment.name &&
-          github.event.inputs.options == 'build' &&
+          (github.event.inputs.ExecutionType == 'build' || github.event.inputs.ExecutionType == 'build-push') &&
           github.event.inputs.site == 'marketing')
         env:
           BUILD_PLATFORM: 'amd64'
@@ -146,7 +146,7 @@ jobs:
           steps.filter.outputs.documentation == 'true' ||
           (github.event_name == 'workflow_dispatch' &&
           github.event.inputs.environment == matrix.environment.name &&
-          github.event.inputs.options == 'build' &&
+          (github.event.inputs.ExecutionType == 'build' || github.event.inputs.ExecutionType == 'build-push') &&
           github.event.inputs.site == 'documentation')
         env:
           BUILD_PLATFORM: 'amd64'
@@ -158,18 +158,20 @@ jobs:
             .
 
       - name: Pushing documenso web image
-        if: steps.filter.outputs.web == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: steps.filter.outputs.web == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push' || 
+          github.event.inputs.site == 'web' && github.event.inputs.ExecutionType == 'build-push'
         run: |
           docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:latest
       
       - name: Pushing documenso marketing image
-        if: steps.filter.outputs.marketing == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: steps.filter.outputs.marketing == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push' || 
+          github.event.inputs.site == 'marketing' && github.event.inputs.ExecutionType == 'build-push'
         run: |
           docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:marketing
 
       - name: Pushing documenso documentation image
-        if: steps.filter.outputs.documentation == 'true'
-        # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: steps.filter.outputs.documentation == 'true' || 
+          github.event.inputs.site == 'documentation' && github.event.inputs.ExecutionType == 'build-push'
         run: |
           docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:documentation
 
