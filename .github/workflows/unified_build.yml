@@ -89,7 +89,7 @@ jobs:
         uses: dorny/paths-filter@v3
         id: filter
         if: |
-          matrix.environment.name == 'demo' ||
+          matrix.environment.name == 'dev' ||
           (github.ref == 'refs/heads/main' && matrix.environment.name != 'dev')
         with:
           filters: |
