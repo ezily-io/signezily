@@ -158,18 +158,21 @@ jobs:
             .
 
       - name: Pushing Signezily web image
+        continue-on-error: true
         if: steps.filter.outputs.web == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push' || 
           github.event.inputs.site == 'web' && github.event.inputs.ExecutionType == 'build-push'
         run: |
           docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:latest
       
       - name: Pushing Signezily marketing image
+        continue-on-error: true
         if: steps.filter.outputs.marketing == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push' || 
           github.event.inputs.site == 'marketing' && github.event.inputs.ExecutionType == 'build-push'
         run: |
           docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:marketing
 
       - name: Pushing Signezily1 documentation image
+        continue-on-error: true
         if: steps.filter.outputs.documentation == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push' || 
           github.event.inputs.site == 'documentation' && github.event.inputs.ExecutionType == 'build-push'
         run: |
