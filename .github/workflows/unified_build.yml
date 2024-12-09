@@ -89,7 +89,7 @@ jobs:
         uses: dorny/paths-filter@v3
         id: filter
         if: |
-          matrix.environment.name == 'dev' ||
+          matrix.environment.name == 'dev' && github.event_name != 'workflow_dispatch' ||
           (github.ref == 'refs/heads/main' && matrix.environment.name != 'dev')
         with:
           filters: |
@@ -182,6 +182,7 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push' || 
           github.event.inputs.ExecutionType == 'deploy' && github.event.inputs.environment == matrix.environment.name
         run: |
+          echo "Service Name: ${SERVICE}${{ matrix.environment.name }}"
           aws ecs update-service \
-            --cluster $CLUSTER --service $SERVICE${{ matrix.environment.name }} \
+            --cluster $CLUSTER --service ${SERVICE}${{ matrix.environment.name }} \
             --force-new-deployment
