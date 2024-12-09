@@ -1,10 +1,7 @@
 ###########################
 #     BASE CONTAINER      #
 ###########################
-FROM node:22-alpine3.20 AS base
-
-RUN apk add --no-cache openssl
-
+FROM node:18-alpine AS base
 
 ###########################
 #    BUILDER CONTAINER    #
@@ -22,7 +19,7 @@ RUN npm install -g "turbo@^1.9.3"
 
 # Outputs to the /out folder
 # source: https://turbo.build/repo/docs/reference/command-line-reference/prune#--docker
-RUN turbo prune --scope=@documenso/remix --docker
+RUN turbo prune --scope=@documenso/documentation --docker
 
 ###########################
 #   INSTALLER CONTAINER   #
@@ -33,7 +30,7 @@ FROM base AS installer
 RUN apk add --no-cache libc6-compat
 RUN apk add --no-cache jq
 # Required for node_modules/aws-crt
-RUN apk add --no-cache make cmake g++ openssl bash
+RUN apk add --no-cache make cmake g++
 
 WORKDIR /app
 
@@ -63,7 +60,10 @@ COPY --from=builder /app/out/package-lock.json ./package-lock.json
 
 COPY --from=builder /app/lingui.config.ts ./lingui.config.ts
 
-RUN npm ci
+#NOt need for documentation
+#RUN npm ci
+RUN npm i
+RUN npm run prisma:generate
 
 # Then copy all the source code (as it changes more often)
 COPY --from=builder /app/out/full/ .
@@ -72,43 +72,45 @@ COPY turbo.json turbo.json
 
 RUN npm install -g "turbo@^1.9.3"
 
-RUN turbo run build --filter=@documenso/remix...
+RUN turbo run build --filter=@documenso/documentation...
 
 ###########################
 #     RUNNER CONTAINER    #
 ###########################
 FROM base AS runner
 
-ENV HUSKY 0
-ENV DOCKER_OUTPUT 1
+WORKDIR /app
 
 RUN apk add --no-cache openssl
 
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-USER nodejs
+USER nextjs
 
-COPY --from=installer /app/apps/web/next.config.js .
-COPY --from=installer /app/apps/web/package.json .
+COPY --from=installer /app/apps/documentation/next.config.js .
+COPY --from=installer /app/apps/documentation/package.json .
 
 # Automatically leverage output traces to reduce image size
-# https://nodejs.org/docs/advanced-features/output-file-tracing
-COPY --from=installer --chown=nodejs:nodejs /app/apps/remix/build ./apps/remix/build
-COPY --from=installer --chown=nodejs:nodejs /app/apps/remix/public ./apps/remix/public
+COPY --from=installer --chown=nextjs:nodejs /app/apps/documentation/.next/standalone ./
+COPY --from=installer --chown=nextjs:nodejs /app/apps/documentation/.next/static ./apps/documentation/.next/static
+COPY --from=installer --chown=nextjs:nodejs /app/apps/documentation/public ./apps/documentation/public
 
 # Copy the prisma binary, schema and migrations
-COPY --from=installer --chown=nodejs:nodejs /app/packages/prisma/schema.prisma ./packages/prisma/schema.prisma
-COPY --from=installer --chown=nodejs:nodejs /app/packages/prisma/migrations ./packages/prisma/migrations
+COPY --from=installer --chown=nextjs:nodejs /app/packages/prisma/schema.prisma ./packages/prisma/schema.prisma
+COPY --from=installer --chown=nextjs:nodejs /app/packages/prisma/migrations ./packages/prisma/migrations
+COPY --from=installer --chown=nextjs:nodejs /app/node_modules/prisma/ ./node_modules/prisma/
+COPY --from=installer --chown=nextjs:nodejs /app/node_modules/@prisma/ ./node_modules/@prisma/
 
-# Generate the prisma client again
-RUN npx prisma generate --schema ./packages/prisma/schema.prisma
+# Symlink the prisma binary
+RUN mkdir node_modules/.bin
+RUN ln -s /app/node_modules/prisma/build/index.js ./node_modules/.bin/prisma
+
+
 
 COPY --chown=nextjs:nodejs ./docker/generate_cert_p12.sh ./generate_cert_p12.sh
 # Get the start script from docker/start.sh
-COPY --chown=nodejs:nodejs ./docker/start.sh /app/apps/remix/start.sh
+COPY --chown=nextjs:nodejs ./docker/start.sh ./start.sh
 
-WORKDIR /app/apps/remix
-
-CMD ["sh", "start.sh"]
+CMD ["sh", "start.sh", "documentation"]
