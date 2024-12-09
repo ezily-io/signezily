@@ -182,7 +182,6 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push' || 
           github.event.inputs.ExecutionType == 'deploy' && github.event.inputs.environment == matrix.environment.name
         run: |
-          echo "Service Name: ${SERVICE}${{ matrix.environment.name }}"
           aws ecs update-service \
-            --cluster $CLUSTER --service ${SERVICE}${{ matrix.environment.name }} \
+            --cluster $CLUSTER --service $SERVICE}${{ matrix.environment.name }} \
             --force-new-deployment
