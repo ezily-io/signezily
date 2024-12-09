@@ -19,7 +19,7 @@ RUN npm install -g "turbo@^1.9.3"
 
 # Outputs to the /out folder
 # source: https://turbo.build/repo/docs/reference/command-line-reference/prune#--docker
-RUN turbo prune --scope=@documenso/web --docker
+RUN turbo prune --scope=@documenso/documentation --docker
 
 ###########################
 #   INSTALLER CONTAINER   #
@@ -60,7 +60,10 @@ COPY --from=builder /app/out/package-lock.json ./package-lock.json
 
 COPY --from=builder /app/lingui.config.ts ./lingui.config.ts
 
-RUN npm ci
+#NOt need for documentation
+#RUN npm ci
+RUN npm i
+RUN npm run prisma:generate
 
 # Then copy all the source code (as it changes more often)
 COPY --from=builder /app/out/full/ .
@@ -69,7 +72,7 @@ COPY turbo.json turbo.json
 
 RUN npm install -g "turbo@^1.9.3"
 
-RUN turbo run build --filter=@documenso/web...
+RUN turbo run build --filter=@documenso/documentation...
 
 ###########################
 #     RUNNER CONTAINER    #
@@ -86,14 +89,13 @@ RUN adduser --system --uid 1001 nextjs
 
 USER nextjs
 
-COPY --from=installer /app/apps/web/next.config.js .
-COPY --from=installer /app/apps/web/package.json .
+COPY --from=installer /app/apps/documentation/next.config.js .
+COPY --from=installer /app/apps/documentation/package.json .
 
 # Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
+COPY --from=installer --chown=nextjs:nodejs /app/apps/documentation/.next/standalone ./
+COPY --from=installer --chown=nextjs:nodejs /app/apps/documentation/.next/static ./apps/documentation/.next/static
+COPY --from=installer --chown=nextjs:nodejs /app/apps/documentation/public ./apps/documentation/public
 
 # Copy the prisma binary, schema and migrations
 COPY --from=installer --chown=nextjs:nodejs /app/packages/prisma/schema.prisma ./packages/prisma/schema.prisma
@@ -105,8 +107,10 @@ COPY --from=installer --chown=nextjs:nodejs /app/node_modules/@prisma/ ./node_mo
 RUN mkdir node_modules/.bin
 RUN ln -s /app/node_modules/prisma/build/index.js ./node_modules/.bin/prisma
 
+
+
 COPY --chown=nextjs:nodejs ./docker/generate_cert_p12.sh ./generate_cert_p12.sh
 # Get the start script from docker/start.sh
 COPY --chown=nextjs:nodejs ./docker/start.sh ./start.sh
 
-CMD ["sh", "start.sh", "default"]
+CMD ["sh", "start.sh", "documentation"]

@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: process.env.DOCKER_OUTPUT ? 'standalone' : undefined,
   transpilePackages: [
     '@documenso/assets',
     '@documenso/lib',
