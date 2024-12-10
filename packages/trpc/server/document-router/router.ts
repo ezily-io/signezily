@@ -1,5 +1,6 @@
 import { TRPCError } from '@trpc/server';
 import { DateTime } from 'luxon';
+import { z } from 'zod';
 
 import { getServerLimits } from '@documenso/ee/server-only/limits/server';
 import { NEXT_PUBLIC_WEBAPP_URL } from '@documenso/lib/constants/app';
@@ -29,7 +30,7 @@ import { DocumentStatus } from '@documenso/prisma/client';
 import { authenticatedProcedure, procedure, router } from '../trpc';
 import {
   ZCreateDocumentMutationSchema,
-  ZDeleteDraftDocumentMutationSchema as ZDeleteDocumentMutationSchema,
+  ZDeleteDocumentMutationSchema,
   ZDownloadAuditLogsMutationSchema,
   ZDownloadCertificateMutationSchema,
   ZFindDocumentAuditLogsQuerySchema,
@@ -49,6 +50,7 @@ import {
 } from './schema';
 
 export const documentRouter = router({
+  // Internal endpoint for now.
   getDocumentById: authenticatedProcedure
     .input(ZGetDocumentByIdQuerySchema)
     .query(async ({ input, ctx }) => {
@@ -58,6 +60,7 @@ export const documentRouter = router({
       });
     }),
 
+  // Internal endpoint for now.
   getDocumentByToken: procedure
     .input(ZGetDocumentByTokenQuerySchema)
     .query(async ({ input, ctx }) => {
@@ -69,8 +72,50 @@ export const documentRouter = router({
       });
     }),
 
+  findDocuments: authenticatedProcedure
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/document/find',
+        summary: 'Find documents',
+        description: 'Find documents based on a search criteria',
+        tags: ['Documents'],
+      },
+    })
+    .input(ZFindDocumentsQuerySchema)
+    .output(z.unknown())
+    .query(async ({ input, ctx }) => {
+      const { user } = ctx;
+
+      const { search, teamId, templateId, page, perPage, orderBy, source, status } = input;
+
+      const documents = await findDocuments({
+        userId: user.id,
+        teamId,
+        templateId,
+        search,
+        source,
+        status,
+        page,
+        perPage,
+        orderBy,
+      });
+
+      return documents;
+    }),
+
   getDocumentWithDetailsById: authenticatedProcedure
+    .meta({
+      openapi: {
+        method: 'GET',
+        path: '/document/{documentId}',
+        summary: 'Get document',
+        description: 'Returns a document given an ID',
+        tags: ['Documents'],
+      },
+    })
     .input(ZGetDocumentWithDetailsByIdQuerySchema)
+    .output(z.unknown())
     .query(async ({ input, ctx }) => {
       return await getDocumentWithDetailsById({
         ...input,
@@ -79,7 +124,16 @@ export const documentRouter = router({
     }),
 
   createDocument: authenticatedProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/document/create',
+        summary: 'Create document',
+        tags: ['Documents'],
+      },
+    })
     .input(ZCreateDocumentMutationSchema)
+    .output(z.unknown())
     .mutation(async ({ input, ctx }) => {
       const { title, documentDataId, teamId } = input;
 
@@ -101,76 +155,18 @@ export const documentRouter = router({
       });
     }),
 
-  deleteDocument: authenticatedProcedure
-    .input(ZDeleteDocumentMutationSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { id, teamId } = input;
-
-      const userId = ctx.user.id;
-
-      return await deleteDocument({
-        id,
-        userId,
-        teamId,
-        requestMetadata: extractNextApiRequestMetadata(ctx.req),
-      });
-    }),
-
-  moveDocumentToTeam: authenticatedProcedure
-    .input(ZMoveDocumentsToTeamSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { documentId, teamId } = input;
-      const userId = ctx.user.id;
-
-      return await moveDocumentToTeam({
-        documentId,
-        teamId,
-        userId,
-        requestMetadata: extractNextApiRequestMetadata(ctx.req),
-      });
-    }),
-
-  findDocuments: authenticatedProcedure
-    .input(ZFindDocumentsQuerySchema)
-    .query(async ({ input, ctx }) => {
-      const { user } = ctx;
-
-      const { search, teamId, templateId, page, perPage, orderBy, source, status } = input;
-
-      const documents = await findDocuments({
-        userId: user.id,
-        teamId,
-        templateId,
-        search,
-        source,
-        status,
-        page,
-        perPage,
-        orderBy,
-      });
-
-      return documents;
-    }),
-
-  findDocumentAuditLogs: authenticatedProcedure
-    .input(ZFindDocumentAuditLogsQuerySchema)
-    .query(async ({ input, ctx }) => {
-      const { page, perPage, documentId, cursor, filterForRecentActivity, orderBy } = input;
-
-      return await findDocumentAuditLogs({
-        page,
-        perPage,
-        documentId,
-        cursor,
-        filterForRecentActivity,
-        orderBy,
-        userId: ctx.user.id,
-      });
-    }),
-
-  // Todo: Add API
+  // Todo: Refactor to updateDocument.
   setSettingsForDocument: authenticatedProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/document/{documentId}',
+        summary: 'Update document',
+        tags: ['Documents'],
+      },
+    })
     .input(ZSetSettingsForDocumentMutationSchema)
+    .output(z.unknown())
     .mutation(async ({ input, ctx }) => {
       const { documentId, teamId, data, meta } = input;
 
@@ -199,6 +195,56 @@ export const documentRouter = router({
       });
     }),
 
+  deleteDocument: authenticatedProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/document/{documentId}/delete',
+        summary: 'Delete document',
+        tags: ['Documents'],
+      },
+    })
+    .input(ZDeleteDocumentMutationSchema)
+    .output(z.unknown())
+    .mutation(async ({ input, ctx }) => {
+      const { documentId, teamId } = input;
+
+      const userId = ctx.user.id;
+
+      return await deleteDocument({
+        id: documentId,
+        userId,
+        teamId,
+        requestMetadata: extractNextApiRequestMetadata(ctx.req),
+      });
+    }),
+
+  moveDocumentToTeam: authenticatedProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/document/{documentId}/move',
+        summary: 'Move document',
+        description: 'Move a document to a team',
+        tags: ['Documents'],
+      },
+    })
+    .input(ZMoveDocumentsToTeamSchema)
+    .output(z.unknown())
+    .mutation(async ({ input, ctx }) => {
+      const { documentId, teamId } = input;
+      const userId = ctx.user.id;
+
+      return await moveDocumentToTeam({
+        documentId,
+        teamId,
+        userId,
+        requestMetadata: extractNextApiRequestMetadata(ctx.req),
+      });
+    }),
+
+  // Internal endpoint for now.
+  // Should probably use `updateDocument`
   setTitleForDocument: authenticatedProcedure
     .input(ZSetTitleForDocumentMutationSchema)
     .mutation(async ({ input, ctx }) => {
@@ -215,6 +261,7 @@ export const documentRouter = router({
       });
     }),
 
+  // Internal endpoint for now.
   setPasswordForDocument: authenticatedProcedure
     .input(ZSetPasswordForDocumentMutationSchema)
     .mutation(async ({ input, ctx }) => {
@@ -239,6 +286,7 @@ export const documentRouter = router({
       });
     }),
 
+  // Internal endpoint for now.
   setSigningOrderForDocument: authenticatedProcedure
     .input(ZSetSigningOrderForDocumentMutationSchema)
     .mutation(async ({ input, ctx }) => {
@@ -252,13 +300,14 @@ export const documentRouter = router({
       });
     }),
 
+  // Internal endpoint for now.
   updateTypedSignatureSettings: authenticatedProcedure
     .input(ZUpdateTypedSignatureSettingsMutationSchema)
     .mutation(async ({ input, ctx }) => {
       const { documentId, teamId, typedSignatureEnabled } = input;
 
       const document = await getDocumentById({
-        id: documentId,
+        documentId,
         teamId,
         userId: ctx.user.id,
       }).catch(() => null);
@@ -278,8 +327,20 @@ export const documentRouter = router({
       });
     }),
 
+  // Todo: Refactor to distributeDocument.
+  // Todo: Rework before releasing API.
   sendDocument: authenticatedProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/document/{documentId}/distribute',
+        summary: 'Distribute document',
+        description: 'Send the document out to recipients based on your distribution method',
+        tags: ['Documents'],
+      },
+    })
     .input(ZSendDocumentMutationSchema)
+    .output(z.unknown())
     .mutation(async ({ input, ctx }) => {
       const { documentId, teamId, meta } = input;
 
@@ -315,7 +376,18 @@ export const documentRouter = router({
     }),
 
   resendDocument: authenticatedProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/document/{documentId}/resend',
+        summary: 'Resend document',
+        description:
+          'Resend the document to recipients who have not signed. Will use the distribution method set in the document.',
+        tags: ['Documents'],
+      },
+    })
     .input(ZResendDocumentMutationSchema)
+    .output(z.unknown())
     .mutation(async ({ input, ctx }) => {
       return await resendDocument({
         userId: ctx.user.id,
@@ -325,7 +397,16 @@ export const documentRouter = router({
     }),
 
   duplicateDocument: authenticatedProcedure
+    .meta({
+      openapi: {
+        method: 'POST',
+        path: '/document/{documentId}/duplicate',
+        summary: 'Duplicate document',
+        tags: ['Documents'],
+      },
+    })
     .input(ZGetDocumentByIdQuerySchema)
+    .output(z.unknown())
     .mutation(async ({ input, ctx }) => {
       return await duplicateDocumentById({
         userId: ctx.user.id,
@@ -333,6 +414,7 @@ export const documentRouter = router({
       });
     }),
 
+  // Internal endpoint for now.
   searchDocuments: authenticatedProcedure
     .input(ZSearchDocumentsMutationSchema)
     .query(async ({ input, ctx }) => {
@@ -346,13 +428,31 @@ export const documentRouter = router({
       return documents;
     }),
 
+  // Internal endpoint for now.
+  findDocumentAuditLogs: authenticatedProcedure
+    .input(ZFindDocumentAuditLogsQuerySchema)
+    .query(async ({ input, ctx }) => {
+      const { page, perPage, documentId, cursor, filterForRecentActivity, orderBy } = input;
+
+      return await findDocumentAuditLogs({
+        page,
+        perPage,
+        documentId,
+        cursor,
+        filterForRecentActivity,
+        orderBy,
+        userId: ctx.user.id,
+      });
+    }),
+
+  // Internal endpoint for now.
   downloadAuditLogs: authenticatedProcedure
     .input(ZDownloadAuditLogsMutationSchema)
     .mutation(async ({ input, ctx }) => {
       const { documentId, teamId } = input;
 
       const document = await getDocumentById({
-        id: documentId,
+        documentId,
         userId: ctx.user.id,
         teamId,
       }).catch(() => null);
@@ -374,13 +474,14 @@ export const documentRouter = router({
       };
     }),
 
+  // Internal endpoint for now.
   downloadCertificate: authenticatedProcedure
     .input(ZDownloadCertificateMutationSchema)
     .mutation(async ({ input, ctx }) => {
       const { documentId, teamId } = input;
 
       const document = await getDocumentById({
-        id: documentId,
+        documentId,
         userId: ctx.user.id,
         teamId,
       });
