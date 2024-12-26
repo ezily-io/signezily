@@ -1,6 +1,7 @@
 import { JobClient } from './client/client';
 import { SEND_CONFIRMATION_EMAIL_JOB_DEFINITION } from './definitions/emails/send-confirmation-email';
 import { SEND_LINE_SUPPORT_EMAIL_JOB_DEFINITION } from './definitions/emails/send-line-support-email';
+import { SEND_RECIPIENT_SIGNED_EMAIL_JOB_DEFINITION } from './definitions/emails/send-recipient-signed-email';
 import { SEND_SIGNING_REJECTION_EMAILS_JOB_DEFINITION } from './definitions/emails/send-rejection-emails';
 import { SEND_SIGNING_EMAIL_JOB_DEFINITION } from './definitions/emails/send-signing-email';
 import { SEND_TEAM_DELETED_EMAIL_JOB_DEFINITION } from './definitions/emails/send-team-deleted-email';
@@ -21,6 +22,7 @@ export const jobsClient = new JobClient([
   SEND_LINE_SUPPORT_EMAIL_JOB_DEFINITION,
   SEAL_DOCUMENT_JOB_DEFINITION,
   SEND_SIGNING_REJECTION_EMAILS_JOB_DEFINITION,
+  SEND_RECIPIENT_SIGNED_EMAIL_JOB_DEFINITION,
 ] as const);
 
 export const jobs = jobsClient;
