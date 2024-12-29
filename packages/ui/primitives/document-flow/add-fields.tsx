@@ -58,11 +58,17 @@ import { FieldAdvancedSettings } from './field-item-advanced-settings';
 import { MissingSignatureFieldDialog } from './missing-signature-field-dialog';
 import { type DocumentFlowStep, FRIENDLY_FIELD_TYPE } from './types';
 
-const MIN_HEIGHT_PX = 12;
-const MIN_WIDTH_PX = 36;
+const fontCaveat = Caveat({
+  weight: ['500'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-caveat',
+});
 
-const DEFAULT_HEIGHT_PX = MIN_HEIGHT_PX * 2.5;
-const DEFAULT_WIDTH_PX = MIN_WIDTH_PX * 2.5;
+const MIN_HEIGHT_PX = 20;
+const MIN_WIDTH_PX = 80;
+const DEFAULT_HEIGHT_PX = 50;
+const DEFAULT_WIDTH_PX = 140;
 
 export type FieldFormType = {
   nativeId?: number;
@@ -498,6 +504,8 @@ export const AddFieldsFormPartial = ({
       fieldBounds.current = {
         height: Math.max(DEFAULT_HEIGHT_PX),
         width: Math.max(DEFAULT_WIDTH_PX),
+        height: Math.max(DEFAULT_HEIGHT_PX),
+        width: Math.max(DEFAULT_WIDTH_PX),
       };
     });
 
@@ -658,6 +666,8 @@ export const AddFieldsFormPartial = ({
                       minWidth={MIN_WIDTH_PX}
                       defaultHeight={DEFAULT_HEIGHT_PX}
                       defaultWidth={DEFAULT_WIDTH_PX}
+                      minHeight={MIN_HEIGHT_PX}
+                      minWidth={MIN_WIDTH_PX}
                       passive={isFieldWithinBounds && !!selectedField}
                       onFocus={() => setLastActiveField(field)}
                       onBlur={() => setLastActiveField(null)}
