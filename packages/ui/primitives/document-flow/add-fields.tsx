@@ -78,6 +78,8 @@ const fontCaveat = Caveat({
 
 const MIN_HEIGHT_PX = 20;
 const MIN_WIDTH_PX = 80;
+const DEFAULT_HEIGHT_PX = 50;
+const DEFAULT_WIDTH_PX = 140;
 
 export type FieldFormType = {
   nativeId?: number;
@@ -480,8 +482,8 @@ export const AddFieldsFormPartial = ({
       }
 
       fieldBounds.current = {
-        height: Math.max(MIN_HEIGHT_PX),
-        width: Math.max(MIN_WIDTH_PX),
+        height: Math.max(DEFAULT_HEIGHT_PX),
+        width: Math.max(DEFAULT_WIDTH_PX),
       };
     });
 
@@ -630,8 +632,8 @@ export const AddFieldsFormPartial = ({
                         selectedSigner?.email !== field.signerEmail ||
                         !canRecipientBeModified(selectedSigner, fields)
                       }
-                      minHeight={fieldBounds.current.height}
-                      minWidth={fieldBounds.current.width}
+                      minHeight={MIN_HEIGHT_PX}
+                      minWidth={MIN_WIDTH_PX}
                       passive={isFieldWithinBounds && !!selectedField}
                       onFocus={() => setLastActiveField(field)}
                       onBlur={() => setLastActiveField(null)}
