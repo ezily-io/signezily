@@ -182,7 +182,7 @@ export const documentRouter = router({
     .input(ZCreateDocumentMutationSchema)
     .output(ZCreateDocumentResponseSchema)
     .mutation(async ({ input, ctx }) => {
-      const { title, documentDataId, teamId } = input;
+      const { title, documentDataId, teamId, timezone } = input;
 
       const { remaining } = await getServerLimits({ email: ctx.user.email, teamId });
 
@@ -199,6 +199,7 @@ export const documentRouter = router({
         title,
         documentDataId,
         normalizePdf: true,
+        timezone,
         requestMetadata: extractNextApiRequestMetadata(ctx.req),
       });
     }),
