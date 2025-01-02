@@ -1,5 +1,7 @@
-import { Trans } from '@lingui/macro';
+import { useMemo } from 'react';
+
 import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/react/macro';
 import { match } from 'ts-pattern';
 
 import { RECIPIENT_ROLES_DESCRIPTION } from '@documenso/lib/constants/recipient-roles';
