@@ -428,17 +428,6 @@ export const SignaturePad = ({
         </div>
       )}
 
-      <div className="text-foreground absolute left-2 top-2">
-        <input {...getInputProps()} />
-        <button
-          type="button"
-          className="focus-visible:ring-ring ring-offset-background text-muted-foreground/60 hover:text-muted-foreground rounded-full p-0 text-[0.688rem] focus-visible:outline-none focus-visible:ring-2"
-          onClick={open}
-        >
-          <Trans>Upload Image</Trans>
-        </button>
-      </div>
-
       <div className="text-foreground absolute right-2 top-2 filter">
         <Select defaultValue={selectedColor} onValueChange={(value) => setSelectedColor(value)}>
           <SelectTrigger className="h-auto w-auto border-none p-0.5">
@@ -478,6 +467,14 @@ export const SignaturePad = ({
       </div>
 
       <div className="absolute bottom-3 right-3 flex gap-2">
+        <input {...getInputProps()} />
+        <button
+          type="button"
+          className="focus-visible:ring-ring ring-offset-background text-muted-foreground/60 hover:text-muted-foreground rounded-full p-0 text-[0.688rem] focus-visible:outline-none focus-visible:ring-2"
+          onClick={open}
+        >
+          <Trans>Upload Image</Trans>
+        </button>
         <button
           type="button"
           className="focus-visible:ring-ring ring-offset-background text-muted-foreground/60 hover:text-muted-foreground rounded-full p-0 text-[0.688rem] focus-visible:outline-none focus-visible:ring-2"
