@@ -1604,7 +1604,7 @@ msgstr "由於未支付的發票，您的團隊已被限制。請結清款項以
 #: apps/web/src/app/(dashboard)/templates/data-table-action-dropdown.tsx:74
 #: apps/web/src/app/(dashboard)/templates/duplicate-template-dialog.tsx:91
 msgid "Duplicate"
-msgstr "重複"
+msgstr "複製"
 
 #: apps/web/src/app/(dashboard)/documents/[id]/document-page-view-button.tsx:104
 #: apps/web/src/app/(dashboard)/documents/[id]/document-page-view-dropdown.tsx:115
