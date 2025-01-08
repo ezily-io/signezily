@@ -1592,7 +1592,7 @@ msgstr "升級"
 
 #: packages/ui/primitives/signature-pad/signature-pad.tsx:476
 msgid "Upload Image"
-msgstr "Upload Image"
+msgstr "上傳圖章"
 
 #: packages/ui/primitives/document-dropzone.tsx:70
 msgid "Upload Template Document"
