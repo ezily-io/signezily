@@ -1,10 +1,7 @@
 ###########################
 #     BASE CONTAINER      #
 ###########################
-FROM node:22-alpine3.20 AS base
-
-RUN apk add --no-cache openssl
-
+FROM node:18-alpine3.19 AS base
 
 ###########################
 #    BUILDER CONTAINER    #
