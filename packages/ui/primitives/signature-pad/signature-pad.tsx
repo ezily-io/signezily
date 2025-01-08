@@ -1,7 +1,7 @@
 'use client';
 
 import type { HTMLAttributes, MouseEvent, PointerEvent, TouchEvent } from 'react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Caveat } from 'next/font/google';
 
@@ -70,43 +70,6 @@ export const SignaturePad = ({
       setUploadedSignature(files[0]);
     },
   });
-
-  useEffect(() => {
-    if (!uploadedSignature) {
-      return;
-    }
-
-    const url = URL.createObjectURL(uploadedSignature);
-
-    const img = new Image();
-    img.src = url;
-
-    img.onload = () => {
-      if (!$el.current || !inputRef.current) return;
-
-      const ctx = $el.current.getContext('2d');
-      const { width, height } = $el.current;
-
-      const ratio = Math.min(width / img.width, height / img.height);
-
-      ctx?.clearRect(0, 0, width, height);
-      ctx?.drawImage(
-        img,
-        0,
-        0,
-        img.width,
-        img.height,
-        (width - img.width * ratio) / 2,
-        (height - img.height * ratio) / 2,
-        img.width * ratio,
-        img.height * ratio,
-      );
-
-      $imageData.current = ctx?.getImageData(0, 0, width, height) || null;
-
-      onChange?.($el.current.toDataURL());
-    };
-  }, [inputRef, onChange, uploadedSignature]);
 
   const perfectFreehandOptions = useMemo(() => {
     const size = $el.current ? Math.min($el.current.height, $el.current.width) * 0.03 : 10;
@@ -234,7 +197,7 @@ export const SignaturePad = ({
     onMouseUp(event, false);
   };
 
-  const onClearClick = () => {
+  const onClearClick = useCallback(() => {
     if ($el.current) {
       const ctx = $el.current.getContext('2d');
 
@@ -248,7 +211,7 @@ export const SignaturePad = ({
     setLines([]);
     setCurrentLine([]);
     setUploadedSignature(null);
-  };
+  }, [onChange]);
 
   const renderTypedSignature = () => {
     if ($el.current && typedSignature) {
@@ -303,6 +266,43 @@ export const SignaturePad = ({
       onChange?.(null);
     }
   };
+
+  useEffect(() => {
+    if (!uploadedSignature) {
+      return;
+    }
+
+    const url = URL.createObjectURL(uploadedSignature);
+
+    const img = new Image();
+    img.src = url;
+
+    img.onload = () => {
+      if (!$el.current || !inputRef.current) return;
+
+      const ctx = $el.current.getContext('2d');
+      const { width, height } = $el.current;
+
+      const ratio = Math.min(width / img.width, height / img.height);
+
+      onClearClick();
+      ctx?.drawImage(
+        img,
+        0,
+        0,
+        img.width,
+        img.height,
+        (width - img.width * ratio) / 2,
+        (height - img.height * ratio) / 2,
+        img.width * ratio,
+        img.height * ratio,
+      );
+
+      $imageData.current = ctx?.getImageData(0, 0, width, height) || null;
+
+      onChange?.($el.current.toDataURL());
+    };
+  }, [inputRef, onChange, onClearClick, uploadedSignature]);
 
   useEffect(() => {
     if (typedSignature.trim() !== '') {
