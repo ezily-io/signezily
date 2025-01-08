@@ -9,6 +9,7 @@ import { Trans } from '@lingui/macro';
 import { Undo2 } from 'lucide-react';
 import type { StrokeOptions } from 'perfect-freehand';
 import { getStroke } from 'perfect-freehand';
+import { useDropzone } from 'react-dropzone';
 
 import { unsafe_useEffectOnce } from '@documenso/lib/client-only/hooks/use-effect-once';
 import { Input } from '@documenso/ui/primitives/input';
@@ -57,6 +58,55 @@ export const SignaturePad = ({
   const [currentLine, setCurrentLine] = useState<Point[]>([]);
   const [selectedColor, setSelectedColor] = useState('black');
   const [typedSignature, setTypedSignature] = useState('');
+  const [uploadedSignature, setUploadedSignature] = useState<File | null>(null);
+
+  const { open, getRootProps, getInputProps, inputRef } = useDropzone({
+    noClick: true,
+    accept: {
+      'image/*': ['.png', '.jpg', '.jpeg', '.gif'],
+    },
+    maxFiles: 1,
+    onDropAccepted(files) {
+      setUploadedSignature(files[0]);
+    },
+  });
+
+  useEffect(() => {
+    if (!uploadedSignature) {
+      return;
+    }
+
+    const url = URL.createObjectURL(uploadedSignature);
+
+    const img = new Image();
+    img.src = url;
+
+    img.onload = () => {
+      if (!$el.current || !inputRef.current) return;
+
+      const ctx = $el.current.getContext('2d');
+      const { width, height } = $el.current;
+
+      const ratio = Math.min(width / img.width, height / img.height);
+
+      ctx?.clearRect(0, 0, width, height);
+      ctx?.drawImage(
+        img,
+        0,
+        0,
+        img.width,
+        img.height,
+        (width - img.width * ratio) / 2,
+        (height - img.height * ratio) / 2,
+        img.width * ratio,
+        img.height * ratio,
+      );
+
+      $imageData.current = ctx?.getImageData(0, 0, width, height) || null;
+
+      onChange?.($el.current.toDataURL());
+    };
+  }, [inputRef, onChange, uploadedSignature]);
 
   const perfectFreehandOptions = useMemo(() => {
     const size = $el.current ? Math.min($el.current.height, $el.current.width) * 0.03 : 10;
@@ -197,6 +247,7 @@ export const SignaturePad = ({
     setTypedSignature('');
     setLines([]);
     setCurrentLine([]);
+    setUploadedSignature(null);
   };
 
   const renderTypedSignature = () => {
@@ -314,7 +365,19 @@ export const SignaturePad = ({
       const img = new Image();
 
       img.onload = () => {
-        ctx?.drawImage(img, 0, 0, Math.min(width, img.width), Math.min(height, img.height));
+        const ratio = Math.min(width / img.width, height / img.height);
+
+        ctx?.drawImage(
+          img,
+          0,
+          0,
+          img.width,
+          img.height,
+          (width - img.width * ratio) / 2,
+          (height - img.height * ratio) / 2,
+          img.width * ratio,
+          img.height * ratio,
+        );
 
         const defaultImageData = ctx?.getImageData(0, 0, width, height) || null;
 
@@ -330,13 +393,14 @@ export const SignaturePad = ({
       className={cn('relative block', containerClassName, {
         'pointer-events-none opacity-50': disabled,
       })}
+      {...getRootProps()}
     >
       <canvas
         ref={$el}
         className={cn(
           'relative block',
           {
-            'dark:hue-rotate-180 dark:invert': selectedColor === 'black',
+            'dark:hue-rotate-180 dark:invert': selectedColor === 'black' && !uploadedSignature,
           },
           className,
         )}
@@ -403,6 +467,14 @@ export const SignaturePad = ({
       </div>
 
       <div className="absolute bottom-3 right-3 flex gap-2">
+        <input {...getInputProps()} />
+        <button
+          type="button"
+          className="focus-visible:ring-ring ring-offset-background text-muted-foreground/60 hover:text-muted-foreground rounded-full p-0 text-[0.688rem] focus-visible:outline-none focus-visible:ring-2"
+          onClick={open}
+        >
+          <Trans>Upload Image</Trans>
+        </button>
         <button
           type="button"
           className="focus-visible:ring-ring ring-offset-background text-muted-foreground/60 hover:text-muted-foreground rounded-full p-0 text-[0.688rem] focus-visible:outline-none focus-visible:ring-2"

@@ -414,7 +414,7 @@ msgstr "管理員"
 msgid "Advanced Options"
 msgstr "進階選項"
 
-#: packages/ui/primitives/document-flow/add-fields.tsx:573
+#: packages/ui/primitives/document-flow/add-fields.tsx:575
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:406
 msgid "Advanced settings"
 msgstr "進階設定"
@@ -467,11 +467,11 @@ msgstr "核准中"
 msgid "Before you get started, please confirm your email address by clicking the button below:"
 msgstr "在開始之前，請點擊下方按鈕確認您的電子郵件地址："
 
-#: packages/ui/primitives/signature-pad/signature-pad.tsx:377
+#: packages/ui/primitives/signature-pad/signature-pad.tsx:441
 msgid "Black"
 msgstr "黑色"
 
-#: packages/ui/primitives/signature-pad/signature-pad.tsx:391
+#: packages/ui/primitives/signature-pad/signature-pad.tsx:455
 msgid "Blue"
 msgstr "藍色"
 
@@ -525,7 +525,7 @@ msgstr "核取方塊值"
 msgid "Clear filters"
 msgstr "清除篩選條件"
 
-#: packages/ui/primitives/signature-pad/signature-pad.tsx:411
+#: packages/ui/primitives/signature-pad/signature-pad.tsx:483
 msgid "Clear Signature"
 msgstr "清除簽名"
 
@@ -552,7 +552,7 @@ msgstr "已完成文件"
 msgid "Configure Direct Recipient"
 msgstr "配置直接接收者"
 
-#: packages/ui/primitives/document-flow/add-fields.tsx:574
+#: packages/ui/primitives/document-flow/add-fields.tsx:576
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:407
 msgid "Configure the {0} field"
 msgstr "配置 {0} 欄位"
@@ -610,7 +610,7 @@ msgstr "建立帳戶"
 msgid "Custom Text"
 msgstr "自訂文字"
 
-#: packages/ui/primitives/document-flow/add-fields.tsx:927
+#: packages/ui/primitives/document-flow/add-fields.tsx:929
 #: packages/ui/primitives/document-flow/types.ts:53
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:690
 msgid "Date"
@@ -748,7 +748,7 @@ msgstr "草稿"
 msgid "Drag & drop your PDF here."
 msgstr "將您的 PDF 拖放到此處。"
 
-#: packages/ui/primitives/document-flow/add-fields.tsx:1058
+#: packages/ui/primitives/document-flow/add-fields.tsx:1060
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:820
 msgid "Dropdown"
 msgstr "下拉選單"
@@ -758,7 +758,7 @@ msgid "Dropdown options"
 msgstr "下拉選項"
 
 #: packages/lib/constants/document.ts:28
-#: packages/ui/primitives/document-flow/add-fields.tsx:875
+#: packages/ui/primitives/document-flow/add-fields.tsx:877
 #: packages/ui/primitives/document-flow/add-signature.tsx:272
 #: packages/ui/primitives/document-flow/add-signers.tsx:512
 #: packages/ui/primitives/document-flow/add-signers.tsx:519
@@ -785,7 +785,7 @@ msgstr "已重新發送電子郵件"
 msgid "Email sent"
 msgstr "電子郵件已發送"
 
-#: packages/ui/primitives/document-flow/add-fields.tsx:1123
+#: packages/ui/primitives/document-flow/add-fields.tsx:1125
 msgid "Empty field"
 msgstr "空白欄位"
 
@@ -798,7 +798,7 @@ msgstr "啟用直接連結簽署"
 msgid "Enable signing order"
 msgstr "啟用簽署順序"
 
-#: packages/ui/primitives/document-flow/add-fields.tsx:795
+#: packages/ui/primitives/document-flow/add-fields.tsx:797
 msgid "Enable Typed Signatures"
 msgstr "啟用鍵入簽名"
 
@@ -886,7 +886,7 @@ msgstr "全球接收者操作驗證"
 msgid "Go Back"
 msgstr "返回"
 
-#: packages/ui/primitives/signature-pad/signature-pad.tsx:398
+#: packages/ui/primitives/signature-pad/signature-pad.tsx:462
 msgid "Green"
 msgstr "綠色"
 
@@ -977,7 +977,7 @@ msgstr "訊息 <0>（可選）</0>"
 msgid "Min"
 msgstr "分鐘"
 
-#: packages/ui/primitives/document-flow/add-fields.tsx:901
+#: packages/ui/primitives/document-flow/add-fields.tsx:903
 #: packages/ui/primitives/document-flow/add-signature.tsx:298
 #: packages/ui/primitives/document-flow/add-signers.tsx:550
 #: packages/ui/primitives/document-flow/add-signers.tsx:556
@@ -1000,7 +1000,7 @@ msgstr "需要簽署"
 msgid "Needs to view"
 msgstr "需要檢視"
 
-#: packages/ui/primitives/document-flow/add-fields.tsx:686
+#: packages/ui/primitives/document-flow/add-fields.tsx:688
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:504
 msgid "No recipient matching this description was found."
 msgstr "找不到符合此描述的收件人。"
@@ -1009,7 +1009,7 @@ msgstr "找不到符合此描述的收件人。"
 msgid "No recipients"
 msgstr "無收件人"
 
-#: packages/ui/primitives/document-flow/add-fields.tsx:701
+#: packages/ui/primitives/document-flow/add-fields.tsx:703
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:519
 msgid "No recipients with this role"
 msgstr "此角色沒有收件人"
@@ -1038,7 +1038,7 @@ msgstr "未找到值。"
 msgid "None"
 msgstr "無"
 
-#: packages/ui/primitives/document-flow/add-fields.tsx:979
+#: packages/ui/primitives/document-flow/add-fields.tsx:981
 #: packages/ui/primitives/document-flow/types.ts:56
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:742
 msgid "Number"
@@ -1174,7 +1174,7 @@ msgstr "收件者已刪除電子郵件"
 msgid "Recipient signing request email"
 msgstr "收件者簽署請求電郵"
 
-#: packages/ui/primitives/signature-pad/signature-pad.tsx:384
+#: packages/ui/primitives/signature-pad/signature-pad.tsx:448
 msgid "Red"
 msgstr "紅色"
 
@@ -1211,7 +1211,7 @@ msgstr "提醒：請{recipientActionVerb}此文件"
 msgid "Reminder: Please {recipientActionVerb} your document"
 msgstr "提醒：請{recipientActionVerb}您的文件"
 
-#: packages/ui/primitives/document-flow/add-fields.tsx:1110
+#: packages/ui/primitives/document-flow/add-fields.tsx:1112
 msgid "Remove"
 msgstr "移除"
 
@@ -1331,7 +1331,7 @@ msgstr "簽署文件"
 msgid "Sign In"
 msgstr "登入"
 
-#: packages/ui/primitives/document-flow/add-fields.tsx:823
+#: packages/ui/primitives/document-flow/add-fields.tsx:825
 #: packages/ui/primitives/document-flow/add-signature.tsx:323
 #: packages/ui/primitives/document-flow/field-icon.tsx:52
 #: packages/ui/primitives/document-flow/types.ts:49
@@ -1414,7 +1414,7 @@ msgstr "Documenso 上 {teamName} 的團隊電子郵件已被移除"
 msgid "Template title"
 msgstr "範本標題"
 
-#: packages/ui/primitives/document-flow/add-fields.tsx:953
+#: packages/ui/primitives/document-flow/add-fields.tsx:955
 #: packages/ui/primitives/document-flow/types.ts:52
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:716
 msgid "Text"
@@ -1508,7 +1508,7 @@ msgstr "這可以通過在下一步直接為每個接收者設定身份驗證要
 msgid "This document can not be recovered, if you would like to dispute the reason for future documents please contact support."
 msgstr "此文件無法恢復，如果您想要對未來文件的原因提出異議，請聯絡支援。"
 
-#: packages/ui/primitives/document-flow/add-fields.tsx:757
+#: packages/ui/primitives/document-flow/add-fields.tsx:759
 msgid "This document has already been sent to this recipient. You can no longer edit this recipient."
 msgstr "此文件已經發送給此接收者。您無法再編輯此接收者。"
 
@@ -1544,7 +1544,7 @@ msgstr "此欄位無法修改或刪除。當您分享此範本的直接連結或
 msgid "This is how the document will reach the recipients once the document is ready for signing."
 msgstr "這是文件準備好進行簽署後將如何送達給收件人的方式。"
 
-#: packages/ui/primitives/document-flow/add-fields.tsx:1090
+#: packages/ui/primitives/document-flow/add-fields.tsx:1092
 msgid "This recipient can no longer be modified as they have signed a field, or completed the document."
 msgstr "此收件人已經簽署了一個欄位或完成了文件，因此無法再進行修改。"
 
@@ -1573,7 +1573,7 @@ msgstr "時區"
 msgid "Title"
 msgstr "標題"
 
-#: packages/ui/primitives/document-flow/add-fields.tsx:1073
+#: packages/ui/primitives/document-flow/add-fields.tsx:1075
 #: packages/ui/primitives/template-flow/add-template-fields.tsx:834
 msgid "To proceed further, please set at least one value for the {0} field."
 msgstr "若要繼續，請至少為 {0} 欄位設定一個值。"
@@ -1589,6 +1589,10 @@ msgstr "更新角色並根據需要為直接收件人新增欄位。使用直接
 #: packages/ui/primitives/document-dropzone.tsx:168
 msgid "Upgrade"
 msgstr "升級"
+
+#: packages/ui/primitives/signature-pad/signature-pad.tsx:476
+msgid "Upload Image"
+msgstr "Upload Image"
 
 #: packages/ui/primitives/document-dropzone.tsx:70
 msgid "Upload Template Document"
