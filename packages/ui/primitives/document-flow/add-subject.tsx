@@ -13,6 +13,13 @@ import { RECIPIENT_ROLES_DESCRIPTION } from '@documenso/lib/constants/recipient-
 import type { TDocument } from '@documenso/lib/types/document';
 import { ZDocumentEmailSettingsSchema } from '@documenso/lib/types/document-email';
 import { formatSigningLink } from '@documenso/lib/utils/recipients';
+import type { Field, Recipient } from '@documenso/prisma/client';
+import {
+  DocumentDistributionMethod,
+  DocumentStatus,
+  RecipientRole,
+} from '@documenso/prisma/client';
+import type { DocumentWithData } from '@documenso/prisma/types/document-with-data';
 import { trpc } from '@documenso/trpc/react';
 import { DocumentSendEmailMessageHelper } from '@documenso/ui/components/document/document-send-email-message-helper';
 import {
@@ -39,11 +46,12 @@ import {
   mapFieldsWithRecipients,
 } from '../../components/document/document-read-only-fields';
 import { AvatarWithText } from '../avatar';
+import { Button } from '../button';
+import { FormErrorMessage } from '../form/form-error-message';
 import { Input } from '../input';
 import { useStep } from '../stepper';
 import { Textarea } from '../textarea';
-import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip';
-import { toast } from '../use-toast';
+import { useToast } from '../use-toast';
 import { type TAddSubjectFormSchema, ZAddSubjectFormSchema } from './add-subject.types';
 import {
   DocumentFlowFormContainerActions,
@@ -72,6 +80,7 @@ export const AddSubjectFormPartial = ({
   isDocumentPdfLoaded,
 }: AddSubjectFormProps) => {
   const { _ } = useLingui();
+  const { toast } = useToast();
 
   const organisation = useCurrentOrganisation();
 
@@ -121,6 +130,29 @@ export const AddSubjectFormPartial = ({
       [DocumentStatus.COMPLETED]: msg`View Document`,
       [DocumentStatus.REJECTED]: msg`View Document`,
     },
+  };
+
+  const {
+    mutate: emailSupport,
+    isLoading,
+    isSuccess,
+  } = trpc.document.requestLineSupport.useMutation({
+    onSuccess() {
+      toast({
+        title: _(msg`Request sent successfully!`),
+        description: _(msg`Support will reach out as soon as possible to your email.`),
+      });
+    },
+    onError() {
+      toast({
+        title: _(msg`There was an error sending your request`),
+        description: _(msg`Please try again later`),
+      });
+    },
+  });
+
+  const requestLineSupport = () => {
+    emailSupport();
   };
 
   const distributionMethod = watch('meta.distributionMethod');
@@ -322,32 +354,37 @@ export const AddSubjectFormPartial = ({
                       <Trans>We won't send anything to notify recipients.</Trans>
                     </p>
 
-                    <p className="mt-2">
-                      <Trans>
-                        We will generate signing links for you, which you can send to the recipients
-                        through your method of choice.
-                      </Trans>
-                      <br />
-                      <hr className="my-4 border-t border-gray-300" />
-                      <br />
-                      <Trans>
-                        If you wish to send through LINE, the integration have been moved to
-                        seperate platform. Please leave your email and we will be contact you
-                        shortly
-                      </Trans>
-                      <br />
-                      <div className="flex items-center">
-                        <Input placeholder="abc@ezily.io" value={''} onChange={(e) => {}} />
-                        <button
-                          className="ml-2 w-32 rounded bg-blue-500 px-6 py-2 text-white"
-                          onClick={() => {
-                            /* TODO: send google analytics */
-                          }}
+                    <div>
+                      <p className="p-2">
+                        <Trans>
+                          We will generate signing links for you, which you can send to the
+                          recipients through your method of choice.
+                        </Trans>
+                      </p>
+
+                      <hr className="border-order my-4" />
+
+                      <p>
+                        <Trans>
+                          If you wish to send through LINE, the integration has been moved to a
+                          separate platform. If you wish to request access please click the button
+                          below.
+                        </Trans>
+                      </p>
+
+                      <div className="center mt-8">
+                        <Button
+                          onClick={requestLineSupport}
+                          type="button"
+                          className="bg-documenso flex-1"
+                          size="lg"
+                          disabled={isLoading || isSuccess}
+                          loading={isLoading}
                         >
-                          提交
-                        </button>
+                          <Trans>Request Line Support</Trans>
+                        </Button>
                       </div>
-                    </p>
+                    </div>
                   </div>
                 ) : (
                   <ul className="text-muted-foreground divide-y">

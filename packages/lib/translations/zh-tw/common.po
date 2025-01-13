@@ -33,6 +33,10 @@ msgstr "{0} 已邀請您{recipientActionVerb}文件 \"{1}\"。"
 msgid "{0} invited you to {recipientActionVerb} a document"
 msgstr "{0} 邀請您{recipientActionVerb}文件"
 
+#: packages/lib/jobs/definitions/emails/send-line-support-email.ts:60
+#~ msgid "{0} is requesting support with the line integration"
+#~ msgstr "{0} is requesting support with the line integration"
+
 #: packages/email/templates/team-join.tsx:61
 msgid "{0} joined the team {teamName} on Documenso"
 msgstr "{0} 已加入團隊 {teamName} 並在 Documenso 上。"
@@ -97,6 +101,10 @@ msgstr "{memberEmail} 加入了以下團隊"
 #: packages/email/templates/team-leave.tsx:67
 msgid "{memberEmail} left the following team"
 msgstr "{memberEmail} 離開了以下團隊"
+
+#: packages/email/templates/line-support.tsx:53
+msgid "{memberName} ({memberEmail}) is requesting support with the LINE integration."
+msgstr "{memberName} ({memberEmail}) is requesting support with the LINE integration."
 
 #: packages/lib/utils/document-audit-logs.ts:263
 msgid "{prefix} added a field"
@@ -300,6 +308,10 @@ msgstr "一個欄位已被移除"
 msgid "A field was updated"
 msgstr "欄位已更新"
 
+#: packages/email/templates/line-support.tsx:23
+msgid "A member is requesting support for line"
+msgstr "A member is requesting support for line"
+
 #: packages/lib/jobs/definitions/emails/send-team-member-joined-email.ts:107
 msgid "A new member has joined your team"
 msgstr "有新成員加入您的團隊"
@@ -336,6 +348,10 @@ msgstr "團隊成員已離開 Documenso 的團隊"
 #: packages/email/templates/team-delete.tsx:33
 msgid "A team you were a part of has been deleted"
 msgstr "您所屬的團隊已經被刪除"
+
+#: packages/lib/jobs/definitions/emails/send-line-support-email.ts:59
+msgid "A user is requesting support with the line integration"
+msgstr "A user is requesting support with the line integration"
 
 #: packages/email/templates/confirm-team-email.tsx:118
 #: packages/email/templates/team-invite.tsx:94
@@ -581,16 +597,16 @@ msgstr "繼續簽署文件。"
 msgid "Continue by viewing the document."
 msgstr "繼續查看文件。"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:274
+#: packages/ui/primitives/document-flow/add-subject.tsx:305
 msgid "Copied"
 msgstr "已複製"
 
 #: packages/ui/components/document/document-share-button.tsx:46
-#: packages/ui/primitives/document-flow/add-subject.tsx:261
+#: packages/ui/primitives/document-flow/add-subject.tsx:292
 msgid "Copied to clipboard"
 msgstr "已複製到剪貼簿"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:269
+#: packages/ui/primitives/document-flow/add-subject.tsx:300
 msgid "Copy"
 msgstr "複製"
 
@@ -874,7 +890,7 @@ msgstr "忘記密碼？"
 msgid "Free Signature"
 msgstr "免費簽名"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:89
+#: packages/ui/primitives/document-flow/add-subject.tsx:92
 msgid "Generate Links"
 msgstr "生成連結"
 
@@ -910,9 +926,13 @@ msgstr "我是此文件的審核者"
 msgid "I am required to receive a copy of this document"
 msgstr "我需要收到此文件的副本。"
 
+#: packages/ui/primitives/document-flow/add-subject.tsx:241
+msgid "If you wish to send through LINE, the integration has been moved to a separate platform. If you wish to request access please click the button below."
+msgstr "If you wish to send through LINE, the integration has been moved to a separate platform. If you wish to request access please click the button below."
+
 #: packages/ui/primitives/document-flow/add-subject.tsx:212
-msgid "If you wish to send through LINE, the integration have been moved to seperate platform. Please leave your email and we will be contact you shortly"
-msgstr "如果您想要使用 LINE 整合功能, 請提供您的資訊我們會盡快與您聯絡"
+#~ msgid "If you wish to send through LINE, the integration have been moved to seperate platform. Please leave your email and we will be contact you shortly"
+#~ msgstr "如果您想要使用 LINE 整合功能, 請提供您的資訊我們會盡快與您聯絡"
 
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:29
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:87
@@ -968,7 +988,7 @@ msgstr "最大值"
 msgid "Member"
 msgstr "會員"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:160
+#: packages/ui/primitives/document-flow/add-subject.tsx:186
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:336
 msgid "Message <0>(Optional)</0>"
 msgstr "訊息 <0>（可選）</0>"
@@ -1005,7 +1025,7 @@ msgstr "需要檢視"
 msgid "No recipient matching this description was found."
 msgstr "找不到符合此描述的收件人。"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:235
+#: packages/ui/primitives/document-flow/add-subject.tsx:266
 msgid "No recipients"
 msgstr "無收件人"
 
@@ -1126,6 +1146,10 @@ msgstr "請確認您的電子郵件"
 msgid "Please confirm your email address"
 msgstr "請確認您的電子郵件地址"
 
+#: packages/ui/primitives/document-flow/add-subject.tsx:112
+msgid "Please try again later"
+msgstr "Please try again later"
+
 #: packages/ui/primitives/pdf-viewer.tsx:223
 #: packages/ui/primitives/pdf-viewer.tsx:238
 msgid "Please try again or contact our support."
@@ -1215,6 +1239,14 @@ msgstr "提醒：請{recipientActionVerb}您的文件"
 msgid "Remove"
 msgstr "移除"
 
+#: packages/ui/primitives/document-flow/add-subject.tsx:257
+msgid "Request Line Support"
+msgstr "Request Line Support"
+
+#: packages/ui/primitives/document-flow/add-subject.tsx:105
+msgid "Request sent successfully!"
+msgstr "Request sent successfully!"
+
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/checkbox-field.tsx:176
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/dropdown-field.tsx:137
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:146
@@ -1223,7 +1255,7 @@ msgstr "移除"
 msgid "Required field"
 msgstr "必填欄位"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:84
+#: packages/ui/primitives/document-flow/add-subject.tsx:87
 msgid "Resend"
 msgstr "重新發送"
 
@@ -1267,8 +1299,8 @@ msgstr "至少選擇"
 msgid "Select default option"
 msgstr "選擇預設選項"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:82
 #: packages/ui/primitives/document-flow/add-subject.tsx:85
+#: packages/ui/primitives/document-flow/add-subject.tsx:88
 #: packages/ui/primitives/document-flow/send-document-action-dialog.tsx:34
 #: packages/ui/primitives/document-flow/send-document-action-dialog.tsx:64
 msgid "Send"
@@ -1385,7 +1417,7 @@ msgstr "發生錯誤。"
 msgid "Step <0>{step} of {maxStep}</0>"
 msgstr "第 <0>{step}</0> 步（共 {maxStep} 步）"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:143
+#: packages/ui/primitives/document-flow/add-subject.tsx:169
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:316
 msgid "Subject <0>(Optional)</0>"
 msgstr "主題 <0>（選填）</0>"
@@ -1393,6 +1425,10 @@ msgstr "主題 <0>（選填）</0>"
 #: packages/ui/primitives/document-password-dialog.tsx:97
 msgid "Submit"
 msgstr "提交"
+
+#: packages/ui/primitives/document-flow/add-subject.tsx:106
+msgid "Support will reach out as soon as possible to your email."
+msgstr "Support will reach out as soon as possible to your email."
 
 #: packages/lib/server-only/team/delete-team.ts:124
 msgid "Team \"{0}\" has been deleted on Documenso"
@@ -1492,13 +1528,17 @@ msgstr "簽署者的電子郵件"
 msgid "The signer's name"
 msgstr "簽署者的姓名"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:263
+#: packages/ui/primitives/document-flow/add-subject.tsx:294
 msgid "The signing link has been copied to your clipboard."
 msgstr "簽署連結已複製到您的剪貼簿。"
 
 #: packages/email/templates/team-email-removed.tsx:63
 msgid "The team email <0>{teamEmail}</0> has been removed from the following team"
 msgstr "團隊電子郵件 <0>{teamEmail}</0> 已從以下團隊中移除"
+
+#: packages/ui/primitives/document-flow/add-subject.tsx:111
+msgid "There was an error sending your request"
+msgstr "There was an error sending your request"
 
 #: packages/ui/components/document/document-global-auth-action-select.tsx:72
 msgid "This can be overriden by setting the authentication requirements directly on each recipient in the next step."
@@ -1578,7 +1618,7 @@ msgstr "標題"
 msgid "To proceed further, please set at least one value for the {0} field."
 msgstr "若要繼續，請至少為 {0} 欄位設定一個值。"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:86
+#: packages/ui/primitives/document-flow/add-subject.tsx:89
 msgid "Update"
 msgstr "更新"
 
@@ -1626,8 +1666,8 @@ msgstr "檢視文件"
 
 #: packages/email/template-components/template-document-invite.tsx:105
 #: packages/email/template-components/template-document-rejected.tsx:44
-#: packages/ui/primitives/document-flow/add-subject.tsx:90
-#: packages/ui/primitives/document-flow/add-subject.tsx:91
+#: packages/ui/primitives/document-flow/add-subject.tsx:93
+#: packages/ui/primitives/document-flow/add-subject.tsx:94
 msgid "View Document"
 msgstr "檢視文件"
 
@@ -1660,10 +1700,14 @@ msgid "Waiting for others to complete signing."
 msgstr "等待其他人完成簽署。"
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:205
-msgid "We will generate signing links for with you, which you can send to the recipients through your method of choice."
-msgstr "我們將為您生成簽署連結，您可以透過您選擇的方法將其發送給收件人。"
+#~ msgid "We will generate signing links for with you, which you can send to the recipients through your method of choice."
+#~ msgstr "我們將為您生成簽署連結，您可以透過您選擇的方法將其發送給收件人。"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:201
+#: packages/ui/primitives/document-flow/add-subject.tsx:232
+msgid "We will generate signing links for you, which you can send to the recipients through your method of choice."
+msgstr "We will generate signing links for you, which you can send to the recipients through your method of choice."
+
+#: packages/ui/primitives/document-flow/add-subject.tsx:227
 msgid "We won't send anything to notify recipients."
 msgstr "我們不會發送任何東西來通知接收者。"
 

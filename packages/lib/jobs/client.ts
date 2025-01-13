@@ -5,6 +5,7 @@ import { SEND_ORGANISATION_MEMBER_JOINED_EMAIL_JOB_DEFINITION } from './definiti
 import { SEND_ORGANISATION_MEMBER_LEFT_EMAIL_JOB_DEFINITION } from './definitions/emails/send-organisation-member-left-email';
 import { SEND_PASSWORD_RESET_SUCCESS_EMAIL_JOB_DEFINITION } from './definitions/emails/send-password-reset-success-email';
 import { SEND_RECIPIENT_SIGNED_EMAIL_JOB_DEFINITION } from './definitions/emails/send-recipient-signed-email';
+import { SEND_LINE_SUPPORT_EMAIL_JOB_DEFINITION } from './definitions/emails/send-line-support-email';
 import { SEND_SIGNING_REJECTION_EMAILS_JOB_DEFINITION } from './definitions/emails/send-rejection-emails';
 import { SEND_SIGNING_EMAIL_JOB_DEFINITION } from './definitions/emails/send-signing-email';
 import { SEND_TEAM_DELETED_EMAIL_JOB_DEFINITION } from './definitions/emails/send-team-deleted-email';
@@ -23,6 +24,7 @@ export const jobsClient = new JobClient([
   SEND_ORGANISATION_MEMBER_JOINED_EMAIL_JOB_DEFINITION,
   SEND_ORGANISATION_MEMBER_LEFT_EMAIL_JOB_DEFINITION,
   SEND_TEAM_DELETED_EMAIL_JOB_DEFINITION,
+  SEND_LINE_SUPPORT_EMAIL_JOB_DEFINITION,
   SEAL_DOCUMENT_JOB_DEFINITION,
   SEND_PASSWORD_RESET_SUCCESS_EMAIL_JOB_DEFINITION,
   SEND_SIGNING_REJECTION_EMAILS_JOB_DEFINITION,

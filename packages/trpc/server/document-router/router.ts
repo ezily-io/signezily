@@ -4,6 +4,7 @@ import { DateTime } from 'luxon';
 import { getServerLimits } from '@documenso/ee/server-only/limits/server';
 import { NEXT_PUBLIC_WEBAPP_URL } from '@documenso/lib/constants/app';
 import { AppError, AppErrorCode } from '@documenso/lib/errors/app-error';
+import { jobsClient } from '@documenso/lib/jobs/client';
 import { encryptSecondaryData } from '@documenso/lib/server-only/crypto/encrypt';
 import { createDocumentData } from '@documenso/lib/server-only/document-data/create-document-data';
 import { upsertDocumentMeta } from '@documenso/lib/server-only/document-meta/upsert-document-meta';
@@ -686,4 +687,22 @@ export const documentRouter = router({
         url: `${NEXT_PUBLIC_WEBAPP_URL()}/__htmltopdf/certificate?d=${encrypted}`,
       };
     }),
+
+  requestLineSupport: authenticatedProcedure.mutation(async ({ ctx }) => {
+    try {
+      return await jobsClient.triggerJob({
+        name: 'send.line-support.email',
+        payload: {
+          memberUserId: ctx.user.id,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'There was a problem with your request. Please try again later.',
+      });
+    }
+  }),
 });
