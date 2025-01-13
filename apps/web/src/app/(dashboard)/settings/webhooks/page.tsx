@@ -147,7 +147,7 @@ export default function WebhookPage() {
       ) : (
         <form onSubmit={waitlist.handleSubmit(onJoinWaitlist)}>
           <Trans>
-            Webhook related features have been move to a seperate platform, please leave your email
+            Webhook related features have been move to a separate platform, please leave your email
             and we will contact you shortly.
           </Trans>
           <div className="mt-4 flex items-center gap-2">
