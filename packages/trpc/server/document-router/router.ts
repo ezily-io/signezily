@@ -5,6 +5,7 @@ import { getServerLimits } from '@documenso/ee/server-only/limits/server';
 import { NEXT_PUBLIC_WEBAPP_URL } from '@documenso/lib/constants/app';
 import { DOCUMENSO_ENCRYPTION_KEY } from '@documenso/lib/constants/crypto';
 import { AppError } from '@documenso/lib/errors/app-error';
+import { jobsClient } from '@documenso/lib/jobs/client';
 import { encryptSecondaryData } from '@documenso/lib/server-only/crypto/encrypt';
 import { upsertDocumentMeta } from '@documenso/lib/server-only/document-meta/upsert-document-meta';
 import { createDocument } from '@documenso/lib/server-only/document/create-document';
@@ -583,4 +584,22 @@ export const documentRouter = router({
         });
       }
     }),
+
+  requestLineSupport: authenticatedProcedure.mutation(async ({ ctx }) => {
+    try {
+      return await jobsClient.triggerJob({
+        name: 'send.line-support.email',
+        payload: {
+          memberUserId: ctx.user.id,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'There was a problem with your request. Please try again later.',
+      });
+    }
+  }),
 });

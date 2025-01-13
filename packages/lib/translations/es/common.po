@@ -46,6 +46,10 @@ msgstr "{0} te ha invitado a {recipientActionVerb} el documento \"{1}\"."
 msgid "{0} invited you to {recipientActionVerb} a document"
 msgstr "{0} te invitó a {recipientActionVerb} un documento"
 
+#: packages/lib/jobs/definitions/emails/send-line-support-email.ts:60
+msgid "{0} is requesting support with the line integration"
+msgstr ""
+
 #: packages/email/templates/team-join.tsx:61
 msgid "{0} joined the team {teamName} on Documenso"
 msgstr "{0} se unió al equipo {teamName} en Documenso"
@@ -118,6 +122,10 @@ msgstr "{memberEmail} se unió al siguiente equipo"
 #: packages/email/templates/team-leave.tsx:67
 msgid "{memberEmail} left the following team"
 msgstr "{memberEmail} dejó el siguiente equipo"
+
+#: packages/email/templates/line-support.tsx:53
+msgid "{memberName} ({memberEmail}) is requesting support with the LINE integration."
+msgstr ""
 
 #: packages/lib/utils/document-audit-logs.ts:263
 msgid "{prefix} added a field"
@@ -324,6 +332,10 @@ msgstr "Se eliminó un campo"
 #: packages/lib/utils/document-audit-logs.ts:270
 msgid "A field was updated"
 msgstr "Se actualizó un campo"
+
+#: packages/email/templates/line-support.tsx:23
+msgid "A member is requesting support for line"
+msgstr ""
 
 #: packages/lib/jobs/definitions/emails/send-team-member-joined-email.ts:107
 msgid "A new member has joined your team"
@@ -618,16 +630,16 @@ msgstr "Continúa firmando el documento."
 msgid "Continue by viewing the document."
 msgstr "Continúa viendo el documento."
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:274
+#: packages/ui/primitives/document-flow/add-subject.tsx:305
 msgid "Copied"
 msgstr "Copiado"
 
 #: packages/ui/components/document/document-share-button.tsx:46
-#: packages/ui/primitives/document-flow/add-subject.tsx:261
+#: packages/ui/primitives/document-flow/add-subject.tsx:292
 msgid "Copied to clipboard"
 msgstr "Copiado al portapapeles"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:269
+#: packages/ui/primitives/document-flow/add-subject.tsx:300
 msgid "Copy"
 msgstr "Copiar"
 
@@ -914,7 +926,7 @@ msgstr "¿Olvidaste tu contraseña?"
 msgid "Free Signature"
 msgstr "Firma gratuita"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:89
+#: packages/ui/primitives/document-flow/add-subject.tsx:92
 msgid "Generate Links"
 msgstr "Generar enlaces"
 
@@ -953,9 +965,13 @@ msgstr "Soy un aprobador de este documento"
 msgid "I am required to receive a copy of this document"
 msgstr "Se me requiere recibir una copia de este documento"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:212
-msgid "If you wish to send through LINE, the integration have been moved to seperate platform. Please leave your email and we will be contact you shortly"
+#: packages/ui/primitives/document-flow/add-subject.tsx:241
+msgid "If you wish to send through LINE, the integration has been moved to a separate platform. If you wish to request access please click the button below."
 msgstr ""
+
+#: packages/ui/primitives/document-flow/add-subject.tsx:212
+#~ msgid "If you wish to send through LINE, the integration have been moved to seperate platform. Please leave your email and we will be contact you shortly"
+#~ msgstr ""
 
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:29
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:87
@@ -1011,7 +1027,7 @@ msgstr "Máx"
 msgid "Member"
 msgstr "Miembro"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:160
+#: packages/ui/primitives/document-flow/add-subject.tsx:186
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:336
 msgid "Message <0>(Optional)</0>"
 msgstr "Mensaje <0>(Opcional)</0>"
@@ -1048,7 +1064,7 @@ msgstr "Necesita ver"
 msgid "No recipient matching this description was found."
 msgstr "No se encontró ningún destinatario que coincidiera con esta descripción."
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:235
+#: packages/ui/primitives/document-flow/add-subject.tsx:266
 msgid "No recipients"
 msgstr "Sin destinatarios"
 
@@ -1169,6 +1185,10 @@ msgstr "Por favor confirma tu correo electrónico"
 msgid "Please confirm your email address"
 msgstr "Por favor confirma tu dirección de correo electrónico"
 
+#: packages/ui/primitives/document-flow/add-subject.tsx:112
+msgid "Please try again later"
+msgstr ""
+
 #: packages/ui/primitives/pdf-viewer.tsx:223
 #: packages/ui/primitives/pdf-viewer.tsx:238
 msgid "Please try again or contact our support."
@@ -1258,6 +1278,14 @@ msgstr "Recordatorio: Por favor {recipientActionVerb} tu documento"
 msgid "Remove"
 msgstr "Eliminar"
 
+#: packages/ui/primitives/document-flow/add-subject.tsx:257
+msgid "Request Line Support"
+msgstr ""
+
+#: packages/ui/primitives/document-flow/add-subject.tsx:105
+msgid "Request sent successfully!"
+msgstr ""
+
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/checkbox-field.tsx:176
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/dropdown-field.tsx:137
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:146
@@ -1266,7 +1294,7 @@ msgstr "Eliminar"
 msgid "Required field"
 msgstr "Campo obligatorio"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:84
+#: packages/ui/primitives/document-flow/add-subject.tsx:87
 msgid "Resend"
 msgstr "Reenviar"
 
@@ -1310,8 +1338,8 @@ msgstr "Seleccionar al menos"
 msgid "Select default option"
 msgstr "Seleccionar opción predeterminada"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:82
 #: packages/ui/primitives/document-flow/add-subject.tsx:85
+#: packages/ui/primitives/document-flow/add-subject.tsx:88
 #: packages/ui/primitives/document-flow/send-document-action-dialog.tsx:34
 #: packages/ui/primitives/document-flow/send-document-action-dialog.tsx:64
 msgid "Send"
@@ -1432,7 +1460,7 @@ msgstr "Algo salió mal."
 msgid "Step <0>{step} of {maxStep}</0>"
 msgstr "Paso <0>{step} de {maxStep}</0>"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:143
+#: packages/ui/primitives/document-flow/add-subject.tsx:169
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:316
 msgid "Subject <0>(Optional)</0>"
 msgstr "Asunto <0>(Opcional)</0>"
@@ -1440,6 +1468,10 @@ msgstr "Asunto <0>(Opcional)</0>"
 #: packages/ui/primitives/document-password-dialog.tsx:97
 msgid "Submit"
 msgstr "Enviar"
+
+#: packages/ui/primitives/document-flow/add-subject.tsx:106
+msgid "Support will reach out as soon as possible to your email."
+msgstr ""
 
 #: packages/lib/server-only/team/delete-team.ts:124
 msgid "Team \"{0}\" has been deleted on Documenso"
@@ -1542,13 +1574,17 @@ msgstr "El correo electrónico del firmante"
 msgid "The signer's name"
 msgstr "El nombre del firmante"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:263
+#: packages/ui/primitives/document-flow/add-subject.tsx:294
 msgid "The signing link has been copied to your clipboard."
 msgstr "El enlace de firma ha sido copiado a tu portapapeles."
 
 #: packages/email/templates/team-email-removed.tsx:63
 msgid "The team email <0>{teamEmail}</0> has been removed from the following team"
 msgstr "El correo electrónico del equipo <0>{teamEmail}</0> ha sido eliminado del siguiente equipo"
+
+#: packages/ui/primitives/document-flow/add-subject.tsx:111
+msgid "There was an error sending your request"
+msgstr ""
 
 #: packages/ui/components/document/document-global-auth-action-select.tsx:72
 msgid "This can be overriden by setting the authentication requirements directly on each recipient in the next step."
@@ -1631,7 +1667,7 @@ msgstr "Título"
 msgid "To proceed further, please set at least one value for the {0} field."
 msgstr "Para continuar, por favor establezca al menos un valor para el campo {0}."
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:86
+#: packages/ui/primitives/document-flow/add-subject.tsx:89
 msgid "Update"
 msgstr "Actualizar"
 
@@ -1679,8 +1715,8 @@ msgstr "Ver documento"
 
 #: packages/email/template-components/template-document-invite.tsx:105
 #: packages/email/template-components/template-document-rejected.tsx:44
-#: packages/ui/primitives/document-flow/add-subject.tsx:90
-#: packages/ui/primitives/document-flow/add-subject.tsx:91
+#: packages/ui/primitives/document-flow/add-subject.tsx:93
+#: packages/ui/primitives/document-flow/add-subject.tsx:94
 msgid "View Document"
 msgstr "Ver Documento"
 
@@ -1717,10 +1753,14 @@ msgid "Waiting for others to complete signing."
 msgstr "Esperando a que otros completen la firma."
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:205
-msgid "We will generate signing links for with you, which you can send to the recipients through your method of choice."
-msgstr "Generaremos enlaces de firma para ti, que podrás enviar a los destinatarios a través de tu método preferido."
+#~ msgid "We will generate signing links for with you, which you can send to the recipients through your method of choice."
+#~ msgstr "Generaremos enlaces de firma para ti, que podrás enviar a los destinatarios a través de tu método preferido."
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:201
+#: packages/ui/primitives/document-flow/add-subject.tsx:232
+msgid "We will generate signing links for you, which you can send to the recipients through your method of choice."
+msgstr ""
+
+#: packages/ui/primitives/document-flow/add-subject.tsx:227
 msgid "We won't send anything to notify recipients."
 msgstr "No enviaremos nada para notificar a los destinatarios."
 
