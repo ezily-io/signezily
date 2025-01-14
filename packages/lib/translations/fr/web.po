@@ -4694,8 +4694,12 @@ msgid "Webhook deleted"
 msgstr "Webhook supprimé"
 
 #: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:149
-msgid "Webhook related features have been move to a seperate platform, please leave your email and we will contact you shortly."
+msgid "Webhook related features have been move to a separate platform, please leave your email and we will contact you shortly."
 msgstr ""
+
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:149
+#~ msgid "Webhook related features have been move to a seperate platform, please leave your email and we will contact you shortly."
+#~ msgstr ""
 
 #: apps/web/src/app/(dashboard)/settings/webhooks/[id]/page.tsx:74
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/[id]/page.tsx:80
