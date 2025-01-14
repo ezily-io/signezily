@@ -1390,7 +1390,7 @@ msgstr "您想要複製此模板嗎？"
 
 #: apps/web/src/app/(dashboard)/settings/profile/delete-account-dialog.tsx:122
 msgid "Documenso will delete <0>all of your documents</0>, along with all of your completed documents, signatures, and all other resources belonging to your Account."
-msgstr ""
+msgstr "我們會刪除<0>所有您的文件 <0/>, 包含您已完成的文件和簽名和所有其他和這個帳戶相關的資源"
 
 #: apps/web/src/app/(dashboard)/documents/[id]/logs/document-logs-page-view.tsx:119
 #: apps/web/src/app/(dashboard)/templates/[id]/template-page-view-documents-table.tsx:38
@@ -2419,7 +2419,7 @@ msgstr "在此頁面，您可以建立一個新的 webhook。"
 
 #: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:26
 msgid "On this page, you can create new API tokens and manage the existing ones. <0/>"
-msgstr ""
+msgstr "在此頁面，您可以創建新的 API Token 並管理現有的 Token  <0/>"
 
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:60
 msgid "On this page, you can create new API tokens and manage the existing ones. <0/>You can view our swagger docs <1>here</1>"
@@ -4629,11 +4629,7 @@ msgstr "Webhook 已刪除"
 
 #: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:149
 msgid "Webhook related features have been move to a separate platform, please leave your email and we will contact you shortly."
-msgstr "Webhook related features have been move to a separate platform, please leave your email and we will contact you shortly."
-
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:149
-#~ msgid "Webhook related features have been move to a seperate platform, please leave your email and we will contact you shortly."
-#~ msgstr "Webhook 相關功能已經移到另一個平台, 如您有興趣請提供信箱我們將很快跟您聯絡"
+msgstr "Webhook 相關功能已經移到另一個平台, 如您有興趣請提供信箱我們將很快跟您聯絡"
 
 #: apps/web/src/app/(dashboard)/settings/webhooks/[id]/page.tsx:74
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/[id]/page.tsx:80
