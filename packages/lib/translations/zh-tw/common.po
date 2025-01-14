@@ -35,15 +35,15 @@ msgstr "{0} 邀請您{recipientActionVerb}文件"
 
 #: packages/lib/jobs/definitions/emails/send-line-support-email.ts:60
 #~ msgid "{0} is requesting support with the line integration"
-#~ msgstr "{0} is requesting support with the line integration"
+#~ msgstr "{0} 想要用 LINE 整合的功能"
 
 #: packages/email/templates/team-join.tsx:61
-msgid "{0} joined the team {teamName} on Documenso"
-msgstr "{0} 已加入團隊 {teamName} 並在 Documenso 上。"
+msgid "{0} joined the team {teamName} on signEzily"
+msgstr "{0} 已加入團隊 {teamName} 並在 上上簽上。"
 
 #: packages/email/templates/team-leave.tsx:61
-msgid "{0} left the team {teamName} on Documenso"
-msgstr "{0} 已離開 Documenso 上的團隊 {teamName}"
+msgid "{0} left the team {teamName} on signEzily"
+msgstr "{0} 已離開 上上簽 上的團隊 {teamName}"
 
 #: packages/ui/primitives/data-table-pagination.tsx:30
 msgid "{0} of {1} row(s) selected."
@@ -104,7 +104,7 @@ msgstr "{memberEmail} 離開了以下團隊"
 
 #: packages/email/templates/line-support.tsx:53
 msgid "{memberName} ({memberEmail}) is requesting support with the LINE integration."
-msgstr "{memberName} ({memberEmail}) is requesting support with the LINE integration."
+msgstr "{memberName} ({memberEmail}) 想要用 LINE 整合功能."
 
 #: packages/lib/utils/document-audit-logs.ts:263
 msgid "{prefix} added a field"
@@ -310,7 +310,7 @@ msgstr "欄位已更新"
 
 #: packages/email/templates/line-support.tsx:23
 msgid "A member is requesting support for line"
-msgstr "A member is requesting support for line"
+msgstr "有一位成員想要 LINE 的支援"
 
 #: packages/lib/jobs/definitions/emails/send-team-member-joined-email.ts:107
 msgid "A new member has joined your team"
@@ -329,20 +329,20 @@ msgid "A recipient was updated"
 msgstr "收件者已更新"
 
 #: packages/lib/server-only/team/create-team-email-verification.ts:156
-msgid "A request to use your email has been initiated by {0} on Documenso"
-msgstr "{0} 已在 Documenso 上發起使用您的電子郵件的請求。"
+msgid "A request to use your email has been initiated by {0} on signEzily"
+msgstr "{0} 已在上上簽上發起使用您的電子郵件的請求。"
 
 #: packages/email/templates/team-join.tsx:31
-msgid "A team member has joined a team on Documenso"
-msgstr "一位團隊成員已加入 Documenso 團隊"
+msgid "A team member has joined a team on signEzily"
+msgstr "一位團隊成員已加入上上簽團隊"
 
 #: packages/lib/jobs/definitions/emails/send-team-member-left-email.ts:96
 msgid "A team member has left {0}"
 msgstr "團隊成員已離開{0}"
 
 #: packages/email/templates/team-leave.tsx:31
-msgid "A team member has left a team on Documenso"
-msgstr "團隊成員已離開 Documenso 的團隊"
+msgid "A team member has left a team on signEzily"
+msgstr "團隊成員已離開上上簽的團隊"
 
 #: packages/email/templates/team-delete.tsx:29
 #: packages/email/templates/team-delete.tsx:33
@@ -351,7 +351,7 @@ msgstr "您所屬的團隊已經被刪除"
 
 #: packages/lib/jobs/definitions/emails/send-line-support-email.ts:59
 msgid "A user is requesting support with the line integration"
-msgstr "A user is requesting support with the line integration"
+msgstr "一個使用者想要了解 LINE 整合功能"
 
 #: packages/email/templates/confirm-team-email.tsx:118
 #: packages/email/templates/team-invite.tsx:94
@@ -360,16 +360,16 @@ msgid "Accept"
 msgstr "接受"
 
 #: packages/email/templates/team-invite.tsx:42
-msgid "Accept invitation to join a team on Documenso"
-msgstr "接受邀請加入 Documenso 團隊"
+msgid "Accept invitation to join a team on signEzily"
+msgstr "接受邀請加入 上上簽團隊"
 
 #: packages/email/templates/confirm-team-email.tsx:41
-msgid "Accept team email request for {teamName} on Documenso"
-msgstr "在 Documenso 上接受 {teamName} 的團隊電子郵件請求"
+msgid "Accept team email request for {teamName} on signEzily"
+msgstr "在上上簽上接受 {teamName} 的團隊電子郵件請求"
 
 #: packages/email/templates/team-transfer-request.tsx:29
-msgid "Accept team transfer request on Documenso"
-msgstr "接受團隊轉移申請บน Documenso"
+msgid "Accept team transfer request on signEzily"
+msgstr "接受團隊轉移申請上上簽"
 
 #: packages/ui/primitives/document-dropzone.tsx:69
 msgid "Add a document"
@@ -928,11 +928,7 @@ msgstr "我需要收到此文件的副本。"
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:241
 msgid "If you wish to send through LINE, the integration has been moved to a separate platform. If you wish to request access please click the button below."
-msgstr "If you wish to send through LINE, the integration has been moved to a separate platform. If you wish to request access please click the button below."
-
-#: packages/ui/primitives/document-flow/add-subject.tsx:212
-#~ msgid "If you wish to send through LINE, the integration have been moved to seperate platform. Please leave your email and we will be contact you shortly"
-#~ msgstr "如果您想要使用 LINE 整合功能, 請提供您的資訊我們會盡快與您聯絡"
+msgstr "如果想要直接用 LINE 傳送連結, LINE 整合功能現在在另一個平台上. 您可以點選以下按鈕來申請連結."
 
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:29
 #: packages/ui/components/recipient/recipient-action-auth-select.tsx:87
@@ -952,8 +948,8 @@ msgid "Invalid email address"
 msgstr "無效的電子郵件地址"
 
 #: packages/email/templates/team-invite.tsx:72
-msgid "Join {teamName} on Documenso"
-msgstr "加入 {teamName} 在 Documenso"
+msgid "Join {teamName} on signEzily"
+msgstr "加入 {teamName} 在 上上簽"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:67
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:72
@@ -1148,7 +1144,7 @@ msgstr "請確認您的電子郵件地址"
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:112
 msgid "Please try again later"
-msgstr "Please try again later"
+msgstr "請晚一點再試一次"
 
 #: packages/ui/primitives/pdf-viewer.tsx:223
 #: packages/ui/primitives/pdf-viewer.tsx:238
@@ -1241,11 +1237,11 @@ msgstr "移除"
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:257
 msgid "Request Line Support"
-msgstr "Request Line Support"
+msgstr "請求 LINE 支援"
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:105
 msgid "Request sent successfully!"
-msgstr "Request sent successfully!"
+msgstr "請求已經送出!"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/checkbox-field.tsx:176
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/dropdown-field.tsx:137
@@ -1398,7 +1394,7 @@ msgstr "簽署完成！"
 
 #: packages/ui/primitives/document-flow/missing-signature-field-dialog.tsx:34
 msgid "Some signers have not been assigned a signature field. Please assign at least 1 signature field to each signer before proceeding."
-msgstr "某些簽署者尚未被分配簽名欄位。請在繼續前為每位簽署者分配至少一個簽名欄位。"
+msgstr "某些簽署者尚未被分配簽名欄位。請在下一步前為每位簽署者分配至少一個簽名欄位。"
 
 #: packages/ui/components/document/document-share-button.tsx:51
 msgid "Something went wrong"
@@ -1428,11 +1424,11 @@ msgstr "提交"
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:106
 msgid "Support will reach out as soon as possible to your email."
-msgstr "Support will reach out as soon as possible to your email."
+msgstr "我們會盡快回覆您的來信."
 
 #: packages/lib/server-only/team/delete-team.ts:124
-msgid "Team \"{0}\" has been deleted on Documenso"
-msgstr "團隊 \"{0}\" 已在 Documenso 上被刪除"
+msgid "Team \"{0}\" has been deleted on signEzily"
+msgstr "團隊 \"{0}\" 已在 上上簽上被刪除"
 
 #: packages/lib/server-only/team/delete-team-email.ts:104
 msgid "Team email has been revoked for {0}"
@@ -1443,8 +1439,8 @@ msgid "Team email removed"
 msgstr "團隊電子郵件已移除"
 
 #: packages/email/templates/team-email-removed.tsx:29
-msgid "Team email removed for {teamName} on Documenso"
-msgstr "Documenso 上 {teamName} 的團隊電子郵件已被移除"
+msgid "Team email removed for {teamName} on signEzily"
+msgstr "上上簽 上 {teamName} 的團隊電子郵件已被移除"
 
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:145
 msgid "Template title"
@@ -1538,7 +1534,7 @@ msgstr "團隊電子郵件 <0>{teamEmail}</0> 已從以下團隊中移除"
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:111
 msgid "There was an error sending your request"
-msgstr "There was an error sending your request"
+msgstr "我們在送出您的請求的時後有一些錯誤發生"
 
 #: packages/ui/components/document/document-global-auth-action-select.tsx:72
 msgid "This can be overriden by setting the authentication requirements directly on each recipient in the next step."
@@ -1557,7 +1553,7 @@ msgid "This document is password protected. Please enter the password to view th
 msgstr "此文件受密碼保護。請輸入密碼以查看文件。"
 
 #: packages/email/template-components/template-footer.tsx:17
-msgid "This document was sent using <0>Documenso.</0>"
+msgid "This document was sent using <0>sign Ezily.</0>"
 msgstr "此文件是使用 <0>Sign Ezily</0>發送的。"
 
 #: packages/email/template-components/template-document-rejection-confirmed.tsx:26
@@ -1685,7 +1681,7 @@ msgstr "檢視者"
 
 #: packages/lib/constants/recipient-roles.ts:33
 msgid "Viewers"
-msgstr "觀眾"
+msgstr "檢視者們"
 
 #: packages/lib/constants/recipient-roles.ts:31
 msgid "Viewing"
@@ -1699,13 +1695,9 @@ msgstr "正在等待其他人"
 msgid "Waiting for others to complete signing."
 msgstr "等待其他人完成簽署。"
 
-#: packages/ui/primitives/document-flow/add-subject.tsx:205
-#~ msgid "We will generate signing links for with you, which you can send to the recipients through your method of choice."
-#~ msgstr "我們將為您生成簽署連結，您可以透過您選擇的方法將其發送給收件人。"
-
 #: packages/ui/primitives/document-flow/add-subject.tsx:232
 msgid "We will generate signing links for you, which you can send to the recipients through your method of choice."
-msgstr "We will generate signing links for you, which you can send to the recipients through your method of choice."
+msgstr "我們將為您生成簽署連結，您可以透過您選擇的方法將其發送給收件人。"
 
 #: packages/ui/primitives/document-flow/add-subject.tsx:227
 msgid "We won't send anything to notify recipients."
@@ -1720,12 +1712,8 @@ msgid "We've changed your password as you asked. You can now sign in with your n
 msgstr "我們已經按照您的要求更改了您的密碼。您現在可以使用新密碼登入。"
 
 #: packages/email/template-components/template-confirmation-email.tsx:21
-#~ msgid "Welcome to Documenso!"
-#~ msgstr "歡迎來到 Documenso！"
-
-#: packages/email/template-components/template-confirmation-email.tsx:21
 msgid "Welcome to Sign Ezily!"
-msgstr ""
+msgstr "歡迎來到上上簽"
 
 #: packages/lib/utils/document-audit-logs.ts:258
 msgid "You"
