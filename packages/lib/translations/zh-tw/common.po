@@ -38,12 +38,20 @@ msgstr "{0} 邀請您{recipientActionVerb}文件"
 #~ msgstr "{0} 想要用 LINE 整合的功能"
 
 #: packages/email/templates/team-join.tsx:61
-msgid "{0} joined the team {teamName} on signEzily"
-msgstr "{0} 已加入團隊 {teamName} 並在 上上簽上。"
+msgid "{0} joined the team {teamName} on Documenso"
+msgstr "{0} joined the team {teamName} on Documenso"
+
+#: packages/email/templates/team-join.tsx:61
+#~ msgid "{0} joined the team {teamName} on signEzily"
+#~ msgstr "{0} 已加入團隊 {teamName} 並在 上上簽上。"
 
 #: packages/email/templates/team-leave.tsx:61
-msgid "{0} left the team {teamName} on signEzily"
-msgstr "{0} 已離開 上上簽 上的團隊 {teamName}"
+msgid "{0} left the team {teamName} on Documenso"
+msgstr "{0} left the team {teamName} on Documenso"
+
+#: packages/email/templates/team-leave.tsx:61
+#~ msgid "{0} left the team {teamName} on signEzily"
+#~ msgstr "{0} 已離開 上上簽 上的團隊 {teamName}"
 
 #: packages/ui/primitives/data-table-pagination.tsx:30
 msgid "{0} of {1} row(s) selected."
@@ -66,7 +74,7 @@ msgstr "{inviterName} 已取消文件 {documentName}，您不再需要簽署。"
 msgid "{inviterName} has cancelled the document<0/>\"{documentName}\""
 msgstr "{inviterName} 已取消文件<0/>\"{documentName}\""
 
-#: packages/email/template-components/template-document-invite.tsx:75
+#: packages/email/template-components/template-document-invite.tsx:67
 msgid "{inviterName} has invited you to {0}<0/>\"{documentName}\""
 msgstr "{inviterName} 已邀請您加入 {0}<0/>\"{documentName}\""
 
@@ -86,7 +94,7 @@ msgstr "{inviterName} 已將您從文件 {documentName} 中移除。"
 msgid "{inviterName} has removed you from the document<0/>\"{documentName}\""
 msgstr "{inviterName} 已將您從文件中移除<0/>\"{documentName}\""
 
-#: packages/email/template-components/template-document-invite.tsx:63
+#: packages/email/template-components/template-document-invite.tsx:55
 msgid "{inviterName} on behalf of {teamName} has invited you to {0}"
 msgstr "{inviterName} 代表 {teamName} 邀請您加入 {0}"
 
@@ -202,7 +210,7 @@ msgstr "{recipientName} 已經拒絕了這個文件 '{documentName}'"
 msgid "{signerName} has rejected the document \"{documentName}\"."
 msgstr "{signerName} 已經拒絕了這個文件 \"{documentName}\"."
 
-#: packages/email/template-components/template-document-invite.tsx:68
+#: packages/email/template-components/template-document-invite.tsx:60
 msgid "{teamName} has invited you to {0}"
 msgstr "{teamName} 已邀請您加入 {0}"
 
@@ -329,20 +337,32 @@ msgid "A recipient was updated"
 msgstr "收件者已更新"
 
 #: packages/lib/server-only/team/create-team-email-verification.ts:156
-msgid "A request to use your email has been initiated by {0} on signEzily"
-msgstr "{0} 已在上上簽上發起使用您的電子郵件的請求。"
+msgid "A request to use your email has been initiated by {0} on Documenso"
+msgstr "A request to use your email has been initiated by {0} on Documenso"
+
+#: packages/lib/server-only/team/create-team-email-verification.ts:156
+#~ msgid "A request to use your email has been initiated by {0} on signEzily"
+#~ msgstr "{0} 已在上上簽上發起使用您的電子郵件的請求。"
 
 #: packages/email/templates/team-join.tsx:31
-msgid "A team member has joined a team on signEzily"
-msgstr "一位團隊成員已加入上上簽團隊"
+msgid "A team member has joined a team on Documenso"
+msgstr "A team member has joined a team on Documenso"
+
+#: packages/email/templates/team-join.tsx:31
+#~ msgid "A team member has joined a team on signEzily"
+#~ msgstr "一位團隊成員已加入上上簽團隊"
 
 #: packages/lib/jobs/definitions/emails/send-team-member-left-email.ts:96
 msgid "A team member has left {0}"
 msgstr "團隊成員已離開{0}"
 
 #: packages/email/templates/team-leave.tsx:31
-msgid "A team member has left a team on signEzily"
-msgstr "團隊成員已離開上上簽的團隊"
+msgid "A team member has left a team on Documenso"
+msgstr "A team member has left a team on Documenso"
+
+#: packages/email/templates/team-leave.tsx:31
+#~ msgid "A team member has left a team on signEzily"
+#~ msgstr "團隊成員已離開上上簽的團隊"
 
 #: packages/email/templates/team-delete.tsx:29
 #: packages/email/templates/team-delete.tsx:33
@@ -360,16 +380,28 @@ msgid "Accept"
 msgstr "接受"
 
 #: packages/email/templates/team-invite.tsx:42
-msgid "Accept invitation to join a team on signEzily"
-msgstr "接受邀請加入 上上簽團隊"
+msgid "Accept invitation to join a team on Documenso"
+msgstr "Accept invitation to join a team on Documenso"
+
+#: packages/email/templates/team-invite.tsx:42
+#~ msgid "Accept invitation to join a team on signEzily"
+#~ msgstr "接受邀請加入 上上簽團隊"
 
 #: packages/email/templates/confirm-team-email.tsx:41
-msgid "Accept team email request for {teamName} on signEzily"
-msgstr "在上上簽上接受 {teamName} 的團隊電子郵件請求"
+msgid "Accept team email request for {teamName} on Documenso"
+msgstr "Accept team email request for {teamName} on Documenso"
+
+#: packages/email/templates/confirm-team-email.tsx:41
+#~ msgid "Accept team email request for {teamName} on signEzily"
+#~ msgstr "在上上簽上接受 {teamName} 的團隊電子郵件請求"
 
 #: packages/email/templates/team-transfer-request.tsx:29
-msgid "Accept team transfer request on signEzily"
-msgstr "接受團隊轉移申請上上簽"
+msgid "Accept team transfer request on Documenso"
+msgstr "Accept team transfer request on Documenso"
+
+#: packages/email/templates/team-transfer-request.tsx:29
+#~ msgid "Accept team transfer request on signEzily"
+#~ msgstr "接受團隊轉移申請上上簽"
 
 #: packages/ui/primitives/document-dropzone.tsx:69
 msgid "Add a document"
@@ -459,7 +491,7 @@ msgstr "載入文件時發生錯誤。"
 msgid "Approve"
 msgstr "核准"
 
-#: packages/email/template-components/template-document-invite.tsx:106
+#: packages/email/template-components/template-document-invite.tsx:91
 msgid "Approve Document"
 msgstr "核准文件"
 
@@ -581,7 +613,7 @@ msgstr "確認電子郵件"
 msgid "Continue"
 msgstr "繼續"
 
-#: packages/email/template-components/template-document-invite.tsx:86
+#: packages/email/template-components/template-document-invite.tsx:78
 msgid "Continue by approving the document."
 msgstr "繼續批准文件。"
 
@@ -589,11 +621,11 @@ msgstr "繼續批准文件。"
 msgid "Continue by downloading the document."
 msgstr "繼續下載文件。"
 
-#: packages/email/template-components/template-document-invite.tsx:84
+#: packages/email/template-components/template-document-invite.tsx:76
 msgid "Continue by signing the document."
 msgstr "繼續簽署文件。"
 
-#: packages/email/template-components/template-document-invite.tsx:85
+#: packages/email/template-components/template-document-invite.tsx:77
 msgid "Continue by viewing the document."
 msgstr "繼續查看文件。"
 
@@ -948,8 +980,12 @@ msgid "Invalid email address"
 msgstr "無效的電子郵件地址"
 
 #: packages/email/templates/team-invite.tsx:72
-msgid "Join {teamName} on signEzily"
-msgstr "加入 {teamName} 在 上上簽"
+msgid "Join {teamName} on Documenso"
+msgstr "Join {teamName} on Documenso"
+
+#: packages/email/templates/team-invite.tsx:72
+#~ msgid "Join {teamName} on signEzily"
+#~ msgstr "加入 {teamName} 在 上上簽"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:67
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx:72
@@ -1114,7 +1150,7 @@ msgstr "選擇一個數字"
 msgid "Placeholder"
 msgstr "佔位符"
 
-#: packages/email/template-components/template-document-invite.tsx:56
+#: packages/email/template-components/template-document-invite.tsx:48
 msgid "Please {0} your document<0/>\"{documentName}\""
 msgstr "請{0}您的文件<0/>\"{documentName}\""
 
@@ -1204,8 +1240,8 @@ msgid "Redirect URL"
 msgstr "重新導向 URL"
 
 #: packages/email/template-components/template-document-invite.tsx:96
-msgid "Reject Document"
-msgstr "拒絕文件"
+#~ msgid "Reject Document"
+#~ msgstr "拒絕文件"
 
 #: packages/email/template-components/template-document-rejection-confirmed.tsx:22
 msgid "Rejection Confirmed"
@@ -1351,9 +1387,9 @@ msgstr "顯示進階設定"
 msgid "Sign"
 msgstr "簽署"
 
-#: packages/email/template-components/template-document-invite.tsx:104
+#: packages/email/template-components/template-document-invite.tsx:89
 msgid "Sign Document"
-msgstr "簽署文件"
+msgstr "簽名"
 
 #: packages/email/template-components/template-reset-password.tsx:34
 msgid "Sign In"
@@ -1427,8 +1463,12 @@ msgid "Support will reach out as soon as possible to your email."
 msgstr "我們會盡快回覆您的來信."
 
 #: packages/lib/server-only/team/delete-team.ts:124
-msgid "Team \"{0}\" has been deleted on signEzily"
-msgstr "團隊 \"{0}\" 已在 上上簽上被刪除"
+msgid "Team \"{0}\" has been deleted on Documenso"
+msgstr "Team \"{0}\" has been deleted on Documenso"
+
+#: packages/lib/server-only/team/delete-team.ts:124
+#~ msgid "Team \"{0}\" has been deleted on signEzily"
+#~ msgstr "團隊 \"{0}\" 已在 上上簽上被刪除"
 
 #: packages/lib/server-only/team/delete-team-email.ts:104
 msgid "Team email has been revoked for {0}"
@@ -1439,8 +1479,12 @@ msgid "Team email removed"
 msgstr "團隊電子郵件已移除"
 
 #: packages/email/templates/team-email-removed.tsx:29
-msgid "Team email removed for {teamName} on signEzily"
-msgstr "上上簽 上 {teamName} 的團隊電子郵件已被移除"
+msgid "Team email removed for {teamName} on Documenso"
+msgstr "Team email removed for {teamName} on Documenso"
+
+#: packages/email/templates/team-email-removed.tsx:29
+#~ msgid "Team email removed for {teamName} on signEzily"
+#~ msgstr "上上簽 上 {teamName} 的團隊電子郵件已被移除"
 
 #: packages/ui/primitives/template-flow/add-template-settings.tsx:145
 msgid "Template title"
@@ -1553,8 +1597,12 @@ msgid "This document is password protected. Please enter the password to view th
 msgstr "此文件受密碼保護。請輸入密碼以查看文件。"
 
 #: packages/email/template-components/template-footer.tsx:17
-msgid "This document was sent using <0>sign Ezily.</0>"
-msgstr "此文件是使用 <0>Sign Ezily</0>發送的。"
+msgid "This document was sent using <0>Documenso.</0>"
+msgstr "This document was sent using <0>Documenso.</0>"
+
+#: packages/email/template-components/template-footer.tsx:17
+#~ msgid "This document was sent using <0>sign Ezily.</0>"
+#~ msgstr "此文件是使用 <0>Sign Ezily</0>發送的。"
 
 #: packages/email/template-components/template-document-rejection-confirmed.tsx:26
 msgid "This email confirms that you have rejected the document <0>\"{documentName}\"</0> sent by {documentOwnerName}."
@@ -1660,7 +1708,7 @@ msgstr "查看從此電子郵件地址發送和接收的所有文件"
 msgid "View document"
 msgstr "檢視文件"
 
-#: packages/email/template-components/template-document-invite.tsx:105
+#: packages/email/template-components/template-document-invite.tsx:90
 #: packages/email/template-components/template-document-rejected.tsx:44
 #: packages/ui/primitives/document-flow/add-subject.tsx:93
 #: packages/ui/primitives/document-flow/add-subject.tsx:94
