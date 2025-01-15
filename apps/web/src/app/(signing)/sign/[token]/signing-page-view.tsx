@@ -16,6 +16,7 @@ import type { CompletedField } from '@documenso/lib/types/fields';
 import type { Field, Recipient } from '@documenso/prisma/client';
 import { FieldType, RecipientRole } from '@documenso/prisma/client';
 import type { FieldWithSignatureAndFieldMeta } from '@documenso/prisma/types/field-with-signature-and-fieldmeta';
+import { DocumentDownloadButton } from '@documenso/ui/components/document/document-download-button';
 import { Card, CardContent } from '@documenso/ui/primitives/card';
 import { ElementVisible } from '@documenso/ui/primitives/element-visible';
 import { LazyPDFViewer } from '@documenso/ui/primitives/lazy-pdf-viewer';
@@ -82,7 +83,10 @@ export const SigningPageView = ({
           </p>
         </div>
 
-        <RejectDocumentDialog document={document} token={recipient.token} />
+        <div className="flex justify-between gap-x-3">
+          <DocumentDownloadButton fileName={document.title} documentData={documentData} />
+          <RejectDocumentDialog document={document} token={recipient.token} />
+        </div>
       </div>
 
       <div className="mt-8 grid grid-cols-12 gap-y-8 lg:gap-x-8 lg:gap-y-0">
