@@ -78,7 +78,7 @@ msgstr "{inviterName} has cancelled the document {documentName}, you don't need 
 msgid "{inviterName} has cancelled the document<0/>\"{documentName}\""
 msgstr "{inviterName} has cancelled the document<0/>\"{documentName}\""
 
-#: packages/email/template-components/template-document-invite.tsx:75
+#: packages/email/template-components/template-document-invite.tsx:67
 msgid "{inviterName} has invited you to {0}<0/>\"{documentName}\""
 msgstr "{inviterName} has invited you to {0}<0/>\"{documentName}\""
 
@@ -98,7 +98,7 @@ msgstr "{inviterName} has removed you from the document {documentName}."
 msgid "{inviterName} has removed you from the document<0/>\"{documentName}\""
 msgstr "{inviterName} has removed you from the document<0/>\"{documentName}\""
 
-#: packages/email/template-components/template-document-invite.tsx:63
+#: packages/email/template-components/template-document-invite.tsx:55
 msgid "{inviterName} on behalf of {teamName} has invited you to {0}"
 msgstr "{inviterName} on behalf of {teamName} has invited you to {0}"
 
@@ -218,7 +218,7 @@ msgstr "{recipientName} has rejected the document '{documentName}'"
 msgid "{signerName} has rejected the document \"{documentName}\"."
 msgstr "{signerName} has rejected the document \"{documentName}\"."
 
-#: packages/email/template-components/template-document-invite.tsx:68
+#: packages/email/template-components/template-document-invite.tsx:60
 msgid "{teamName} has invited you to {0}"
 msgstr "{teamName} has invited you to {0}"
 
@@ -483,7 +483,7 @@ msgstr "An error occurred while loading the document."
 msgid "Approve"
 msgstr "Approve"
 
-#: packages/email/template-components/template-document-invite.tsx:106
+#: packages/email/template-components/template-document-invite.tsx:91
 msgid "Approve Document"
 msgstr "Approve Document"
 
@@ -613,7 +613,7 @@ msgstr "Continue"
 #~ msgid "Continue by {0} the document."
 #~ msgstr "Continue by {0} the document."
 
-#: packages/email/template-components/template-document-invite.tsx:86
+#: packages/email/template-components/template-document-invite.tsx:78
 msgid "Continue by approving the document."
 msgstr "Continue by approving the document."
 
@@ -621,11 +621,11 @@ msgstr "Continue by approving the document."
 msgid "Continue by downloading the document."
 msgstr "Continue by downloading the document."
 
-#: packages/email/template-components/template-document-invite.tsx:84
+#: packages/email/template-components/template-document-invite.tsx:76
 msgid "Continue by signing the document."
 msgstr "Continue by signing the document."
 
-#: packages/email/template-components/template-document-invite.tsx:85
+#: packages/email/template-components/template-document-invite.tsx:77
 msgid "Continue by viewing the document."
 msgstr "Continue by viewing the document."
 
@@ -1156,7 +1156,7 @@ msgstr "Pick a number"
 msgid "Placeholder"
 msgstr "Placeholder"
 
-#: packages/email/template-components/template-document-invite.tsx:56
+#: packages/email/template-components/template-document-invite.tsx:48
 msgid "Please {0} your document<0/>\"{documentName}\""
 msgstr "Please {0} your document<0/>\"{documentName}\""
 
@@ -1246,8 +1246,8 @@ msgid "Redirect URL"
 msgstr "Redirect URL"
 
 #: packages/email/template-components/template-document-invite.tsx:96
-msgid "Reject Document"
-msgstr "Reject Document"
+#~ msgid "Reject Document"
+#~ msgstr "Reject Document"
 
 #: packages/email/template-components/template-document-rejection-confirmed.tsx:22
 msgid "Rejection Confirmed"
@@ -1393,7 +1393,7 @@ msgstr "Show advanced settings"
 msgid "Sign"
 msgstr "Sign"
 
-#: packages/email/template-components/template-document-invite.tsx:104
+#: packages/email/template-components/template-document-invite.tsx:89
 msgid "Sign Document"
 msgstr "Sign Document"
 
@@ -1712,7 +1712,7 @@ msgstr "View all documents sent to and from this email address"
 msgid "View document"
 msgstr "View document"
 
-#: packages/email/template-components/template-document-invite.tsx:105
+#: packages/email/template-components/template-document-invite.tsx:90
 #: packages/email/template-components/template-document-rejected.tsx:44
 #: packages/ui/primitives/document-flow/add-subject.tsx:93
 #: packages/ui/primitives/document-flow/add-subject.tsx:94
