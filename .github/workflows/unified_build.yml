@@ -115,7 +115,6 @@ jobs:
 
       - name: Build Signezily Web Docker Image
         if: |
-          steps.filter.outputs.web == 'true' ||
           (github.event_name == 'workflow_dispatch' &&
           matrix.function == 'build_web' &&
           (github.event.inputs.ExecutionType == 'build' || github.event.inputs.ExecutionType == 'build-push') &&
@@ -127,7 +126,6 @@ jobs:
 
       - name: Build Signezily Documentation Docker Image
         if: |
-          steps.filter.outputs.documentation == 'true' ||
           (github.event_name == 'workflow_dispatch' &&
           matrix.function == 'build_documentation' &&
           (github.event.inputs.ExecutionType == 'build' || github.event.inputs.ExecutionType == 'build-push') &&
