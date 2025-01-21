@@ -126,8 +126,8 @@ jobs:
 
       - name: Build Signezily Documentation Docker Image
         if: |
-          (github.event_name == 'workflow_dispatch' &&
-          matrix.function == 'build_documentation' &&
+          (github.event_name == 'workflow_dispatch' && matrix.function == 'build_web') ||
+          (github.event_name == 'workflow_dispatch' && matrix.function == 'build_documentation' &&
           (github.event.inputs.ExecutionType == 'build' || github.event.inputs.ExecutionType == 'build-push') &&
           github.event.inputs.site == 'documentation')
         run: .github/workflows/build.sh ${{ matrix.function }}
