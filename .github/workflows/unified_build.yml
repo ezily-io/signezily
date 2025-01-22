@@ -118,8 +118,9 @@ jobs:
 
       - name: Build Signezily Web Docker Image
         if: |
+          (github.ref == 'refs/heads/main' && github.event_name == 'push' && matrix.function == 'build_web' ) ||
           (github.event_name == 'pull_request' && matrix.function == 'build_web' && steps.filter.outputs.web == 'true') ||
-          (github.event_name == 'pull_request' && matrix.function == 'build_web' &&
+          (github.event_name == 'workflow_dispatch' && matrix.function == 'build_web' &&
           (github.event.inputs.ExecutionType == 'build' || github.event.inputs.ExecutionType == 'build-push') &&
           github.event.inputs.site == 'web')
         run: .github/workflows/build.sh ${{ matrix.function }}
@@ -127,19 +128,21 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           GIT_BRANCH: ${{ github.ref_name }}
 
-      - name: Build Signezily Marketing Docker Image
-        if: |
-          (github.event_name == 'pull_request' && matrix.function == 'build_marketing' && steps.filter.outputs.marketing == 'true') ||
-          (github.event_name == 'workflow_dispatch' && matrix.function == 'build_marketing' &&
-          (github.event.inputs.ExecutionType == 'build' || github.event.inputs.ExecutionType == 'build-push') &&
-          github.event.inputs.site == 'marketing')
-        run: .github/workflows/build.sh ${{ matrix.function }}
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          GIT_BRANCH: ${{ github.ref_name }}
+      # - name: Build Signezily Marketing Docker Image
+      #   if: |
+      #     (github.ref == 'refs/heads/main' && github.event_name == 'push' && matrix.function == 'build_marketing' ) ||
+      #     (github.event_name == 'pull_request' && matrix.function == 'build_marketing' && steps.filter.outputs.marketing == 'true') ||
+      #     (github.event_name == 'workflow_dispatch' && matrix.function == 'build_marketing' &&
+      #     (github.event.inputs.ExecutionType == 'build' || github.event.inputs.ExecutionType == 'build-push') &&
+      #     github.event.inputs.site == 'marketing')
+      #   run: .github/workflows/build.sh ${{ matrix.function }}
+      #   env:
+      #     EVENT_NAME: ${{ github.event_name }}
+      #     GIT_BRANCH: ${{ github.ref_name }}
 
       - name: Build Signezily Documentation Docker Image
         if: |
+          (github.ref == 'refs/heads/main' && github.event_name == 'push' && matrix.function == 'build_documentation' ) ||
           (github.event_name == 'pull_request' && matrix.function == 'build_documentation' && steps.filter.outputs.documentation == 'true') ||
           (github.event_name == 'workflow_dispatch' && matrix.function == 'build_documentation' &&
           (github.event.inputs.ExecutionType == 'build' || github.event.inputs.ExecutionType == 'build-push') &&

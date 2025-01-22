@@ -83,10 +83,6 @@ build_web() {
         done
         echo "Docker images pushed: $TAGS"
 
-        # aws ecs update-service \
-        #   --cluster "$CLUSTER" --service "$SERVICE" \
-        #   --force-new-deployment
-        echo "Service updated: $SERVICE"
     else
         echo "Push skipped. Conditions not met: Event=$EVENT_NAME, Branch=$GIT_BRANCH"
     fi
@@ -117,10 +113,6 @@ build_marketing_site() {
         done
         echo "Docker images pushed: $TAGS"
 
-        # aws ecs update-service \
-        #   --cluster "$CLUSTER" --service "$SERVICE" \
-        #   --force-new-deployment
-        echo "Service updated: $SERVICE"
     else
         echo "Push skipped. Conditions not met: Event=$EVENT_NAME, Branch=$GIT_BRANCH"
     fi
@@ -151,10 +143,6 @@ build_documentation_site() {
         done
         echo "Docker images pushed: $TAGS"
 
-        # aws ecs update-service \
-        #   --cluster "$CLUSTER" --service "$SERVICE" \
-        #   --force-new-deployment
-        echo "Service updated: $SERVICE"
     else
         echo "Push skipped. Conditions not met: Event=$EVENT_NAME, Branch=$GIT_BRANCH"
     fi
