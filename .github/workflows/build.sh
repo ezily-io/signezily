@@ -12,7 +12,6 @@ export CLUSTER="dev"
 getVersion(){
     version=$(jq -r .version package.json)
     echo "$version"
-    return version
 }
 
 # Function to set up common build variables
