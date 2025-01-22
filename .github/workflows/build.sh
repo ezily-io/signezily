@@ -8,6 +8,13 @@ export BUILDKIT_PROGRESS=plain
 export DOCKER_BUILDKIT=1
 export CLUSTER="dev"
 
+# Global version variable extracted from package.json
+getVersion(){
+    version=$(jq -r .version package.json)
+    echo "$version"
+    return version
+}
+
 # Function to set up common build variables
 setup_build_variables() {
     local ecr_repository="$1"
@@ -16,7 +23,8 @@ setup_build_variables() {
     GIT_SHA=$(git rev-parse --short HEAD)
     IMAGE="$AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$ecr_repository"
     THIS_TAG="$IMAGE:$GIT_SHA"
-    TAGS="$IMAGE:latest,$THIS_TAG"
+    APP_VERSION=$(getVersion)
+    TAGS="$IMAGE:latest,$THIS_TAG,$APP_VERSION"
     COMMIT_SHA=$GIT_SHA
     BUILD_PLATFORM="amd64"
 
@@ -130,7 +138,7 @@ build_documentation_site() {
     docker build --progress=$BUILDKIT_PROGRESS --build-arg COMMIT_SHA=$COMMIT_SHA -t $THIS_TAG -t $IMAGE:latest -f ./docker/Dockerfile.documentation .
     echo "Build process for $1 completed."
 
-    if [ "$GIT_BRANCH" = "main" ] && [ "$EVENT_NAME" = "push" ]; then
+    if [ "$GIT_BRANCH" = "main" ] && [ "$EVENT_NAME" = "push" || "$EVENT_NAME" = "pull_request"]; then
         docker push $THIS_TAG
         docker push $IMAGE:latest
         echo "Docker images pushed: $FINAL_TAGS"

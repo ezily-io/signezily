@@ -104,14 +104,17 @@ jobs:
               # - '.github/workflows/unified_build.yml'
               - 'docker/Dockerfile'
               - 'apps/web/**'
+              - 'package.json'
             marketing:
               # - '.github/workflows/unified_build.yml'
               - 'docker/Dockerfile.marketing'
               - 'apps/marketing/**'
+              - 'package.json'
             documentation:
               - '.github/workflows/unified_build.yml'
               - 'docker/Dockerfile.documentation'
               - 'apps/documentation/**'
+              - 'package.json'
 
       - name: Build Signezily Web Docker Image
         if: |
