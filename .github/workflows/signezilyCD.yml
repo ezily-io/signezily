@@ -68,35 +68,46 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Filter Changed Files
+        uses: dorny/paths-filter@v3
+        id: filter
+        if: |
+          github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main'
+        with:
+          filters: |
+            dev:
+              - 'terraform/signezily-infra/dev.tfvars'
+            prod:
+              - 'terraform/signezily-infra/prod.tfvars'
+
       - name: Determine Plan or Apply Action
         id: condition
         run: |
-          echo "ExecutionType=skip" >> $GITHUB_ENV
-          # if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-          #   if [[ "${{ github.event.inputs.environment }}" == "${{ matrix.environment.name }}" ]]; then
-          #     echo "ExecutionType=${{ github.event.inputs.ExecutionType }}" >> $GITHUB_ENV
-          #     echo "TF_WORKSPACE=${{ matrix.environment.tf_workspace }}" >> $GITHUB_ENV
-          #   else
-          #     echo "ExecutionType=skip" >> $GITHUB_ENV
-          #   fi
-          # elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
-          #   # Always plan for dev; only plan for qa/demo if tfvars was modified
-          #   if [[ "${{ matrix.environment.name }}" == "dev" || \
-          #         "${{ github.event.pull_request.changed_files }}" =~ "${{ matrix.environment.tfvars }}" ]]; then
-          #     echo "ExecutionType=plan" >> $GITHUB_ENV
-          #     echo "TF_WORKSPACE=${{ matrix.environment.tf_workspace }}" >> $GITHUB_ENV
-          #   else
-          #     echo "ExecutionType=skip" >> $GITHUB_ENV
-          #   fi
-          # elif [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/main" ]]; then
-          #   # Apply only to the environment that tfvars were modified when pushed to main
-          #   if [[ "${{ github.event.head_commit.message }}" =~ "${{ matrix.environment.tfvars }}" ]]; then
-          #     echo "ExecutionType=apply" >> $GITHUB_ENV
-          #     echo "TF_WORKSPACE=${{ matrix.environment.tf_workspace }}" >> $GITHUB_ENV
-          #   else
-          #     echo "ExecutionType=skip" >> $GITHUB_ENV
-          #   fi
-          # fi
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            if [[ "${{ github.event.inputs.environment }}" == "${{ matrix.environment.name }}" ]]; then
+              echo "ExecutionType=${{ github.event.inputs.ExecutionType }}" >> $GITHUB_ENV
+              echo "TF_WORKSPACE=${{ matrix.environment.tf_workspace }}" >> $GITHUB_ENV
+            else
+              echo "ExecutionType=skip" >> $GITHUB_ENV
+            fi
+          elif [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/main" ]]; then
+            # Apply only to the environment that tfvars were modified when pushed to main
+            if [[ "${{ github.event.head_commit.message }}" =~ "${{ matrix.environment.tfvars }}" ]]; then
+              echo "ExecutionType=apply" >> $GITHUB_ENV
+              echo "TF_WORKSPACE=${{ matrix.environment.tf_workspace }}" >> $GITHUB_ENV
+            else
+              echo "ExecutionType=skip" >> $GITHUB_ENV
+            fi
+          elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            # Always plan for dev; only plan for qa/demo if tfvars was modified
+            if [[ "${{ matrix.environment.name }}" == "dev" || \
+                  "${{ steps.filter.outputs.prod }}" == "true" ]]; then
+              echo "ExecutionType=plan" >> $GITHUB_ENV
+              echo "TF_WORKSPACE=${{ matrix.environment.tf_workspace }}" >> $GITHUB_ENV
+            else
+              echo "ExecutionType=skip" >> $GITHUB_ENV
+            fi
+          fi
 
       - name: Configure AWS
         if: ${{ env.ExecutionType != 'skip' }}
