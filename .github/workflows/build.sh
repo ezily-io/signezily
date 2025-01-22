@@ -25,11 +25,12 @@ setup_build_variables() {
     APP_VERSION=$(getVersion)
     THIS_TAG="$IMAGE:${app_name}_${GIT_SHA}"
     APP_VERSION_TAG="${IMAGE}:${app_name}_${APP_VERSION}"
-    TAGS="$IMAGE:${app_name}_latest $THIS_TAG $APP_VERSION_TAG"
+    LATEST="${APP_NAME}_latest"
+    TAGS="$IMAGE:$LATEST $THIS_TAG $APP_VERSION_TAG"
     COMMIT_SHA=$GIT_SHA
     BUILD_PLATFORM="amd64"
 
-    export GIT_SHA IMAGE THIS_TAG TAGS APP_VERSION_TAG COMMIT_SHA BUILD_PLATFORM
+    export GIT_SHA IMAGE THIS_TAG TAGS APP_VERSION_TAG LATEST COMMIT_SHA BUILD_PLATFORM
 }
 
 # Build Base
@@ -67,22 +68,24 @@ build_web() {
     SERVICE="documenso-app-dev"
     BUILDKIT_PROGRESS="plain"
     DOCKER_BUILDKIT=1
+    APP_NAME="app"
 
     # Set up build variables
-    setup_build_variables $ECR_REPOSITORY
+    setup_build_variables $ECR_REPOSITORY $APP_NAME
 
     # Build the Docker image
-    docker build --progress=$BUILDKIT_PROGRESS --build-arg COMMIT_SHA=$COMMIT_SHA -t $THIS_TAG -t $IMAGE:latest -f ./docker/Dockerfile .
+    docker build --progress=$BUILDKIT_PROGRESS --build-arg COMMIT_SHA=$COMMIT_SHA -t $THIS_TAG -t $APP_VERSION_TAG -t $IMAGE:$LATEST -f ./docker/Dockerfile .
     echo "Build process for $1 completed."
 
-    if [ "$GIT_BRANCH" = "main" ] && [ "$EVENT_NAME" = "push" ]; then
-        docker push $THIS_TAG
-        docker push $IMAGE:latest
-        echo "Docker images pushed: $FINAL_TAGS"
+    if [ "$GIT_BRANCH" = "main" ] && [ "$EVENT_NAME" = "push" ] || [ "$EVENT_NAME" = "pull_request" ]; then
+        for tag in $TAGS; do
+          docker push "$tag"
+        done
+        echo "Docker images pushed: $TAGS"
 
-        aws ecs update-service \
-          --cluster "$CLUSTER" --service "$SERVICE" \
-          --force-new-deployment
+        # aws ecs update-service \
+        #   --cluster "$CLUSTER" --service "$SERVICE" \
+        #   --force-new-deployment
         echo "Service updated: $SERVICE"
     else
         echo "Push skipped. Conditions not met: Event=$EVENT_NAME, Branch=$GIT_BRANCH"
@@ -99,22 +102,24 @@ build_marketing_site() {
     SERVICE="documenso-app-dev"
     BUILDKIT_PROGRESS="plain"
     DOCKER_BUILDKIT=1
+    APP_NAME="maketing"
 
     # Set up build variables
-    setup_build_variables $ECR_REPOSITORY
+    setup_build_variables $ECR_REPOSITORY $APP_NAME
 
     # Build the Docker image
-    docker build --progress=$BUILDKIT_PROGRESS --build-arg COMMIT_SHA=$COMMIT_SHA -t $THIS_TAG -t $IMAGE:latest -f ./docker/Dockerfile.marketing .
+    docker build --progress=$BUILDKIT_PROGRESS --build-arg COMMIT_SHA=$COMMIT_SHA -t $THIS_TAG -t $APP_VERSION_TAG -t $IMAGE:$LATEST -f ./docker/Dockerfile.marketing .
     echo "Build process for $1 completed."
 
-    if [ "$GIT_BRANCH" = "main" ] && [ "$EVENT_NAME" = "push" ]; then
-        docker push $THIS_TAG
-        docker push $IMAGE:latest
-        echo "Docker images pushed: $FINAL_TAGS"
+    if [ "$GIT_BRANCH" = "main" ] && [ "$EVENT_NAME" = "push" ] || [ "$EVENT_NAME" = "pull_request" ]; then
+        for tag in $TAGS; do
+          docker push "$tag"
+        done
+        echo "Docker images pushed: $TAGS"
 
-        aws ecs update-service \
-          --cluster "$CLUSTER" --service "$SERVICE" \
-          --force-new-deployment
+        # aws ecs update-service \
+        #   --cluster "$CLUSTER" --service "$SERVICE" \
+        #   --force-new-deployment
         echo "Service updated: $SERVICE"
     else
         echo "Push skipped. Conditions not met: Event=$EVENT_NAME, Branch=$GIT_BRANCH"
@@ -132,7 +137,6 @@ build_documentation_site() {
     BUILDKIT_PROGRESS="plain"
     DOCKER_BUILDKIT=1
     APP_NAME="docs"
-    LATEST="${APP_NAME}_latest"
 
     # Set up build variables
     setup_build_variables $ECR_REPOSITORY $APP_NAME
@@ -141,11 +145,7 @@ build_documentation_site() {
     docker build --progress=$BUILDKIT_PROGRESS --build-arg COMMIT_SHA=$COMMIT_SHA -t $THIS_TAG -t $APP_VERSION_TAG -t $IMAGE:$LATEST -f ./docker/Dockerfile.documentation .
     echo "Build process for $1 completed."
 
-    # if [ "$GIT_BRANCH" = "main" ] && [ "$EVENT_NAME" = "push" || "$EVENT_NAME" = "pull_request" ]; then
-    if [ "$EVENT_NAME" = "pull_request" ]; then
-        # docker push $THIS_TAG
-        # docker push $APP_VERSION_TAG 
-        # docker push $IMAGE:$LATEST
+    if [ "$GIT_BRANCH" = "main" ] && [ "$EVENT_NAME" = "push" ] || [ "$EVENT_NAME" = "pull_request" ]; then
         for tag in $TAGS; do
           docker push "$tag"
         done
