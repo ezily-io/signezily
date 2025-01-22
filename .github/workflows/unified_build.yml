@@ -125,8 +125,7 @@ jobs:
           GIT_BRANCH: ${{ github.ref_name }}
 
       - name: Build Signezily Documentation TEST
-        if: |
-          github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'workflow_dispatch'
         run: echo '${{ matrix.function }}'
 
 
@@ -169,20 +168,3 @@ jobs:
           aws ecs update-service \
             --cluster $CLUSTER --service ${SERVICE}${{ github.event.inputs.environment }} \
             --force-new-deployment
-  test:
-    runs-on: ubuntu-latest-2core
-    steps:
-      - run: echo '${{ toJSON(needs.validation.outputs) }}'
-  
-      - name: Build
-        if: needs.validation.outputs.build == 'true' && github.event.pull_request.draft
-        run: echo '${{ needs.validation.outputs.build }}'
-      - name: cm-ui
-        if: needs.validation.outputs.cm-ui == 'true' && github.event.pull_request.draft
-        run: echo '${{ needs.validation.outputs.cm-ui }}'
-      - name: cube
-        if: needs.validation.outputs.cube == 'true' && github.event.pull_request.draft
-        run: echo '${{ needs.validation.outputs.cube }}'
-      - name: Draft PR
-        if: needs.validation.outputs.build == 'true' && github.event.pull_request.draft
-        run: echo '${{ ! github.event.pull_request.draft }}'
