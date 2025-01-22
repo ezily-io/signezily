@@ -115,10 +115,20 @@ jobs:
 
       - name: Build Signezily Web Docker Image
         if: |
-          (github.event_name == 'workflow_dispatch' &&
-          matrix.function == 'build_web' &&
+          (github.event_name == 'pull_request' && matrix.function == 'build_web' &&
           (github.event.inputs.ExecutionType == 'build' || github.event.inputs.ExecutionType == 'build-push') &&
           github.event.inputs.site == 'web')
+        run: .github/workflows/build.sh ${{ matrix.function }}
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          GIT_BRANCH: ${{ github.ref_name }}
+
+      - name: Build Signezily Marketing Docker Image
+        if: |
+          (github.event_name == 'pull_request' && matrix.function == 'build_marketing' && steps.filter.outputs.marketing == 'true') ||
+          (github.event_name == 'workflow_dispatch' && matrix.function == 'build_marketing' &&
+          (github.event.inputs.ExecutionType == 'build' || github.event.inputs.ExecutionType == 'build-push') &&
+          github.event.inputs.site == 'marketing')
         run: .github/workflows/build.sh ${{ matrix.function }}
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -134,27 +144,6 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           GIT_BRANCH: ${{ github.ref_name }}
-
-      - name: Pushing Signezily web image
-        continue-on-error: true
-        if: steps.filter.outputs.web == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push' || 
-          github.event.inputs.site == 'web' && github.event.inputs.ExecutionType == 'build-push'
-        run: |
-          docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:latest
-      
-      - name: Pushing Signezily marketing image
-        continue-on-error: true
-        if: steps.filter.outputs.marketing == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push' || 
-          github.event.inputs.site == 'marketing' && github.event.inputs.ExecutionType == 'build-push'
-        run: |
-          docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:marketing
-
-      - name: Pushing Signezily1 documentation image
-        continue-on-error: true
-        if: steps.filter.outputs.documentation == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push' || 
-          github.event.inputs.site == 'documentation' && github.event.inputs.ExecutionType == 'build-push'
-        run: |
-          docker push 898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:documentation
 
       - name: Deploy
         if: github.ref == 'refs/heads/main' && github.event_name == 'push' || 

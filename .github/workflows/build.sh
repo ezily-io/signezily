@@ -79,7 +79,40 @@ build_web() {
         echo "Push skipped. Conditions not met: Event=$EVENT_NAME, Branch=$GIT_BRANCH"
     fi
 }
-#  DOCS APP
+
+# Marketing Site
+build_marketing_site() {
+
+    echo "Building Documenso Docs..."
+    
+    # Environment Variables
+    ECR_REPOSITORY="signezily"
+    SERVICE="documenso-app-dev"
+    BUILDKIT_PROGRESS="plain"
+    DOCKER_BUILDKIT=1
+
+    # Set up build variables
+    setup_build_variables $ECR_REPOSITORY
+
+    # Build the Docker image
+    docker build --progress=$BUILDKIT_PROGRESS --build-arg COMMIT_SHA=$COMMIT_SHA -t $THIS_TAG -t $IMAGE:latest -f ./docker/Dockerfile.marketing .
+    echo "Build process for $1 completed."
+
+    if [ "$GIT_BRANCH" = "main" ] && [ "$EVENT_NAME" = "push" ]; then
+        docker push $THIS_TAG
+        docker push $IMAGE:latest
+        echo "Docker images pushed: $FINAL_TAGS"
+
+        aws ecs update-service \
+          --cluster "$CLUSTER" --service "$SERVICE" \
+          --force-new-deployment
+        echo "Service updated: $SERVICE"
+    else
+        echo "Push skipped. Conditions not met: Event=$EVENT_NAME, Branch=$GIT_BRANCH"
+    fi
+}
+
+#  DOCS Site
 build_documentation_site() {
 
     echo "Building Documenso Docs..."
@@ -94,7 +127,7 @@ build_documentation_site() {
     setup_build_variables $ECR_REPOSITORY
 
     # Build the Docker image
-    docker build --progress=$BUILDKIT_PROGRESS --build-arg COMMIT_SHA=$COMMIT_SHA -t $THIS_TAG -t $IMAGE:latest -f ./docker/Dockerfile .
+    docker build --progress=$BUILDKIT_PROGRESS --build-arg COMMIT_SHA=$COMMIT_SHA -t $THIS_TAG -t $IMAGE:latest -f ./docker/Dockerfile.documentation .
     echo "Build process for $1 completed."
 
     if [ "$GIT_BRANCH" = "main" ] && [ "$EVENT_NAME" = "push" ]; then
@@ -117,7 +150,7 @@ case $1 in
     build_web
     ;;
   "build_marketing")
-    build_marketing
+    build_marketing_site
     ;;
   "build_documentation")
     build_documentation_site
