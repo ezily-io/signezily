@@ -1,12 +1,12 @@
 provider "aws" {
   region = var.region
-   default_tags {
-   tags = {
-     Automation = "Terraform"
-     App        = var.application
-     Environment = var.environment
-   }
- }
+  default_tags {
+    tags = {
+      Automation  = "Terraform"
+      App         = var.application
+      Environment = var.environment
+    }
+  }
 }
 
 terraform {
@@ -20,7 +20,7 @@ terraform {
   }
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
       version = "4.31.0"
     }
   }

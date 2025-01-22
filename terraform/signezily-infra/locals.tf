@@ -42,9 +42,9 @@ locals {
 
   common_env = concat([
     # {
-      # name  = "NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH",
-      # value = "/app/apps/sign_ezily_cert.p12"
-      # value = "/opt/documenso/cert.p12"
+    # name  = "NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH",
+    # value = "/app/apps/sign_ezily_cert.p12"
+    # value = "/opt/documenso/cert.p12"
     # },
     ],
     local.additional_env,

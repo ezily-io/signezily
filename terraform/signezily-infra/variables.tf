@@ -59,9 +59,9 @@ variable "desired_count" {
 }
 
 variable "port" {
-    type        = number
-    default     = 3000
-    description = "Port where the app executes."
+  type        = number
+  default     = 3000
+  description = "Port where the app executes."
 }
 
 variable "image" {

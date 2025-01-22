@@ -62,40 +62,40 @@ resource "aws_ecs_task_definition" "documenso" {
 }
 
 
-    # {
-    #   name  = "marketing",
-    #   image = var.marketing_image,
-    #   portMappings = [
-    #     { hostPort = 3001, protocol = "tcp", containerPort = 3001 },
-    #   ],
-    #   secrets     = local.common_secrets,
-    #   environment = local.common_env
-    #   logConfiguration = {
-    #     logDriver = "awslogs",
-    #     options = {
-    #       awslogs-group         = local.log_group,
-    #       awslogs-region        = var.region,
-    #       awslogs-stream-prefix = "${var.application}"
-    #     }
-    #   },
-    # }
-    # {
-    #   name  = "documentation",
-    #   image = var.docs_image,
-    #   portMappings = [
-    #     { hostPort = 3002, protocol = "tcp", containerPort = 3002 },
-    #   ],
-    #   secrets     = local.common_secrets,
-    #   environment = local.common_env
-    #   logConfiguration = {
-    #     logDriver = "awslogs",
-    #     options = {
-    #       awslogs-group         = local.log_group,
-    #       awslogs-region        = var.region,
-    #       awslogs-stream-prefix = "${var.application}"
-    #     }
-    #   },
-    # },
+# {
+#   name  = "marketing",
+#   image = var.marketing_image,
+#   portMappings = [
+#     { hostPort = 3001, protocol = "tcp", containerPort = 3001 },
+#   ],
+#   secrets     = local.common_secrets,
+#   environment = local.common_env
+#   logConfiguration = {
+#     logDriver = "awslogs",
+#     options = {
+#       awslogs-group         = local.log_group,
+#       awslogs-region        = var.region,
+#       awslogs-stream-prefix = "${var.application}"
+#     }
+#   },
+# }
+# {
+#   name  = "documentation",
+#   image = var.docs_image,
+#   portMappings = [
+#     { hostPort = 3002, protocol = "tcp", containerPort = 3002 },
+#   ],
+#   secrets     = local.common_secrets,
+#   environment = local.common_env
+#   logConfiguration = {
+#     logDriver = "awslogs",
+#     options = {
+#       awslogs-group         = local.log_group,
+#       awslogs-region        = var.region,
+#       awslogs-stream-prefix = "${var.application}"
+#     }
+#   },
+# },
 
 
 
