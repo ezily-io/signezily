@@ -157,5 +157,5 @@ jobs:
           github.event.inputs.ExecutionType == 'deploy'
         run: |
           aws ecs update-service \
-            --cluster $CLUSTER --service ${SERVICE}${{ github.event.inputs.environment }} \
+            --cluster $CLUSTER --service documenso-app-dev \
             --force-new-deployment
