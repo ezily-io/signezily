@@ -54,7 +54,7 @@ jobs:
     if: '! github.event.pull_request.draft'
     defaults:
       run:
-        working-directory: terraform/services/documenso/
+        working-directory: terraform/signezily-infra/
     env:
       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
 
