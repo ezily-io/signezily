@@ -23,10 +23,9 @@ setup_build_variables() {
     GIT_SHA=$(git rev-parse --short HEAD)
     IMAGE="$AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$ecr_repository"
     APP_VERSION=$(getVersion)
-    THIS_TAG="$IMAGE:$GIT_SHA"
-    # APP_VERSION_TAG="$IMAGE:$app_name'_'$APP_VERSION"
+    THIS_TAG="$IMAGE:${app_name}_${$GIT_SHA}"
     APP_VERSION_TAG="${IMAGE}:${app_name}_${APP_VERSION}"
-    TAGS="$IMAGE:latest,$THIS_TAG,$APP_VERSION"
+    TAGS="$IMAGE:${app_name}_latest $THIS_TAG $APP_VERSION_TAG"
     COMMIT_SHA=$GIT_SHA
     BUILD_PLATFORM="amd64"
 
@@ -133,19 +132,24 @@ build_documentation_site() {
     BUILDKIT_PROGRESS="plain"
     DOCKER_BUILDKIT=1
     APP_NAME="docs"
+    LATEST="${APP_NAME}_latest"
 
     # Set up build variables
     setup_build_variables $ECR_REPOSITORY $APP_NAME
 
     # Build the Docker image
-    docker build --progress=$BUILDKIT_PROGRESS --build-arg COMMIT_SHA=$COMMIT_SHA -t $THIS_TAG -t $IMAGE:latest -f ./docker/Dockerfile.documentation .
+    docker build --progress=$BUILDKIT_PROGRESS --build-arg COMMIT_SHA=$COMMIT_SHA -t $THIS_TAG -t $APP_VERSION_TAG -t $IMAGE:$LATEST -f ./docker/Dockerfile.documentation .
     echo "Build process for $1 completed."
 
     # if [ "$GIT_BRANCH" = "main" ] && [ "$EVENT_NAME" = "push" || "$EVENT_NAME" = "pull_request" ]; then
     if [ "$EVENT_NAME" = "pull_request" ]; then
-        docker push $THIS_TAG
-        docker push $IMAGE:latest
-        echo "Docker images pushed: $FINAL_TAGS"
+        # docker push $THIS_TAG
+        # docker push $APP_VERSION_TAG 
+        # docker push $IMAGE:$LATEST
+        for tag in $TAGS; do
+          docker push "$tag"
+        done
+        echo "Docker images pushed: $TAGS"
 
         # aws ecs update-service \
         #   --cluster "$CLUSTER" --service "$SERVICE" \
