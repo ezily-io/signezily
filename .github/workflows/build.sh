@@ -17,17 +17,20 @@ getVersion(){
 # Function to set up common build variables
 setup_build_variables() {
     local ecr_repository="$1"
+    local app_name="$2"
 
     # Get current Git SHA
     GIT_SHA=$(git rev-parse --short HEAD)
     IMAGE="$AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$ecr_repository"
-    THIS_TAG="$IMAGE:$GIT_SHA"
     APP_VERSION=$(getVersion)
+    THIS_TAG="$IMAGE:$GIT_SHA"
+    # APP_VERSION_TAG="$IMAGE:$app_name'_'$APP_VERSION"
+    APP_VERSION_TAG="${IMAGE}:${app_name}_${APP_VERSION}"
     TAGS="$IMAGE:latest,$THIS_TAG,$APP_VERSION"
     COMMIT_SHA=$GIT_SHA
     BUILD_PLATFORM="amd64"
 
-    export GIT_SHA IMAGE THIS_TAG TAGS COMMIT_SHA BUILD_PLATFORM
+    export GIT_SHA IMAGE THIS_TAG TAGS APP_VERSION_TAG COMMIT_SHA BUILD_PLATFORM
 }
 
 # Build Base
@@ -129,22 +132,24 @@ build_documentation_site() {
     SERVICE="documenso-app-dev"
     BUILDKIT_PROGRESS="plain"
     DOCKER_BUILDKIT=1
+    APP_NAME="docs"
 
     # Set up build variables
-    setup_build_variables $ECR_REPOSITORY
+    setup_build_variables $ECR_REPOSITORY $APP_NAME
 
     # Build the Docker image
     docker build --progress=$BUILDKIT_PROGRESS --build-arg COMMIT_SHA=$COMMIT_SHA -t $THIS_TAG -t $IMAGE:latest -f ./docker/Dockerfile.documentation .
     echo "Build process for $1 completed."
 
-    if [ "$GIT_BRANCH" = "main" ] && [ "$EVENT_NAME" = "push" || "$EVENT_NAME" = "pull_request"]; then
+    # if [ "$GIT_BRANCH" = "main" ] && [ "$EVENT_NAME" = "push" || "$EVENT_NAME" = "pull_request" ]; then
+    if [ "$EVENT_NAME" = "pull_request" ]; then
         docker push $THIS_TAG
         docker push $IMAGE:latest
         echo "Docker images pushed: $FINAL_TAGS"
 
-        aws ecs update-service \
-          --cluster "$CLUSTER" --service "$SERVICE" \
-          --force-new-deployment
+        # aws ecs update-service \
+        #   --cluster "$CLUSTER" --service "$SERVICE" \
+        #   --force-new-deployment
         echo "Service updated: $SERVICE"
     else
         echo "Push skipped. Conditions not met: Event=$EVENT_NAME, Branch=$GIT_BRANCH"
