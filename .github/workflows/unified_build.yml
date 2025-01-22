@@ -101,12 +101,12 @@ jobs:
         with:
           filters: |
             web:
-              # - '.github/workflows/unified_build.yml'
+              - '.github/workflows/unified_build.yml'
               - 'docker/Dockerfile'
               - 'apps/web/**'
               - 'package.json'
             marketing:
-              # - '.github/workflows/unified_build.yml'
+              - '.github/workflows/unified_build.yml'
               - 'docker/Dockerfile.marketing'
               - 'apps/marketing/**'
               - 'package.json'
