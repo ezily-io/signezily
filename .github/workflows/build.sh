@@ -77,7 +77,7 @@ build_web() {
     docker build --progress=$BUILDKIT_PROGRESS --build-arg COMMIT_SHA=$COMMIT_SHA -t $THIS_TAG -t $APP_VERSION_TAG -t $IMAGE:$LATEST -f ./docker/Dockerfile .
     echo "Build process for $1 completed."
 
-    if [ "$GIT_BRANCH" = "main" ] && [ "$EVENT_NAME" = "push" ] || [ "$EVENT_NAME" = "pull_request" ]; then
+    if [ "$GIT_BRANCH" = "main" ] && [ "$EVENT_NAME" = "push" ] ; then
         for tag in $TAGS; do
           docker push "$tag"
         done
@@ -137,7 +137,7 @@ build_documentation_site() {
     docker build --progress=$BUILDKIT_PROGRESS --build-arg COMMIT_SHA=$COMMIT_SHA -t $THIS_TAG -t $APP_VERSION_TAG -t $IMAGE:$LATEST -f ./docker/Dockerfile.documentation .
     echo "Build process for $1 completed."
 
-    if [ "$GIT_BRANCH" = "main" ] && [ "$EVENT_NAME" = "push" ] || [ "$EVENT_NAME" = "pull_request" ]; then
+    if [ "$GIT_BRANCH" = "main" ] && [ "$EVENT_NAME" = "push" ] ; then
         for tag in $TAGS; do
           docker push "$tag"
         done
