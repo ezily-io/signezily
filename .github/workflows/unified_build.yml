@@ -125,8 +125,9 @@ jobs:
           GIT_BRANCH: ${{ github.ref_name }}
 
       - name: Build Signezily Documentation TEST
-        if: github.event_name == 'workflow_dispatch'
-        run: echo '${{ matrix.function }}'
+        # if: github.event_name == 'workflow_dispatch'
+        # run: echo '${{ matrix.function }}'
+        run: echo '${{ github.event_name }}'
 
 
       - name: Build Signezily Documentation Docker Image
