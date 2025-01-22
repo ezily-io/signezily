@@ -118,6 +118,7 @@ jobs:
 
       - name: Build Signezily Web Docker Image
         if: |
+          (github.event_name == 'pull_request' && matrix.function == 'build_marketing' && steps.filter.outputs.marketing == 'true') ||
           (github.event_name == 'pull_request' && matrix.function == 'build_web' &&
           (github.event.inputs.ExecutionType == 'build' || github.event.inputs.ExecutionType == 'build-push') &&
           github.event.inputs.site == 'web')
