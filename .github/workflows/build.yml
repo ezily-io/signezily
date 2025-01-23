@@ -1,4 +1,4 @@
-name: Unified Docker Build
+name: Docker Build Signezily
 
 on:
   workflow_dispatch:
