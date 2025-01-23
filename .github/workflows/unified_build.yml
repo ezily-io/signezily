@@ -70,6 +70,7 @@ jobs:
   build_and_publish_platform_containers:
     name: Build container
     runs-on: ubuntu-latest
+    if: '! github.event.pull_request.draft'
     strategy:
       fail-fast: false
       matrix:
