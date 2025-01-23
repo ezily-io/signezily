@@ -92,14 +92,17 @@ jobs:
             fi
           elif [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/main" ]]; then
             # Apply only to the environment that tfvars were modified when pushed to main
-            if [[ "${{ github.event.head_commit.message }}" =~ "${{ matrix.environment.tfvars }}" ]]; then
+            if [[ "${{ steps.filter.outputs.prod }}" == "true" && "${{ matrix.environment.name }}" == "prod" ]]; then
+              echo "ExecutionType=apply" >> $GITHUB_ENV
+              echo "TF_WORKSPACE=${{ matrix.environment.tf_workspace }}" >> $GITHUB_ENV
+            elif [[ "${{ steps.filter.outputs.dev }}" == "true" && "${{ matrix.environment.name }}" == "dev" ]]; then
               echo "ExecutionType=apply" >> $GITHUB_ENV
               echo "TF_WORKSPACE=${{ matrix.environment.tf_workspace }}" >> $GITHUB_ENV
             else
               echo "ExecutionType=skip" >> $GITHUB_ENV
             fi
           elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            # Always plan for dev; only plan for qa/demo if tfvars was modified
+            # Always plan for dev; only plan for prod if tfvars was modified
             if [[ "${{ matrix.environment.name }}" == "dev" || \
                   "${{ steps.filter.outputs.prod }}" == "true" ]]; then
               echo "ExecutionType=plan" >> $GITHUB_ENV
