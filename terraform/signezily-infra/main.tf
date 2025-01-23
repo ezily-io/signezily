@@ -22,7 +22,7 @@ module "documenso" {
   vpc_id                  = data.aws_vpc.prod.id
   service_name            = var.service_name
   application             = var.application
-  application_fullname    = "documenso"
+  application_fullname    = var.application
   cluster_id              = var.cluster_id
   ecs_subnet_ids          = data.aws_subnets.prod_private.ids
   lb_subnet_ids           = data.aws_subnets.prod_public.ids
