@@ -74,5 +74,10 @@ locals {
     ],
     local.additional_secrets,
   )
+
+  app_image       = "${var.app_image_ecr}:app_${var.docker_image_tag}"
+  marketing_image = "${var.marketing_image_ecr}:marketing_${var.docker_image_tag}"
+  docs_image      = "${var.docs_image_ecr}:docs_${var.docker_image_tag}"
+
 }
 

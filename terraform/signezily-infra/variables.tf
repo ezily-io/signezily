@@ -64,21 +64,27 @@ variable "port" {
   description = "Port where the app executes."
 }
 
-variable "image" {
+variable "docker_image_tag" {
   type        = string
-  default     = "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:latest"
+  default     = "latest"
+  description = "Docker image tag to be used."
+}
+
+variable "app_image_ecr" {
+  type        = string
+  default     = "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily"
   description = "ECR API image to be used."
 }
 
-variable "marketing_image" {
+variable "marketing_image_ecr" {
   type        = string
-  default     = "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:marketing"
+  default     = "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily"
   description = "ECR API image to be used."
 }
 
-variable "docs_image" {
+variable "docs_image_ecr" {
   type        = string
-  default     = "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily:documentation"
+  default     = "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily"
   description = "ECR API image to be used."
 }
 
