@@ -33,7 +33,7 @@ on:
   push:
     branches: ['main']
     paths:
-      - ".github/workflows/unified_build.yml"
+      - ".github/workflows/build.yml"
       - "docker/Dockerfile.*"
       - "apps/**"
       - "packages/*"
@@ -43,7 +43,7 @@ on:
   pull_request:
     branches: ['main']
     paths:
-      - ".github/workflows/unified_build.yml"
+      - ".github/workflows/build.yml"
       - "docker/Dockerfile.*"
       - "apps/**"
       - "packages/*"
@@ -102,17 +102,17 @@ jobs:
         with:
           filters: |
             web:
-              - '.github/workflows/unified_build.yml'
+              - '.github/workflows/build.yml'
               - 'docker/Dockerfile'
               - 'apps/web/**'
               - 'package.json'
             marketing:
-              - '.github/workflows/unified_build.yml'
+              - '.github/workflows/build.yml'
               - 'docker/Dockerfile.marketing'
               - 'apps/marketing/**'
               - 'package.json'
             documentation:
-              - '.github/workflows/unified_build.yml'
+              - '.github/workflows/build.yml'
               - 'docker/Dockerfile.documentation'
               - 'apps/documentation/**'
               - 'package.json'
