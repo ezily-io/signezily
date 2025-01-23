@@ -9,7 +9,7 @@ resource "aws_ecs_task_definition" "documenso" {
   container_definitions = jsonencode([
     {
       name  = "app",
-      image = var.image,
+      image = local.app_image,
       portMappings = [
         { hostPort = var.port, protocol = "tcp", containerPort = var.port }
       ],
@@ -26,7 +26,7 @@ resource "aws_ecs_task_definition" "documenso" {
     },
     {
       name  = "marketing",
-      image = var.marketing_image,
+      image = local.marketing_image,
       portMappings = [
         { hostPort = 3001, protocol = "tcp", containerPort = 3001 },
       ],
@@ -43,7 +43,7 @@ resource "aws_ecs_task_definition" "documenso" {
     },
     {
       name  = "documentation",
-      image = var.docs_image,
+      image = local.docs_image,
       portMappings = [
         { hostPort = 3002, protocol = "tcp", containerPort = 3002 },
       ],
