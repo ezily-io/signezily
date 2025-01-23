@@ -1,4 +1,4 @@
-name: Unified Docker Build
+name: Docker Build Signezily
 
 on:
   workflow_dispatch:
@@ -33,7 +33,7 @@ on:
   push:
     branches: ['main']
     paths:
-      - ".github/workflows/unified_build.yml"
+      - ".github/workflows/build.yml"
       - "docker/Dockerfile.*"
       - "apps/**"
       - "packages/*"
@@ -43,7 +43,7 @@ on:
   pull_request:
     branches: ['main']
     paths:
-      - ".github/workflows/unified_build.yml"
+      - ".github/workflows/build.yml"
       - "docker/Dockerfile.*"
       - "apps/**"
       - "packages/*"
@@ -54,7 +54,7 @@ env:
   AWS_REGION: ap-northeast-1
   AWS_ACCOUNT: 898622234277
   ECR_REPOSITORY: "signezily"
-  SERVICE: "documenso-app-"
+  SERVICE: "signezily-app-"
   CLUSTER: "data"
 
 permissions:
@@ -70,6 +70,7 @@ jobs:
   build_and_publish_platform_containers:
     name: Build container
     runs-on: ubuntu-latest
+    if: '! github.event.pull_request.draft'
     strategy:
       fail-fast: false
       matrix:
@@ -101,17 +102,17 @@ jobs:
         with:
           filters: |
             web:
-              - '.github/workflows/unified_build.yml'
+              - '.github/workflows/build.yml'
               - 'docker/Dockerfile'
               - 'apps/web/**'
               - 'package.json'
             marketing:
-              - '.github/workflows/unified_build.yml'
+              - '.github/workflows/build.yml'
               - 'docker/Dockerfile.marketing'
               - 'apps/marketing/**'
               - 'package.json'
             documentation:
-              - '.github/workflows/unified_build.yml'
+              - '.github/workflows/build.yml'
               - 'docker/Dockerfile.documentation'
               - 'apps/documentation/**'
               - 'package.json'
@@ -157,5 +158,5 @@ jobs:
           github.event.inputs.ExecutionType == 'deploy'
         run: |
           aws ecs update-service \
-            --cluster $CLUSTER --service documenso-app-dev \
+            --cluster $CLUSTER --service signezily-app-dev \
             --force-new-deployment
