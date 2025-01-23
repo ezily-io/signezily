@@ -54,7 +54,7 @@ env:
   AWS_REGION: ap-northeast-1
   AWS_ACCOUNT: 898622234277
   ECR_REPOSITORY: "signezily"
-  SERVICE: "documenso-app-"
+  SERVICE: "signezily-app-"
   CLUSTER: "data"
 
 permissions:
@@ -158,5 +158,5 @@ jobs:
           github.event.inputs.ExecutionType == 'deploy'
         run: |
           aws ecs update-service \
-            --cluster $CLUSTER --service documenso-app-dev \
+            --cluster $CLUSTER --service signezily-app-dev \
             --force-new-deployment
