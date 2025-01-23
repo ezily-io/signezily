@@ -1,0 +1,171 @@
+name: SIGNEZILY CD
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to run the action on"
+        required: true
+        type: choice
+        options:
+          - dev
+          # - qa
+          - prod
+      ExecutionType:
+        description: "Terraform 'plan' or 'apply'"
+        type: choice
+        default: "plan"
+        options:
+          - "plan"
+          - "apply"
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/workflows/signezilyCD.yml'
+      - 'terraform/modules/**'
+      - 'terraform/signezily-infra/*'
+  pull_request:
+    branches: [ main ]
+    types: ['opened', 'reopened', 'synchronize', 'ready_for_review']
+    paths:
+      - '.github/workflows/signezilyCD.yml'
+      - 'terraform/modules/**'
+      - 'terraform/signezily-infra/*'
+
+env:
+  AWS_DEFAULT_REGION: ap-northeast-1
+  AWS_REGION: ap-northeast-1
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  deploy:
+    name: Terraform
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: '! github.event.pull_request.draft'
+    defaults:
+      run:
+        working-directory: terraform/signezily-infra/
+    env:
+      TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+
+    strategy:
+      matrix:
+        environment:
+          - { name: "dev", tf_workspace: "service-documenso-dev", tfvars: "dev.tfvars" }
+          - { name: "prod", tf_workspace: "service-documenso-prod", tfvars: "prod.tfvars" }
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Filter Changed Files
+        uses: dorny/paths-filter@v3
+        id: filter
+        if: |
+          github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main'
+        with:
+          filters: |
+            dev:
+              - 'terraform/signezily-infra/dev.tfvars'
+            prod:
+              - 'terraform/signezily-infra/prod.tfvars'
+
+      - name: Determine Plan or Apply Action
+        id: condition
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            if [[ "${{ github.event.inputs.environment }}" == "${{ matrix.environment.name }}" ]]; then
+              echo "ExecutionType=${{ github.event.inputs.ExecutionType }}" >> $GITHUB_ENV
+              echo "TF_WORKSPACE=${{ matrix.environment.tf_workspace }}" >> $GITHUB_ENV
+            else
+              echo "ExecutionType=skip" >> $GITHUB_ENV
+            fi
+          elif [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/main" ]]; then
+            # Apply only to the environment that tfvars were modified when pushed to main
+            if [[ "${{ steps.filter.outputs.prod }}" == "true" && "${{ matrix.environment.name }}" == "prod" ]]; then
+              echo "ExecutionType=apply" >> $GITHUB_ENV
+              echo "TF_WORKSPACE=${{ matrix.environment.tf_workspace }}" >> $GITHUB_ENV
+            elif [[ "${{ steps.filter.outputs.dev }}" == "true" && "${{ matrix.environment.name }}" == "dev" ]]; then
+              echo "ExecutionType=apply" >> $GITHUB_ENV
+              echo "TF_WORKSPACE=${{ matrix.environment.tf_workspace }}" >> $GITHUB_ENV
+            else
+              echo "ExecutionType=skip" >> $GITHUB_ENV
+            fi
+          elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            # Always plan for dev; only plan for prod if tfvars was modified
+            if [[ "${{ matrix.environment.name }}" == "dev" || \
+                  "${{ steps.filter.outputs.prod }}" == "true" ]]; then
+              echo "ExecutionType=plan" >> $GITHUB_ENV
+              echo "TF_WORKSPACE=${{ matrix.environment.tf_workspace }}" >> $GITHUB_ENV
+            else
+              echo "ExecutionType=skip" >> $GITHUB_ENV
+            fi
+          fi
+
+      - name: Configure AWS
+        if: ${{ env.ExecutionType != 'skip' }}
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::898622234277:role/Github-actions
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        if: ${{ env.ExecutionType != 'skip' }}
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_version: 1.5.7
+
+      - name: Terraform Init
+        if: ${{ env.ExecutionType != 'skip' }}
+        run: terraform init -no-color || terraform init -upgrade -no-color
+      
+      - name: Terraform Format
+        if: ${{ env.ExecutionType != 'skip' }}
+        id: fmt
+        run: terraform fmt -recursive -check
+
+      # Terraform Plan or Apply based on conditions
+      - name: Terraform Plan
+        id: plan
+        if: ${{ env.ExecutionType == 'plan' }}
+        run: terraform plan -no-color -var-file="${{ matrix.environment.tfvars }}"
+
+      # - name: Update Pull Request
+      #   uses: actions/github-script@v6
+      #   if: github.event_name == 'pull_request' && env.ExecutionType == 'plan'
+      #   env:
+      #     PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     script: |
+      #       const output = `### Terraform "${{ matrix.environment.name }}"
+      #       #### Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+      #       #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+      #       #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+      #       <details><summary>Show Plan</summary>
+
+      #       \`\`\`${process.env.PLAN}\`\`\`
+      #       </details>
+
+      #       *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+      #       github.rest.issues.createComment({
+      #       issue_number: context.issue.number,
+      #       owner: context.repo.owner,
+      #       repo: context.repo.repo,
+      #       body: output
+      #       })
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && env.ExecutionType == 'apply'
+        run: terraform apply -var-file="${{ matrix.environment.tfvars }}" -auto-approve
