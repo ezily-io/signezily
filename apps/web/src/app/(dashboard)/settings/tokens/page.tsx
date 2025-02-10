@@ -25,6 +25,15 @@ export default async function ApiTokensPage() {
       <p className="text-muted-foreground mt-2 text-sm">
         <Trans>
           On this page, you can create new API tokens and manage the existing ones. <br />
+          Also see our{' '}
+          <a
+            className="text-primary underline"
+            href={'https://docs.documenso.com/developers/public-api'}
+            target="_blank"
+          >
+            Documentation
+          </a>
+          .
         </Trans>
       </p>
 

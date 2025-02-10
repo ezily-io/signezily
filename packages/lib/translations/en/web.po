@@ -1135,6 +1135,18 @@ msgstr "An email with this address already exists."
 #: apps/remix/app/components/forms/password.tsx
 #: apps/remix/app/components/forms/avatar-image.tsx
 #: apps/remix/app/components/dialogs/organisation-email-create-dialog.tsx
+#: apps/web/src/app/(dashboard)/admin/documents/[id]/super-delete-document-dialog.tsx:60
+#: apps/web/src/app/(dashboard)/admin/site-settings/banner-form.tsx:83
+#: apps/web/src/app/(dashboard)/admin/users/[id]/delete-user-dialog.tsx:60
+#: apps/web/src/app/(dashboard)/settings/profile/delete-account-dialog.tsx:57
+#: apps/web/src/app/(signing)/sign/[token]/complete/claim-account.tsx:92
+#: apps/web/src/components/forms/avatar-image.tsx:116
+#: apps/web/src/components/forms/password.tsx:78
+#: apps/web/src/components/forms/profile.tsx:81
+#: apps/web/src/components/forms/reset-password.tsx:81
+#: apps/web/src/components/forms/signup.tsx:107
+#: apps/web/src/components/forms/token.tsx:146
+#: apps/web/src/components/forms/v2/signup.tsx:154
 msgid "An error occurred"
 msgstr "An error occurred"
 
@@ -1331,6 +1343,45 @@ msgstr "An unexpected error occurred."
 #: apps/remix/app/components/dialogs/admin-organisation-create-dialog.tsx
 #: apps/remix/app/components/dialogs/admin-document-delete-dialog.tsx
 #: apps/remix/app/components/dialogs/account-delete-dialog.tsx
+#: apps/web/src/app/(dashboard)/admin/documents/[id]/super-delete-document-dialog.tsx:66
+#: apps/web/src/app/(dashboard)/admin/site-settings/banner-form.tsx:89
+#: apps/web/src/app/(dashboard)/admin/users/[id]/delete-user-dialog.tsx:66
+#: apps/web/src/app/(dashboard)/settings/profile/delete-account-dialog.tsx:63
+#: apps/web/src/app/(signing)/sign/[token]/complete/claim-account.tsx:98
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/team-transfer-status.tsx:54
+#: apps/web/src/components/(dashboard)/common/command-menu.tsx:301
+#: apps/web/src/components/(dashboard)/settings/token/delete-token-dialog.tsx:97
+#: apps/web/src/components/(dashboard)/settings/webhooks/delete-webhook-dialog.tsx:88
+#: apps/web/src/components/(teams)/dialogs/add-team-email-dialog.tsx:100
+#: apps/web/src/components/(teams)/dialogs/create-team-dialog.tsx:105
+#: apps/web/src/components/(teams)/dialogs/delete-team-dialog.tsx:84
+#: apps/web/src/components/(teams)/dialogs/delete-team-member-dialog.tsx:58
+#: apps/web/src/components/(teams)/dialogs/invite-team-member-dialog.tsx:158
+#: apps/web/src/components/(teams)/dialogs/leave-team-dialog.tsx:58
+#: apps/web/src/components/(teams)/dialogs/transfer-team-dialog.tsx:116
+#: apps/web/src/components/(teams)/dialogs/update-team-email-dialog.tsx:89
+#: apps/web/src/components/(teams)/dialogs/update-team-member-dialog.tsx:100
+#: apps/web/src/components/(teams)/forms/update-team-form.tsx:134
+#: apps/web/src/components/forms/avatar-image.tsx:94
+#: apps/web/src/components/forms/avatar-image.tsx:122
+#: apps/web/src/components/forms/password.tsx:84
+#: apps/web/src/components/forms/profile.tsx:87
+#: apps/web/src/components/forms/public-profile-claim-dialog.tsx:113
+#: apps/web/src/components/forms/public-profile-form.tsx:104
+#: apps/web/src/components/forms/reset-password.tsx:87
+#: apps/web/src/components/forms/signin.tsx:248
+#: apps/web/src/components/forms/signin.tsx:256
+#: apps/web/src/components/forms/signin.tsx:270
+#: apps/web/src/components/forms/signin.tsx:285
+#: apps/web/src/components/forms/signin.tsx:301
+#: apps/web/src/components/forms/signup.tsx:113
+#: apps/web/src/components/forms/signup.tsx:128
+#: apps/web/src/components/forms/signup.tsx:142
+#: apps/web/src/components/forms/v2/signup.tsx:160
+#: apps/web/src/components/forms/v2/signup.tsx:183
+#: apps/web/src/components/forms/v2/signup.tsx:197
+#: apps/web/src/components/templates/manage-public-template-dialog.tsx:141
+#: apps/web/src/components/templates/manage-public-template-dialog.tsx:178
 msgid "An unknown error occurred"
 msgstr "An unknown error occurred"
 
@@ -1824,6 +1875,7 @@ msgid "Choose your preferred authentication method:"
 msgstr "Choose your preferred authentication method:"
 
 #: apps/remix/app/components/forms/token.tsx
+#: apps/web/src/components/forms/token.tsx:200
 msgid "Choose..."
 msgstr "Choose..."
 
@@ -2177,6 +2229,7 @@ msgid "Copy Signing Links"
 msgstr "Copy Signing Links"
 
 #: apps/remix/app/components/forms/token.tsx
+#: apps/web/src/components/forms/token.tsx:288
 msgid "Copy token"
 msgstr "Copy token"
 
@@ -2343,6 +2396,8 @@ msgstr "Create the document as pending and ready to sign."
 
 #: apps/remix/app/components/forms/token.tsx
 #: apps/remix/app/components/forms/token.tsx
+#: apps/web/src/components/forms/token.tsx:250
+#: apps/web/src/components/forms/token.tsx:259
 msgid "Create token"
 msgstr "Create token"
 
@@ -2395,6 +2450,10 @@ msgstr "Created on"
 #. placeholder {0}: i18n.date(token.createdAt, DateTime.DATETIME_FULL)
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.webhooks._index.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.tokens.tsx
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:67
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:88
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:100
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:93
 msgid "Created on {0}"
 msgstr "Created on {0}"
 
@@ -2530,6 +2589,21 @@ msgstr "delete"
 #: apps/remix/app/components/dialogs/folder-delete-dialog.tsx
 #: apps/remix/app/components/dialogs/document-delete-dialog.tsx
 #: apps/remix/app/components/dialogs/claim-delete-dialog.tsx
+#: apps/web/src/app/(dashboard)/documents/[id]/document-page-view-dropdown.tsx:144
+#: apps/web/src/app/(dashboard)/documents/data-table-action-dropdown.tsx:189
+#: apps/web/src/app/(dashboard)/documents/delete-document-dialog.tsx:200
+#: apps/web/src/app/(dashboard)/settings/security/passkeys/user-passkeys-data-table-actions.tsx:177
+#: apps/web/src/app/(dashboard)/settings/security/passkeys/user-passkeys-data-table-actions.tsx:211
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:83
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:100
+#: apps/web/src/app/(dashboard)/templates/data-table-action-dropdown.tsx:94
+#: apps/web/src/app/(dashboard)/templates/delete-template-dialog.tsx:90
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:116
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:105
+#: apps/web/src/components/(dashboard)/settings/token/delete-token-dialog.tsx:121
+#: apps/web/src/components/(dashboard)/settings/webhooks/delete-webhook-dialog.tsx:109
+#: apps/web/src/components/(teams)/dialogs/delete-team-dialog.tsx:167
+#: apps/web/src/components/(teams)/dialogs/delete-team-member-dialog.tsx:113
 msgid "Delete"
 msgstr "Delete"
 
@@ -2739,6 +2813,8 @@ msgid "Disable Two Factor Authentication before deleting your account."
 msgstr "Disable Two Factor Authentication before deleting your account."
 
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.webhooks._index.tsx
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:74
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:79
 msgid "Disabled"
 msgstr "Disabled"
 
@@ -3200,6 +3276,15 @@ msgstr "Duplicate on all pages"
 #: apps/remix/app/components/general/teams/team-email-dropdown.tsx
 #: apps/remix/app/components/general/document/document-page-view-dropdown.tsx
 #: apps/remix/app/components/general/document/document-page-view-button.tsx
+#: apps/web/src/app/(dashboard)/documents/[id]/document-page-view-button.tsx:104
+#: apps/web/src/app/(dashboard)/documents/[id]/document-page-view-dropdown.tsx:115
+#: apps/web/src/app/(dashboard)/documents/data-table-action-button.tsx:102
+#: apps/web/src/app/(dashboard)/documents/data-table-action-dropdown.tsx:156
+#: apps/web/src/app/(dashboard)/settings/security/passkeys/user-passkeys-data-table-actions.tsx:111
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:95
+#: apps/web/src/app/(dashboard)/templates/data-table-action-dropdown.tsx:65
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/team-email-dropdown.tsx:77
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:100
 msgid "Edit"
 msgstr "Edit"
 
@@ -3412,6 +3497,12 @@ msgstr "Enable signing order"
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.webhooks.$id.tsx
 #: apps/remix/app/routes/_authenticated+/admin+/site-settings.tsx
 #: apps/remix/app/components/dialogs/webhook-create-dialog.tsx
+#: apps/web/src/app/(dashboard)/admin/site-settings/banner-form.tsx:123
+#: apps/web/src/app/(dashboard)/settings/webhooks/[id]/page.tsx:138
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:74
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/[id]/page.tsx:142
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:79
+#: apps/web/src/components/(dashboard)/settings/webhooks/create-webhook-dialog.tsx:166
 msgid "Enabled"
 msgstr "Enabled"
 
@@ -3560,6 +3651,8 @@ msgstr "Expired"
 
 #. placeholder {0}: i18n.date(token.expires, DateTime.DATETIME_FULL)
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.tokens.tsx
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:71
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:104
 msgid "Expires on {0}"
 msgstr "Expires on {0}"
 
@@ -4320,6 +4413,8 @@ msgstr "Links Generated"
 
 #. placeholder {0}: webhook.eventTriggers .map((trigger) => toFriendlyWebhookEventName(trigger)) .join(', ')
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.webhooks._index.tsx
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:79
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:84
 msgid "Listening to {0}"
 msgstr "Listening to {0}"
 
@@ -4671,6 +4766,7 @@ msgid "Never"
 msgstr "Never"
 
 #: apps/remix/app/components/forms/token.tsx
+#: apps/web/src/components/forms/token.tsx:224
 msgid "Never expire"
 msgstr "Never expire"
 
@@ -4866,6 +4962,20 @@ msgid "On this page, you can create and manage API tokens. See our <0>Documentat
 msgstr "On this page, you can create and manage API tokens. See our <0>Documentation</0> for more information."
 
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.webhooks._index.tsx
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:26
+#~ msgid "On this page, you can create new API tokens and manage the existing ones. <0/>"
+#~ msgstr "On this page, you can create new API tokens and manage the existing ones. <0/>"
+
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:26
+msgid "On this page, you can create new API tokens and manage the existing ones. <0/>Also see our <1>Documentation</1>."
+msgstr "On this page, you can create new API tokens and manage the existing ones. <0/>Also see our <1>Documentation</1>."
+
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:60
+msgid "On this page, you can create new API tokens and manage the existing ones. <0/>You can view our swagger docs <1>here</1>"
+msgstr "On this page, you can create new API tokens and manage the existing ones. <0/>You can view our swagger docs <1>here</1>"
+
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:29
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:34
 msgid "On this page, you can create new Webhooks and manage the existing ones."
 msgstr "On this page, you can create new Webhooks and manage the existing ones."
 
@@ -5286,6 +5396,7 @@ msgid "Please contact the site owner for further assistance."
 msgstr "Please contact the site owner for further assistance."
 
 #: apps/remix/app/components/forms/token.tsx
+#: apps/web/src/components/forms/token.tsx:175
 msgid "Please enter a meaningful name for your token. This will help you identify it later."
 msgstr "Please enter a meaningful name for your token. This will help you identify it later."
 
@@ -6480,6 +6591,12 @@ msgstr "Something went wrong. Please try again later."
 
 #: apps/remix/app/components/forms/2fa/view-recovery-codes-dialog.tsx
 #: apps/remix/app/components/dialogs/passkey-create-dialog.tsx
+#: apps/web/src/components/forms/token.tsx:143
+msgid "Something went wrong. Please try again later."
+msgstr ""
+
+#: apps/web/src/app/(dashboard)/settings/security/passkeys/create-passkey-dialog.tsx:240
+#: apps/web/src/components/forms/2fa/view-recovery-codes-dialog.tsx:154
 msgid "Something went wrong. Please try again or contact support."
 msgstr "Something went wrong. Please try again or contact support."
 
@@ -6514,6 +6631,10 @@ msgstr "Status"
 #: packages/ui/primitives/document-flow/document-flow-root.tsx
 msgid "Step <0>{step} of {maxStep}</0>"
 msgstr "Step <0>{step} of {maxStep}</0>"
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:161
+#: apps/web/src/components/forms/token.tsx:342
+#~ msgid "submit"
+#~ msgstr "submit"
 
 #: apps/remix/app/components/tables/admin-organisations-table.tsx
 msgid "Stripe"
@@ -7582,6 +7703,24 @@ msgid "Token name"
 msgstr "Token name"
 
 #: apps/remix/app/routes/_authenticated+/admin+/stats.tsx
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:75
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:108
+msgid "Token doesn't have an expiration date"
+msgstr "Token doesn't have an expiration date"
+
+#: apps/web/src/components/forms/token.tsx:193
+msgid "Token expiration date"
+msgstr "Token expiration date"
+
+#: apps/web/src/components/forms/token.tsx:165
+msgid "Token name"
+msgstr "Token name"
+
+#: apps/web/src/components/forms/token.tsx:330
+#~ msgid "Token related features have been move to a seperate platform, please leave your email and we will contact you shortly."
+#~ msgstr "Token related features have been move to a seperate platform, please leave your email and we will contact you shortly."
+
+#: apps/web/src/app/(dashboard)/admin/stats/page.tsx:65
 msgid "Total Documents"
 msgstr "Total Documents"
 
@@ -8298,6 +8437,9 @@ msgstr "We encountered an error while updating the webhook. Please try again lat
 #: apps/remix/app/components/dialogs/team-group-create-dialog.tsx
 msgid "We encountered an unknown error while attempting to add team members. Please try again later."
 msgstr "We encountered an unknown error while attempting to add team members. Please try again later."
+#: apps/web/src/components/forms/token.tsx:146
+#~ msgid "We encountered an unknown error while attempting create the new token. Please try again later."
+#~ msgstr "We encountered an unknown error while attempting create the new token. Please try again later."
 
 #: apps/remix/app/components/dialogs/team-email-add-dialog.tsx
 msgid "We encountered an unknown error while attempting to add this email. Please try again later."
@@ -8549,6 +8691,9 @@ msgstr "Webhook deleted"
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.webhooks.$id.tsx
 msgid "Webhook not found"
 msgstr "Webhook not found"
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:149
+#~ msgid "Webhook related features have been move to a separate platform, please leave your email and we will contact you shortly."
+#~ msgstr ""
 
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.webhooks.$id.tsx
 msgid "Webhook updated"
@@ -8563,6 +8708,12 @@ msgstr "Webhook URL"
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings._layout.tsx
 #: apps/remix/app/components/general/settings-nav-mobile.tsx
 #: apps/remix/app/components/general/settings-nav-desktop.tsx
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:28
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:33
+#: apps/web/src/components/(dashboard)/settings/layout/desktop-nav.tsx:103
+#: apps/web/src/components/(dashboard)/settings/layout/mobile-nav.tsx:106
+#: apps/web/src/components/(teams)/settings/layout/desktop-nav.tsx:109
+#: apps/web/src/components/(teams)/settings/layout/mobile-nav.tsx:118
 msgid "Webhooks"
 msgstr "Webhooks"
 
@@ -8851,6 +9002,13 @@ msgstr "You currently have an inactive <0>{currentProductName}</0> subscription"
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl._index.tsx
 msgid "You currently have no access to any teams within this organisation. Please contact your organisation to request access."
 msgstr "You currently have no access to any teams within this organisation. Please contact your organisation to request access."
+#: apps/web/src/components/forms/token.tsx:141
+msgid "You do not have permission to create a token for this team"
+msgstr ""
+
+#: apps/web/src/app/(unauthenticated)/team/invite/[token]/page.tsx:127
+msgid "You have accepted an invitation from <0>{0}</0> to join their team."
+msgstr "You have accepted an invitation from <0>{0}</0> to join their team."
 
 #: apps/remix/app/components/forms/token.tsx
 msgid "You do not have permission to create a token for this team"
@@ -8905,6 +9063,8 @@ msgid "You have initiated the document {0} that requires you to {recipientAction
 msgstr "You have initiated the document {0} that requires you to {recipientActionVerb} it."
 
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.webhooks._index.tsx
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:44
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:49
 msgid "You have no webhooks yet. Your webhooks will be shown here once you create them."
 msgstr "You have no webhooks yet. Your webhooks will be shown here once you create them."
 
@@ -9163,6 +9323,8 @@ msgid "Your email preferences have been updated"
 msgstr "Your email preferences have been updated"
 
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.tokens.tsx
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:47
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:80
 msgid "Your existing tokens"
 msgstr "Your existing tokens"
 
@@ -9270,5 +9432,11 @@ msgid "Your token was created successfully! Make sure to copy it because you won
 msgstr "Your token was created successfully! Make sure to copy it because you won't be able to see it again!"
 
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.tokens.tsx
+#: apps/web/src/components/forms/token.tsx:277
+msgid "Your token was created successfully! Make sure to copy it because you won't be able to see it again!"
+msgstr "Your token was created successfully! Make sure to copy it because you won't be able to see it again!"
+
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:53
+#: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:86
 msgid "Your tokens will be shown here once you create them."
 msgstr "Your tokens will be shown here once you create them."
