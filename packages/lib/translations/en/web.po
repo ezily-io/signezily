@@ -454,7 +454,7 @@ msgstr "An email requesting the transfer of this team has been sent."
 #: apps/web/src/components/forms/profile.tsx:81
 #: apps/web/src/components/forms/reset-password.tsx:81
 #: apps/web/src/components/forms/signup.tsx:107
-#: apps/web/src/components/forms/token.tsx:138
+#: apps/web/src/components/forms/token.tsx:146
 #: apps/web/src/components/forms/v2/signup.tsx:154
 msgid "An error occurred"
 msgstr "An error occurred"
@@ -607,7 +607,6 @@ msgstr "An error occurred while uploading your document."
 #: apps/web/src/components/forms/signup.tsx:113
 #: apps/web/src/components/forms/signup.tsx:128
 #: apps/web/src/components/forms/signup.tsx:142
-#: apps/web/src/components/forms/token.tsx:144
 #: apps/web/src/components/forms/v2/signup.tsx:160
 #: apps/web/src/components/forms/v2/signup.tsx:183
 #: apps/web/src/components/forms/v2/signup.tsx:197
@@ -866,7 +865,7 @@ msgstr "Choose Direct Link Recipient"
 msgid "Choose how the document will reach recipients"
 msgstr "Choose how the document will reach recipients"
 
-#: apps/web/src/components/forms/token.tsx:229
+#: apps/web/src/components/forms/token.tsx:200
 msgid "Choose..."
 msgstr "Choose..."
 
@@ -1070,7 +1069,7 @@ msgstr "Copy Shareable Link"
 msgid "Copy Signing Links"
 msgstr "Copy Signing Links"
 
-#: apps/web/src/components/forms/token.tsx:320
+#: apps/web/src/components/forms/token.tsx:288
 msgid "Copy token"
 msgstr "Copy token"
 
@@ -1143,8 +1142,8 @@ msgstr "Create Team"
 msgid "Create the document as pending and ready to sign."
 msgstr "Create the document as pending and ready to sign."
 
-#: apps/web/src/components/forms/token.tsx:279
-#: apps/web/src/components/forms/token.tsx:288
+#: apps/web/src/components/forms/token.tsx:250
+#: apps/web/src/components/forms/token.tsx:259
 msgid "Create token"
 msgstr "Create token"
 
@@ -1189,8 +1188,8 @@ msgstr "Created by"
 msgid "Created on"
 msgstr "Created on"
 
-#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:58
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:123
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:67
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:88
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:100
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:93
 msgid "Created on {0}"
@@ -1247,8 +1246,8 @@ msgstr "delete"
 #: apps/web/src/app/(dashboard)/documents/delete-document-dialog.tsx:200
 #: apps/web/src/app/(dashboard)/settings/security/passkeys/user-passkeys-data-table-actions.tsx:177
 #: apps/web/src/app/(dashboard)/settings/security/passkeys/user-passkeys-data-table-actions.tsx:211
-#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:74
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:137
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:83
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:100
 #: apps/web/src/app/(dashboard)/templates/data-table-action-dropdown.tsx:94
 #: apps/web/src/app/(dashboard)/templates/delete-template-dialog.tsx:90
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:116
@@ -1395,7 +1394,7 @@ msgstr "Disable 2FA"
 msgid "Disable Two Factor Authentication before deleting your account."
 msgstr "Disable Two Factor Authentication before deleting your account."
 
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:109
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:74
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:79
 msgid "Disabled"
 msgstr "Disabled"
@@ -1647,7 +1646,7 @@ msgstr "Duplicate"
 #: apps/web/src/app/(dashboard)/documents/data-table-action-button.tsx:102
 #: apps/web/src/app/(dashboard)/documents/data-table-action-dropdown.tsx:156
 #: apps/web/src/app/(dashboard)/settings/security/passkeys/user-passkeys-data-table-actions.tsx:111
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:132
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:95
 #: apps/web/src/app/(dashboard)/templates/data-table-action-dropdown.tsx:65
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/team-email-dropdown.tsx:77
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:100
@@ -1744,7 +1743,7 @@ msgstr "Enable Direct Link Signing"
 
 #: apps/web/src/app/(dashboard)/admin/site-settings/banner-form.tsx:123
 #: apps/web/src/app/(dashboard)/settings/webhooks/[id]/page.tsx:138
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:109
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:74
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/[id]/page.tsx:142
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:79
 #: apps/web/src/components/(dashboard)/settings/webhooks/create-webhook-dialog.tsx:166
@@ -1844,7 +1843,7 @@ msgstr "Exceeded timeout"
 msgid "Expired"
 msgstr "Expired"
 
-#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:62
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:71
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:104
 msgid "Expires on {0}"
 msgstr "Expires on {0}"
@@ -2175,7 +2174,7 @@ msgstr "Link template"
 msgid "Links Generated"
 msgstr "Links Generated"
 
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:114
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:79
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:84
 msgid "Listening to {0}"
 msgstr "Listening to {0}"
@@ -2375,7 +2374,7 @@ msgstr "Need to sign documents?"
 msgid "Never"
 msgstr "Never"
 
-#: apps/web/src/components/forms/token.tsx:253
+#: apps/web/src/components/forms/token.tsx:224
 msgid "Never expire"
 msgstr "Never expire"
 
@@ -2471,18 +2470,18 @@ msgid "On this page, you can create a new webhook."
 msgstr "On this page, you can create a new webhook."
 
 #: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:26
-msgid "On this page, you can create new API tokens and manage the existing ones. <0/>"
-msgstr "On this page, you can create new API tokens and manage the existing ones. <0/>"
+#~ msgid "On this page, you can create new API tokens and manage the existing ones. <0/>"
+#~ msgstr "On this page, you can create new API tokens and manage the existing ones. <0/>"
 
 #: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:26
-#~ msgid "On this page, you can create new API tokens and manage the existing ones. <0/>Also see our <1>Documentation</1>."
-#~ msgstr "On this page, you can create new API tokens and manage the existing ones. <0/>Also see our <1>Documentation</1>."
+msgid "On this page, you can create new API tokens and manage the existing ones. <0/>Also see our <1>Documentation</1>."
+msgstr "On this page, you can create new API tokens and manage the existing ones. <0/>Also see our <1>Documentation</1>."
 
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:60
 msgid "On this page, you can create new API tokens and manage the existing ones. <0/>You can view our swagger docs <1>here</1>"
 msgstr "On this page, you can create new API tokens and manage the existing ones. <0/>You can view our swagger docs <1>here</1>"
 
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:63
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:29
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:34
 msgid "On this page, you can create new Webhooks and manage the existing ones."
 msgstr "On this page, you can create new Webhooks and manage the existing ones."
@@ -2672,7 +2671,7 @@ msgstr "Please choose your new password"
 msgid "Please contact support if you would like to revert this action."
 msgstr "Please contact support if you would like to revert this action."
 
-#: apps/web/src/components/forms/token.tsx:204
+#: apps/web/src/components/forms/token.tsx:175
 msgid "Please enter a meaningful name for your token. This will help you identify it later."
 msgstr "Please enter a meaningful name for your token. This will help you identify it later."
 
@@ -3391,6 +3390,10 @@ msgstr "Something went wrong while updating the team billing subscription, pleas
 msgid "Something went wrong!"
 msgstr "Something went wrong!"
 
+#: apps/web/src/components/forms/token.tsx:143
+msgid "Something went wrong. Please try again later."
+msgstr ""
+
 #: apps/web/src/app/(dashboard)/settings/security/passkeys/create-passkey-dialog.tsx:240
 #: apps/web/src/components/forms/2fa/view-recovery-codes-dialog.tsx:154
 msgid "Something went wrong. Please try again or contact support."
@@ -3423,8 +3426,8 @@ msgstr "Status"
 
 #: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:161
 #: apps/web/src/components/forms/token.tsx:342
-msgid "submit"
-msgstr "submit"
+#~ msgid "submit"
+#~ msgstr "submit"
 
 #: apps/web/src/app/(dashboard)/settings/billing/billing-plans.tsx:129
 msgid "Subscribe"
@@ -4007,22 +4010,22 @@ msgstr "Token created"
 msgid "Token deleted"
 msgstr "Token deleted"
 
-#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:66
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:75
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:108
 msgid "Token doesn't have an expiration date"
 msgstr "Token doesn't have an expiration date"
 
-#: apps/web/src/components/forms/token.tsx:222
+#: apps/web/src/components/forms/token.tsx:193
 msgid "Token expiration date"
 msgstr "Token expiration date"
 
-#: apps/web/src/components/forms/token.tsx:194
+#: apps/web/src/components/forms/token.tsx:165
 msgid "Token name"
 msgstr "Token name"
 
 #: apps/web/src/components/forms/token.tsx:330
-msgid "Token related features have been move to a seperate platform, please leave your email and we will contact you shortly."
-msgstr "Token related features have been move to a seperate platform, please leave your email and we will contact you shortly."
+#~ msgid "Token related features have been move to a seperate platform, please leave your email and we will contact you shortly."
+#~ msgstr "Token related features have been move to a seperate platform, please leave your email and we will contact you shortly."
 
 #: apps/web/src/app/(dashboard)/admin/stats/page.tsx:65
 msgid "Total Documents"
@@ -4487,8 +4490,8 @@ msgid "We encountered an error while updating the webhook. Please try again late
 msgstr "We encountered an error while updating the webhook. Please try again later."
 
 #: apps/web/src/components/forms/token.tsx:146
-msgid "We encountered an unknown error while attempting create the new token. Please try again later."
-msgstr "We encountered an unknown error while attempting create the new token. Please try again later."
+#~ msgid "We encountered an unknown error while attempting create the new token. Please try again later."
+#~ msgstr "We encountered an unknown error while attempting create the new token. Please try again later."
 
 #: apps/web/src/components/(teams)/dialogs/add-team-email-dialog.tsx:102
 msgid "We encountered an unknown error while attempting to add this email. Please try again later."
@@ -4689,8 +4692,8 @@ msgid "Webhook deleted"
 msgstr "Webhook deleted"
 
 #: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:149
-msgid "Webhook related features have been move to a separate platform, please leave your email and we will contact you shortly."
-msgstr ""
+#~ msgid "Webhook related features have been move to a separate platform, please leave your email and we will contact you shortly."
+#~ msgstr ""
 
 #: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:149
 #~ msgid "Webhook related features have been move to a seperate platform, please leave your email and we will contact you shortly."
@@ -4706,7 +4709,7 @@ msgstr "Webhook updated"
 msgid "Webhook URL"
 msgstr "Webhook URL"
 
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:61
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:28
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:33
 #: apps/web/src/components/(dashboard)/settings/layout/desktop-nav.tsx:103
 #: apps/web/src/components/(dashboard)/settings/layout/mobile-nav.tsx:106
@@ -4860,6 +4863,10 @@ msgstr "You cannot upload encrypted PDFs"
 msgid "You do not currently have a customer record, this should not happen. Please contact support for assistance."
 msgstr "You do not currently have a customer record, this should not happen. Please contact support for assistance."
 
+#: apps/web/src/components/forms/token.tsx:141
+msgid "You do not have permission to create a token for this team"
+msgstr ""
+
 #: apps/web/src/app/(unauthenticated)/team/invite/[token]/page.tsx:127
 msgid "You have accepted an invitation from <0>{0}</0> to join their team."
 msgstr "You have accepted an invitation from <0>{0}</0> to join their team."
@@ -4881,7 +4888,7 @@ msgstr "You have been invited by <0>{0}</0> to join their team."
 msgid "You have declined the invitation from <0>{0}</0> to join their team."
 msgstr "You have declined the invitation from <0>{0}</0> to join their team."
 
-#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:79
+#: apps/web/src/app/(dashboard)/settings/webhooks/page.tsx:44
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/webhooks/page.tsx:49
 msgid "You have no webhooks yet. Your webhooks will be shown here once you create them."
 msgstr "You have no webhooks yet. Your webhooks will be shown here once you create them."
@@ -5054,7 +5061,7 @@ msgstr "Your email has been successfully confirmed! You can now use all features
 msgid "Your email is currently being used by team <0>{0}</0> ({1})."
 msgstr "Your email is currently being used by team <0>{0}</0> ({1})."
 
-#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:38
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:47
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:80
 msgid "Your existing tokens"
 msgstr "Your existing tokens"
@@ -5129,11 +5136,11 @@ msgstr "Your templates has been saved successfully."
 msgid "Your token has expired!"
 msgstr "Your token has expired!"
 
-#: apps/web/src/components/forms/token.tsx:306
+#: apps/web/src/components/forms/token.tsx:277
 msgid "Your token was created successfully! Make sure to copy it because you won't be able to see it again!"
 msgstr "Your token was created successfully! Make sure to copy it because you won't be able to see it again!"
 
-#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:44
+#: apps/web/src/app/(dashboard)/settings/tokens/page.tsx:53
 #: apps/web/src/app/(teams)/t/[teamUrl]/settings/tokens/page.tsx:86
 msgid "Your tokens will be shown here once you create them."
 msgstr "Your tokens will be shown here once you create them."
