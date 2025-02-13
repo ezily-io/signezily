@@ -17,8 +17,6 @@ declare namespace NodeJS {
     NEXT_PRIVATE_ENCRYPTION_KEY: string;
     NEXT_PRIVATE_ENCRYPTION_SECONDARY_KEY: string;
 
-    NEXT_PUBLIC_STRIPE_COMMUNITY_PLAN_MONTHLY_PRICE_ID: string;
-
     NEXT_PRIVATE_STRIPE_API_KEY: string;
     NEXT_PRIVATE_STRIPE_WEBHOOK_SECRET: string;
 
@@ -71,16 +69,9 @@ declare namespace NodeJS {
 
     NEXT_PUBLIC_DISABLE_SIGNUP?: string;
 
-    //
     NEXT_PRIVATE_BROWSERLESS_URL?: string;
 
-    NEXT_PRIVATE_JOBS_PROVIDER?: 'trigger' | 'inngest' | 'local';
-
-    /**
-     * Trigger.dev environment variables
-     */
-    NEXT_PRIVATE_TRIGGER_API_KEY?: string;
-    NEXT_PRIVATE_TRIGGER_API_URL?: string;
+    NEXT_PRIVATE_JOBS_PROVIDER?: 'inngest' | 'local';
 
     /**
      * Inngest environment variables
