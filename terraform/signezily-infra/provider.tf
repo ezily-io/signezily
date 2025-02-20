@@ -15,7 +15,7 @@ terraform {
     organization = "rainforest"
 
     workspaces {
-      tags = ["service-documenso"]
+      tags = ["signezily"]
     }
   }
   required_providers {
