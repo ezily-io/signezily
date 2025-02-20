@@ -6,7 +6,7 @@ variable "region" {
 
 variable "application" {
   type        = string
-  default     = "documenso"
+  default     = "signezily"
   description = "Application name."
 }
 
