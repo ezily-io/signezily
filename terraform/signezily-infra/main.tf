@@ -9,7 +9,7 @@ module "documenso_database" {
   ]
 }
 
-module "documenso_execution_role" {
+module "signezily_execution_role" {
   source      = "../modules/iam"
   application = var.application
   environment = var.environment
