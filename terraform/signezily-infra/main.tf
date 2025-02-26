@@ -17,7 +17,7 @@ module "signezily_execution_role" {
   json_policy = file("${path.module}/iam_role/execution_policy.json")
 }
 
-module "documenso" {
+module "signezily" {
   source                  = "../modules/fargate"
   vpc_id                  = data.aws_vpc.prod.id
   service_name            = var.service_name
