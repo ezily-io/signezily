@@ -4,8 +4,8 @@ resource "aws_ecs_task_definition" "signezily" {
   network_mode             = "awsvpc"
   cpu                      = var.cpu
   memory                   = var.memory
-  execution_role_arn       = module.documenso_execution_role.role
-  task_role_arn            = module.documenso_execution_role.role
+  execution_role_arn       = module.signezily_execution_role.role
+  task_role_arn            = module.signezily_execution_role.role
   container_definitions = jsonencode([
     {
       name  = "app",

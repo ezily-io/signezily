@@ -69,7 +69,7 @@ locals {
   common_secrets = concat([
     for name in local.secret_names : {
       name      = name,
-      valueFrom = "${aws_secretsmanager_secret.documenso.id}:${name}::"
+      valueFrom = "${aws_secretsmanager_secret.signezily.id}:${name}::"
     }
     ],
     local.additional_secrets,
