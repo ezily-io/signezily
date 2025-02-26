@@ -1,4 +1,4 @@
-resource "aws_ecs_task_definition" "documenso" {
+resource "aws_ecs_task_definition" "signezily" {
   family                   = "${var.application}-${var.environment}"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"

@@ -61,8 +61,8 @@ jobs:
     strategy:
       matrix:
         environment:
-          - { name: "dev", tf_workspace: "service-documenso-dev", tfvars: "dev.tfvars" }
-          - { name: "prod", tf_workspace: "service-documenso-prod", tfvars: "prod.tfvars" }
+          - { name: "dev", tf_workspace: "signezily-dev", tfvars: "dev.tfvars" }
+          - { name: "prod", tf_workspace: "signezily-prod", tfvars: "prod.tfvars" }
 
     steps:
       - name: Checkout code
