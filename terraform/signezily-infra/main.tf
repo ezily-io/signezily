@@ -9,7 +9,7 @@ module "signezily_database" {
   ]
 }
 
-module "documenso_execution_role" {
+module "signezily_execution_role" {
   source      = "../modules/iam"
   application = var.application
   environment = var.environment
@@ -17,7 +17,7 @@ module "documenso_execution_role" {
   json_policy = file("${path.module}/iam_role/execution_policy.json")
 }
 
-module "documenso" {
+module "signezily" {
   source                  = "../modules/fargate"
   vpc_id                  = data.aws_vpc.prod.id
   service_name            = var.service_name
@@ -27,7 +27,7 @@ module "documenso" {
   ecs_subnet_ids          = data.aws_subnets.prod_private.ids
   lb_subnet_ids           = data.aws_subnets.prod_public.ids
   certificate_arn         = var.certificate_arn
-  ecs_execution_role_arn  = module.documenso_execution_role.role
+  ecs_execution_role_arn  = module.signezily_execution_role.role
   ecs_task_definition_arn = aws_ecs_task_definition.signezily.arn
   environment             = var.environment
   lb_internal             = false
