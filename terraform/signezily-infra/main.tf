@@ -1,4 +1,4 @@
-module "documenso_database" {
+module "signezily_database" {
   source      = "../modules/rds"
   del_protect = var.del_protect
   environment = var.environment
