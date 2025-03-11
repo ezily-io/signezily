@@ -118,11 +118,11 @@ jobs:
               - 'apps/documentation/**'
               - 'package.json'
 
-      - name: Mask a Secret Value
-        run: |
-          echo "::add-mask::${{ secrets.AWS_REGION }}"
-          echo "::add-mask::${{ secrets.AWS_ACCOUNT }}"
-          echo "::add-mask::${{ secrets.AWS_ACCOUNT }}"
+      # - name: Mask a Secret Value
+      #   run: |
+      #     echo "::add-mask::${{ secrets.AWS_REGION }}"
+      #     echo "::add-mask::${{ secrets.AWS_ACCOUNT }}"
+      #     echo "::add-mask::${{ secrets.AWS_ACCOUNT }}"
 
 
       - name: Build Signezily Web Docker Image
@@ -136,6 +136,7 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           GIT_BRANCH: ${{ github.ref_name }}
+          AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
 
       - name: Build Signezily Marketing Docker Image
         if: |
@@ -148,6 +149,7 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           GIT_BRANCH: ${{ github.ref_name }}
+          AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
 
       - name: Build Signezily Documentation Docker Image
         if: |
@@ -160,6 +162,7 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           GIT_BRANCH: ${{ github.ref_name }}
+          AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
 
       - name: Deploy
         if: github.ref == 'refs/heads/main' && github.event_name == 'push' || 
