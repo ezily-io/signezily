@@ -120,9 +120,9 @@ jobs:
 
       - name: Mask a Secret Value
         run: |
-          echo "::add-mask::${{ secrets.AWS_REGION }}
-          echo "::add-mask::${{ secrets.AWS_ACCOUNT }}
-          echo "::add-mask::${{ secrets.AWS_ACCOUNT }}
+          echo "::add-mask::${{ secrets.AWS_REGION }}"
+          echo "::add-mask::${{ secrets.AWS_ACCOUNT }}"
+          echo "::add-mask::${{ secrets.AWS_ACCOUNT }}"
 
 
       - name: Build Signezily Web Docker Image
