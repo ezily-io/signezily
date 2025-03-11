@@ -32,9 +32,9 @@ on:
       - 'terraform/modules/**'
       - 'terraform/signezily-infra/*'
 
-env:
-  AWS_DEFAULT_REGION: ap-northeast-1
-  AWS_REGION: ap-northeast-1
+# env:
+#   AWS_DEFAULT_REGION: ap-northeast-1
+#   AWS_REGION: ap-northeast-1
 
 permissions:
   id-token: write
@@ -62,6 +62,7 @@ jobs:
       TF_VAR_marketing_image_ecr: ${{ secrets.TF_VAR_APP_IMAGE_ECR }}
       TF_VAR_certificate_arn: ${{ secrets.TF_VAR_CERTIFICATE_ARN }}
       TF_VAR_cluster_id : ${{ secrets.TF_VAR_CLUSTER_ID }}
+      TF_VAR_region: ${{ secrets.TF_VAR_REGION }}
 
     strategy:
       matrix:
@@ -146,7 +147,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         if: ${{ env.ExecutionType == 'plan' }}
-        run: terraform plan -no-color -var-file="${{ matrix.environment.tfvars }}"
+        run: terraform plan -no-color -var-file="${{ matrix.environment.tfvars }}" | grep -v "arn:aws:secretsmanager" | grep -v "sg-" | grep -v "rds.amazonaws.com" | grep -v "subnet-" | grep -v "vpc-" | grep -v "id=" 
 
       - name: Update Pull Request
         uses: actions/github-script@v6

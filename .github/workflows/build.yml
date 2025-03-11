@@ -51,7 +51,7 @@ on:
       - "package.json"
       - "turbo.json"
 env:
-  AWS_REGION: ap-northeast-1
+  AWS_REGION: ${{ secrets.AWS_REGION }}
   AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
   ECR_REPOSITORY: "signezily"
   SERVICE: "signezily-app-"
@@ -117,6 +117,13 @@ jobs:
               - 'docker/Dockerfile.documentation'
               - 'apps/documentation/**'
               - 'package.json'
+
+      - name: Mask a Secret Value
+        run: |
+          echo "::add-mask::${{ secrets.AWS_REGION }}
+          echo "::add-mask::${{ secrets.AWS_ACCOUNT }}
+          echo "::add-mask::${{ secrets.AWS_ACCOUNT }}
+
 
       - name: Build Signezily Web Docker Image
         if: |
