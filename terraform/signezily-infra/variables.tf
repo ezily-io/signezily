@@ -90,16 +90,16 @@ variable "docs_image_ecr" {
 }
 
 variable "env" {
-  type = map(any)
-  sensitive   = true
+  type      = map(any)
+  sensitive = true
   default = {
   }
   description = "Environment variables for the ECS task."
 }
 
 variable "secrets" {
-  type = map(any)
-  sensitive   = true
+  type      = map(any)
+  sensitive = true
   default = {
   }
   description = "Secrets from secrets manager for the ECS task."
