@@ -2,11 +2,9 @@
 
 # Set Environment Variables
 export AWS_DEFAULT_REGION=ap-northeast-1
-export AWS_REGION=ap-northeast-1
-export AWS_ACCOUNT=898622234277
 export BUILDKIT_PROGRESS=plain
 export DOCKER_BUILDKIT=1
-export CLUSTER="dev"
+
 
 # Global version variable extracted from package.json
 getVersion(){
@@ -22,6 +20,7 @@ setup_build_variables() {
     # Get current Git SHA
     GIT_SHA=$(git rev-parse --short HEAD)
     IMAGE="$AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$ecr_repository"
+    IMAGE=$AWS_ACCOUNT
     APP_VERSION=$(getVersion)
     THIS_TAG="$IMAGE:${app_name}_${GIT_SHA}"
     APP_VERSION_TAG="${IMAGE}:${app_name}_${APP_VERSION}"

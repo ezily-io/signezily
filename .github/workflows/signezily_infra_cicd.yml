@@ -57,6 +57,11 @@ jobs:
         working-directory: terraform/signezily-infra/
     env:
       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+      TF_VAR_app_image_ecr: ${{ secrets.TF_VAR_APP_IMAGE_ECR }}
+      TF_VAR_docs_image_ecr: ${{ secrets.TF_VAR_APP_IMAGE_ECR }}
+      TF_VAR_marketing_image_ecr: ${{ secrets.TF_VAR_APP_IMAGE_ECR }}
+      TF_VAR_certificate_arn: ${{ secrets.TF_VAR_CERTIFICATE_ARN }}
+      TF_VAR_cluster_id : ${{ secrets.TF_VAR_CLUSTER_ID }}
 
     strategy:
       matrix:
@@ -118,7 +123,7 @@ jobs:
         if: ${{ env.ExecutionType != 'skip' }}
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::898622234277:role/Github-actions
+          role-to-assume: ${{ secrets.AWS_GHA_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup Terraform

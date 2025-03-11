@@ -52,7 +52,7 @@ on:
       - "turbo.json"
 env:
   AWS_REGION: ap-northeast-1
-  AWS_ACCOUNT: 898622234277
+  AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
   ECR_REPOSITORY: "signezily"
   SERVICE: "signezily-app-"
   CLUSTER: "data"
@@ -77,7 +77,8 @@ jobs:
         function:
           - build_web
           # - build_marketing
-          - build_documentation
+          # - build_documentation
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -87,7 +88,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT }}:role/Github-actions
+          role-to-assume: ${{ secrets.AWS_GHA_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
