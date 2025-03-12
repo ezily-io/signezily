@@ -272,7 +272,11 @@ export const SignaturePad = ({
       event.preventDefault();
     }
 
-    onMouseUp(event, false);
+    if (isPressed) {
+      onMouseUp(event, true);
+    } else {
+      onMouseUp(event, false);
+    }
   };
 
   const onClearClick = useCallback(() => {
