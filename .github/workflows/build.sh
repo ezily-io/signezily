@@ -20,7 +20,7 @@ setup_build_variables() {
     # Get current Git SHA
     GIT_SHA=$(git rev-parse --short HEAD)
     IMAGE="$AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$ecr_repository"
-    IMAGE=$AWS_ACCOUNT
+    # IMAGE=$AWS_ACCOUNT
     APP_VERSION=$(getVersion)
     THIS_TAG="$IMAGE:${app_name}_${GIT_SHA}"
     APP_VERSION_TAG="${IMAGE}:${app_name}_${APP_VERSION}"
