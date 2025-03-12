@@ -76,7 +76,7 @@ locals {
   )
 
   app_image       = "${var.app_image_ecr}:app_${var.docker_image_tag}"
-  marketing_image = "${var.marketing_image_ecr}:marketing_${var.docker_image_tag}"
+  marketing_image = "${var.marketing_image_ecr}:marketing_1.8.0-rc.3"
   docs_image      = "${var.docs_image_ecr}:docs_${var.docker_image_tag}"
 
 }
