@@ -32,10 +32,6 @@ on:
       - 'terraform/modules/**'
       - 'terraform/signezily-infra/*'
 
-# env:
-#   AWS_DEFAULT_REGION: ap-northeast-1
-#   AWS_REGION: ap-northeast-1
-
 permissions:
   id-token: write
   contents: write
@@ -63,6 +59,7 @@ jobs:
       TF_VAR_certificate_arn: ${{ secrets.TF_VAR_CERTIFICATE_ARN }}
       TF_VAR_cluster_id : ${{ secrets.TF_VAR_CLUSTER_ID }}
       TF_VAR_region: ${{ secrets.TF_VAR_REGION }}
+      AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
 
     strategy:
       matrix:
