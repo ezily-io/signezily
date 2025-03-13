@@ -101,3 +101,16 @@ variable "secrets" {
   }
   description = "Secrets from secrets manager for the ECS task."
 }
+
+variable "dynamic_capacity_provider_strategy" {
+  description = "List of capacity providers with weights"
+  type = list(object({
+    capacity_provider = string
+    weight            = number
+    base              = number
+  }))
+  default = [
+    { capacity_provider = "FARGATE_SPOT", weight = 14, base = 1 },
+    { capacity_provider = "FARGATE", weight = 1, base = 0 }
+  ]
+}

@@ -34,6 +34,7 @@ module "signezily" {
   cpu                     = var.cpu
   memory                  = var.memory
   desired_count           = var.desired_count
+  dynamic_capacity_provider_strategy = var.dynamic_capacity_provider_strategy
   awslogs_group           = "/ecs/${var.environment}/${var.application}/${var.service_name}"
   containers = {
     app = {
