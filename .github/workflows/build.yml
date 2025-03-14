@@ -34,7 +34,7 @@ on:
     branches: ['main']
     paths:
       - ".github/workflows/build.yml"
-      - "docker/Dockerfile.*"
+      - "docker/Dockerfile*"
       - "apps/**"
       - "packages/*"
       - "scripts/*"
