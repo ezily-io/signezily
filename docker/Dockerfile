@@ -86,8 +86,6 @@ RUN adduser --system --uid 1001 nextjs
 
 USER nextjs
 
-# Increase memory allocation for node
-ENV NODE_OPTIONS="--max-old-space-size=8192"
 
 COPY --from=installer /app/apps/web/next.config.js .
 COPY --from=installer /app/apps/web/package.json .
