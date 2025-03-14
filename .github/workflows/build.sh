@@ -77,7 +77,7 @@ build_web() {
     docker build --progress=$BUILDKIT_PROGRESS --build-arg COMMIT_SHA=$COMMIT_SHA -t $THIS_TAG -t $APP_VERSION_TAG -t $IMAGE:$LATEST -f ./docker/Dockerfile .
     echo "Build process for $1 completed."
 
-    if [ "$GIT_BRANCH" = "allocate-more-memory-with-node-option" ] ; then
+    if [ "$GIT_BRANCH" = "main" ] && [ "$EVENT_NAME" = "push" ] ; then
         for tag in $TAGS; do
           docker push "$tag"
         done
