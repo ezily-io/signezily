@@ -32,10 +32,6 @@ on:
       - 'terraform/modules/**'
       - 'terraform/signezily-infra/*'
 
-env:
-  AWS_DEFAULT_REGION: ap-northeast-1
-  AWS_REGION: ap-northeast-1
-
 permissions:
   id-token: write
   contents: write
@@ -57,6 +53,13 @@ jobs:
         working-directory: terraform/signezily-infra/
     env:
       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+      TF_VAR_app_image_ecr: ${{ secrets.TF_VAR_APP_IMAGE_ECR }}
+      TF_VAR_docs_image_ecr: ${{ secrets.TF_VAR_APP_IMAGE_ECR }}
+      TF_VAR_marketing_image_ecr: ${{ secrets.TF_VAR_APP_IMAGE_ECR }}
+      TF_VAR_certificate_arn: ${{ secrets.TF_VAR_CERTIFICATE_ARN }}
+      TF_VAR_cluster_id : ${{ secrets.TF_VAR_CLUSTER_ID }}
+      TF_VAR_region: ${{ secrets.TF_VAR_REGION }}
+      AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
 
     strategy:
       matrix:
@@ -118,8 +121,8 @@ jobs:
         if: ${{ env.ExecutionType != 'skip' }}
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::898622234277:role/Github-actions
-          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_GHA_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Setup Terraform
         if: ${{ env.ExecutionType != 'skip' }}
@@ -141,7 +144,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         if: ${{ env.ExecutionType == 'plan' }}
-        run: terraform plan -no-color -var-file="${{ matrix.environment.tfvars }}"
+        run: terraform plan -no-color -var-file="${{ matrix.environment.tfvars }}" | grep -v "arn:aws:secretsmanager" | grep -v "sg-" | grep -v "rds.amazonaws.com" | grep -v "subnet-" | grep -v "vpc-" | grep -v "id=" 
 
       - name: Update Pull Request
         uses: actions/github-script@v6
