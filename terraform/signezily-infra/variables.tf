@@ -52,6 +52,12 @@ variable "memory" {
   description = "Fargate memory."
 }
 
+variable "node_options_memory" {
+  type        = string
+  default     = "1843"
+  description = "Node memory 10% less than hardware."
+}
+
 variable "desired_count" {
   type        = number
   default     = 1

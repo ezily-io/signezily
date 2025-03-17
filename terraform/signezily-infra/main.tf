@@ -18,24 +18,24 @@ module "signezily_execution_role" {
 }
 
 module "signezily" {
-  source                  = "../modules/fargate"
-  vpc_id                  = data.aws_vpc.prod.id
-  service_name            = var.service_name
-  application             = var.application
-  application_fullname    = var.application
-  cluster_id              = var.cluster_id
-  ecs_subnet_ids          = data.aws_subnets.prod_private.ids
-  lb_subnet_ids           = data.aws_subnets.prod_public.ids
-  certificate_arn         = var.certificate_arn
-  ecs_execution_role_arn  = module.signezily_execution_role.role
-  ecs_task_definition_arn = aws_ecs_task_definition.signezily.arn
-  environment             = var.environment
-  lb_internal             = false
-  cpu                     = var.cpu
-  memory                  = var.memory
-  desired_count           = var.desired_count
+  source                             = "../modules/fargate"
+  vpc_id                             = data.aws_vpc.prod.id
+  service_name                       = var.service_name
+  application                        = var.application
+  application_fullname               = var.application
+  cluster_id                         = var.cluster_id
+  ecs_subnet_ids                     = data.aws_subnets.prod_private.ids
+  lb_subnet_ids                      = data.aws_subnets.prod_public.ids
+  certificate_arn                    = var.certificate_arn
+  ecs_execution_role_arn             = module.signezily_execution_role.role
+  ecs_task_definition_arn            = aws_ecs_task_definition.signezily.arn
+  environment                        = var.environment
+  lb_internal                        = false
+  cpu                                = var.cpu
+  memory                             = var.memory
+  desired_count                      = var.desired_count
   dynamic_capacity_provider_strategy = var.dynamic_capacity_provider_strategy
-  awslogs_group           = "/ecs/${var.environment}/${var.application}/${var.service_name}"
+  awslogs_group                      = "/ecs/${var.environment}/${var.application}/${var.service_name}"
   containers = {
     app = {
       ports = {

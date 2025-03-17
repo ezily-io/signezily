@@ -42,8 +42,8 @@ locals {
 
   common_env = concat([
     {
-      name = "NODE_OPTIONS",
-      value = "--max-old-space-size=4096"
+      name  = "NODE_OPTIONS",
+      value = "--max-old-space-size=${var.node_options_memory}"
     },
     # {
     # name  = "NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH",
