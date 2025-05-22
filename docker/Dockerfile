@@ -113,4 +113,4 @@ COPY --chown=nodejs:nodejs ./docker/start.sh /app/apps/remix/start.sh
 
 WORKDIR /app/apps/remix
 
-CMD ["sh", "start.sh", "default"]
+CMD ["sh", "start.sh"]
