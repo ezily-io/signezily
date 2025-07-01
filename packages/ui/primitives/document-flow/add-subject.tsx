@@ -11,6 +11,7 @@ import { RECIPIENT_ROLES_DESCRIPTION } from '@documenso/lib/constants/recipient-
 import type { TDocument } from '@documenso/lib/types/document';
 import { ZDocumentEmailSettingsSchema } from '@documenso/lib/types/document-email';
 import { formatSigningLink } from '@documenso/lib/utils/recipients';
+import { trpc } from '@documenso/trpc/react';
 import { DocumentSendEmailMessageHelper } from '@documenso/ui/components/document/document-send-email-message-helper';
 import { Tabs, TabsList, TabsTrigger } from '@documenso/ui/primitives/tabs';
 
@@ -96,7 +97,7 @@ export const AddSubjectFormPartial = ({
 
   const {
     mutate: emailSupport,
-    isLoading,
+    isPending: isLoading,
     isSuccess,
   } = trpc.document.requestLineSupport.useMutation({
     onSuccess() {
