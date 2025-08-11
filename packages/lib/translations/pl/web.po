@@ -109,13 +109,11 @@ msgid "{0, plural, one {1 matching field} other {# matching fields}}"
 msgstr "{0, plural, one {1 pasujące pole} few {# pasujące pola} many {# pasujących pól} other {# pasujących pól}}"
 
 #. placeholder {0}: recipients.length
-#: apps/remix/app/routes/_authenticated+/documents.$id.edit.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id.edit.tsx
 msgid "{0, plural, one {1 Recipient} other {# Recipients}}"
 msgstr "{0, plural, one {1 odbiorca} few {# odbiorców} many {# odbiorców} other {# odbiorców}}"
 
 #. placeholder {0}: pendingRecipients.length
-#: apps/remix/app/routes/_authenticated+/documents.$id._index.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id._index.tsx
 msgid "{0, plural, one {Waiting on 1 recipient} other {Waiting on # recipients}}"
 msgstr "{0, plural, one {Czekam na 1 odbiorcę} few {Czekam na # odbiorców} many {Czekam na # odbiorców} other {Czekam na # odbiorców}}"
@@ -165,7 +163,6 @@ msgid "{0} on behalf of \"{1}\" has invited you to {recipientActionVerb} the doc
 msgstr "{0} w imieniu \"{1}\" zaprosił Cię do {recipientActionVerb} dokument „{2}”."
 
 #. placeholder {0}: recipients.length
-#: apps/remix/app/routes/_authenticated+/documents.$id._index.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id._index.tsx
 msgid "{0} Recipient(s)"
 msgstr "{0} Odbiorca(ów)"
@@ -2386,7 +2383,6 @@ msgstr "Utworzono"
 msgid "Created At"
 msgstr "Utworzono w"
 
-#: apps/remix/app/routes/_authenticated+/documents.$id.logs.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id.logs.tsx
 msgid "Created by"
 msgstr "Utworzono przez"
@@ -2395,8 +2391,8 @@ msgstr "Utworzono przez"
 msgid "Created on"
 msgstr "Utworzone w"
 
-#. placeholder {0}: i18n.date(token.createdAt, DateTime.DATETIME_FULL)
 #. placeholder {0}: i18n.date(webhook.createdAt, DateTime.DATETIME_FULL)
+#. placeholder {0}: i18n.date(token.createdAt, DateTime.DATETIME_FULL)
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.tokens.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.webhooks._index.tsx
 msgid "Created on {0}"
@@ -2458,7 +2454,6 @@ msgstr "Panel sterowania"
 msgid "Date"
 msgstr "Data"
 
-#: apps/remix/app/routes/_authenticated+/documents.$id.logs.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id.logs.tsx
 msgid "Date created"
 msgstr "Data utworzenia"
@@ -2538,8 +2533,8 @@ msgstr "usuń"
 msgid "Delete"
 msgstr "Usuń"
 
-#. placeholder {0}: token.name
 #. placeholder {0}: webhook.webhookUrl
+#. placeholder {0}: token.name
 #. placeholder {0}: organisation.name
 #: apps/remix/app/components/dialogs/folder-delete-dialog.tsx
 #: apps/remix/app/components/dialogs/organisation-delete-dialog.tsx
@@ -2794,7 +2789,6 @@ msgstr "Documenso usunie <0>wszystkie twoje dokumenty</0>, wraz ze wszystkimi za
 
 #: apps/remix/app/components/general/settings-nav-desktop.tsx
 #: apps/remix/app/components/general/template/template-page-view-documents-table.tsx
-#: apps/remix/app/routes/_authenticated+/documents.$id.logs.tsx
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl.settings._layout.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id.logs.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings._layout.tsx
@@ -2885,7 +2879,6 @@ msgstr "Tworzenie dokumentu"
 
 #: apps/remix/app/components/dialogs/admin-document-delete-dialog.tsx
 #: apps/remix/app/components/dialogs/document-delete-dialog.tsx
-#: apps/remix/app/routes/_authenticated+/documents.$id._index.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id._index.tsx
 #: packages/lib/utils/document-audit-logs.ts
 msgid "Document deleted"
@@ -2920,11 +2913,6 @@ msgstr "Zaktualizowano identyfikator zewnętrzny dokumentu"
 msgid "Document found in your account"
 msgstr "Dokument znaleziony na Twoim koncie"
 
-#: apps/remix/app/routes/_authenticated+/documents.$id._index.tsx
-msgid "Document history"
-msgstr "Historia dokumentu"
-
-#: apps/remix/app/routes/_authenticated+/documents.$id.logs.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id.logs.tsx
 #: apps/remix/app/routes/_internal+/[__htmltopdf]+/audit-log.tsx
 msgid "Document ID"
@@ -3020,12 +3008,10 @@ msgstr "Zaktualizowano autoryzację podpisu dokumentu"
 msgid "Document signing process will be cancelled"
 msgstr "Proces podpisywania dokumentu zostanie anulowany"
 
-#: apps/remix/app/routes/_authenticated+/documents.$id.logs.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id.logs.tsx
 msgid "Document status"
 msgstr "Status dokumentu"
 
-#: apps/remix/app/routes/_authenticated+/documents.$id.logs.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id.logs.tsx
 msgid "Document title"
 msgstr "Tytuł dokumentu"
@@ -3074,8 +3060,6 @@ msgstr "Dokument zostanie trwale usunięty"
 #: apps/remix/app/components/general/user-profile-timur.tsx
 #: apps/remix/app/components/tables/admin-dashboard-users-table.tsx
 #: apps/remix/app/routes/_authenticated+/admin+/_layout.tsx
-#: apps/remix/app/routes/_authenticated+/documents.$id._index.tsx
-#: apps/remix/app/routes/_authenticated+/documents.$id.edit.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents._index.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id._index.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id.edit.tsx
@@ -3084,7 +3068,6 @@ msgid "Documents"
 msgstr "Dokumenty"
 
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/templates.$id._index.tsx
-#: apps/remix/app/routes/_authenticated+/templates.$id._index.tsx
 msgid "Documents created from template"
 msgstr "Dokumenty utworzone z szablonu"
 
@@ -3221,7 +3204,6 @@ msgid "Edit"
 msgstr "Edytuj"
 
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/templates.$id._index.tsx
-#: apps/remix/app/routes/_authenticated+/templates.$id._index.tsx
 msgid "Edit Template"
 msgstr "Edytuj szablon"
 
@@ -4280,7 +4262,6 @@ msgstr "Ostatnia aktywność"
 msgid "Last modified"
 msgstr "Ostatnia modyfikacja"
 
-#: apps/remix/app/routes/_authenticated+/documents.$id.logs.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id.logs.tsx
 msgid "Last updated"
 msgstr "Zaktualizowano"
@@ -4395,7 +4376,6 @@ msgid "Manage all subscription claims"
 msgstr "Zarządzaj wszystkimi roszczeniami subskrypcyjnymi"
 
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/templates.$id._index.tsx
-#: apps/remix/app/routes/_authenticated+/templates.$id._index.tsx
 msgid "Manage and view template"
 msgstr "Zarządzaj i przeglądaj szablon"
 
@@ -6836,8 +6816,6 @@ msgstr "Zespoły, do których obecnie przypisana jest ta grupa organizacji"
 #: apps/remix/app/components/general/template/template-page-view-documents-table.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/templates.$id._index.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/templates.$id.edit.tsx
-#: apps/remix/app/routes/_authenticated+/templates.$id._index.tsx
-#: apps/remix/app/routes/_authenticated+/templates.$id.edit.tsx
 msgid "Template"
 msgstr "Szablon"
 
@@ -6891,7 +6869,6 @@ msgstr "Szablon został zaktualizowany"
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.public-profile.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/templates._index.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/templates.$id._index.tsx
-#: apps/remix/app/routes/_authenticated+/templates.$id._index.tsx
 msgid "Templates"
 msgstr "Szablony"
 
@@ -7338,12 +7315,10 @@ msgstr "Ten dokument został anulowany przez właściciela i nie jest już dost�
 msgid "This document has been cancelled by the owner."
 msgstr "Ten dokument został anulowany przez właściciela."
 
-#: apps/remix/app/routes/_authenticated+/documents.$id._index.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id._index.tsx
 msgid "This document has been rejected by a recipient"
 msgstr "Dokument został odrzucony przez odbiorcę"
 
-#: apps/remix/app/routes/_authenticated+/documents.$id._index.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id._index.tsx
 msgid "This document has been signed by all recipients"
 msgstr "Ten dokument został podpisany przez wszystkich odbiorców"
@@ -7352,7 +7327,6 @@ msgstr "Ten dokument został podpisany przez wszystkich odbiorców"
 msgid "This document is available in your Documenso account. You can view more details, recipients, and audit logs there."
 msgstr "Ten dokument jest dostępny na Twoim koncie w Documenso. Możesz tam zobaczyć więcej szczegółów, odbiorców i dzienniki audytów."
 
-#: apps/remix/app/routes/_authenticated+/documents.$id._index.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id._index.tsx
 msgid "This document is currently a draft and has not been sent"
 msgstr "Ten dokument jest obecnie szkicowany i nie został wysłany"
@@ -7500,7 +7474,6 @@ msgstr "Zostaniesz wylogowany z wszystkich innych urządzeń. Aby dalej korzysta
 msgid "Time"
 msgstr "Czas"
 
-#: apps/remix/app/routes/_authenticated+/documents.$id.logs.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id.logs.tsx
 msgid "Time zone"
 msgstr "Strefa czasowa"
@@ -7538,9 +7511,9 @@ msgstr ""
 msgid "To change the email you must remove and add a new email address."
 msgstr "Aby zmienić e-mail, musisz usunąć i dodać nowy adres e-mail."
 
+#. placeholder {0}: user.email
 #. placeholder {0}: userToEnable.email
 #. placeholder {0}: userToDisable.email
-#. placeholder {0}: user.email
 #: apps/remix/app/components/dialogs/admin-user-delete-dialog.tsx
 #: apps/remix/app/components/dialogs/admin-user-disable-dialog.tsx
 #: apps/remix/app/components/dialogs/admin-user-enable-dialog.tsx
@@ -8014,7 +7987,6 @@ msgid "Uploading document..."
 msgstr "Przesyłanie dokumentu..."
 
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/templates.$id._index.tsx
-#: apps/remix/app/routes/_authenticated+/templates.$id._index.tsx
 msgid "Use"
 msgstr "Użyj"
 
