@@ -3,7 +3,7 @@ import { env } from '../utils/env';
 export const FROM_ADDRESS = env('NEXT_PRIVATE_SMTP_FROM_ADDRESS') || 'noreply@ezily.io';
 export const FROM_NAME = env('NEXT_PRIVATE_SMTP_FROM_NAME') || 'SignEzily';
 
-export const SUPPORT_EMAIL = process.env.NEXT_PRIVATE_SUPPORT_EMAIL || 'support@ezily.io';
+export const SUPPORT_EMAIL = env('NEXT_PRIVATE_SUPPORT_EMAIL') || 'support@ezily.io';
 export const DOCUMENSO_INTERNAL_EMAIL = {
   name: FROM_NAME,
   address: FROM_ADDRESS,
