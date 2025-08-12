@@ -366,27 +366,6 @@ export const SignUpForm = ({
             </Button>
           </form>
         </Form>
-        <p className="text-muted-foreground mt-6 text-xs">
-          <Trans>
-            By proceeding, you agree to our{' '}
-            <Link
-              to="https://documen.so/terms"
-              target="_blank"
-              className="text-documenso-700 duration-200 hover:opacity-70"
-            >
-              Terms of Service
-            </Link>{' '}
-            and{' '}
-            <Link
-              to="https://documen.so/privacy"
-              target="_blank"
-              className="text-documenso-700 duration-200 hover:opacity-70"
-            >
-              Privacy Policy
-            </Link>
-            .
-          </Trans>
-        </p>
       </div>
     </div>
   );

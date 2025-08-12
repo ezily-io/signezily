@@ -7522,9 +7522,9 @@ msgstr "To be able to add members to a team, you must first add them to the orga
 msgid "To change the email you must remove and add a new email address."
 msgstr "若要更改電子郵件，您必須先移除並新增一個新的電子郵件地址。"
 
-#. placeholder {0}: user.email
 #. placeholder {0}: userToEnable.email
 #. placeholder {0}: userToDisable.email
+#. placeholder {0}: user.email
 #: apps/remix/app/components/dialogs/admin-user-delete-dialog.tsx
 #: apps/remix/app/components/dialogs/admin-user-disable-dialog.tsx
 #: apps/remix/app/components/dialogs/admin-user-enable-dialog.tsx

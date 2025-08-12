@@ -7511,9 +7511,9 @@ msgstr ""
 msgid "To change the email you must remove and add a new email address."
 msgstr "Aby zmienić e-mail, musisz usunąć i dodać nowy adres e-mail."
 
-#. placeholder {0}: user.email
 #. placeholder {0}: userToEnable.email
 #. placeholder {0}: userToDisable.email
+#. placeholder {0}: user.email
 #: apps/remix/app/components/dialogs/admin-user-delete-dialog.tsx
 #: apps/remix/app/components/dialogs/admin-user-disable-dialog.tsx
 #: apps/remix/app/components/dialogs/admin-user-enable-dialog.tsx
