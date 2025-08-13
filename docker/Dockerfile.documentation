@@ -1,7 +1,7 @@
 ###########################
 #     BASE CONTAINER      #
 ###########################
-FROM node:18-alpine AS base
+FROM node:22-alpine3.22 AS base
 
 ###########################
 #    BUILDER CONTAINER    #
@@ -63,7 +63,6 @@ COPY --from=builder /app/lingui.config.ts ./lingui.config.ts
 #NOt need for documentation
 #RUN npm ci
 RUN npm i
-RUN npm run prisma:generate
 
 # Then copy all the source code (as it changes more often)
 COPY --from=builder /app/out/full/ .
@@ -96,17 +95,6 @@ COPY --from=installer /app/apps/documentation/package.json .
 COPY --from=installer --chown=nextjs:nodejs /app/apps/documentation/.next/standalone ./
 COPY --from=installer --chown=nextjs:nodejs /app/apps/documentation/.next/static ./apps/documentation/.next/static
 COPY --from=installer --chown=nextjs:nodejs /app/apps/documentation/public ./apps/documentation/public
-
-# Copy the prisma binary, schema and migrations
-COPY --from=installer --chown=nextjs:nodejs /app/packages/prisma/schema.prisma ./packages/prisma/schema.prisma
-COPY --from=installer --chown=nextjs:nodejs /app/packages/prisma/migrations ./packages/prisma/migrations
-COPY --from=installer --chown=nextjs:nodejs /app/node_modules/prisma/ ./node_modules/prisma/
-COPY --from=installer --chown=nextjs:nodejs /app/node_modules/@prisma/ ./node_modules/@prisma/
-
-# Symlink the prisma binary
-RUN mkdir node_modules/.bin
-RUN ln -s /app/node_modules/prisma/build/index.js ./node_modules/.bin/prisma
-
 
 
 COPY --chown=nextjs:nodejs ./docker/generate_cert_p12.sh ./generate_cert_p12.sh

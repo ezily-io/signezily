@@ -1,7 +1,7 @@
 ###########################
 #     BASE CONTAINER      #
 ###########################
-FROM node:18-alpine3.19 AS base
+FROM node:20-alpine3.22 AS base
 
 ###########################
 #    BUILDER CONTAINER    #
@@ -113,4 +113,4 @@ COPY --chown=nodejs:nodejs ./docker/start.sh /app/apps/remix/start.sh
 
 WORKDIR /app/apps/remix
 
-CMD ["sh", "start.sh"]
+CMD ["sh", "start.sh", "default"]
