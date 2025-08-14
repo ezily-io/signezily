@@ -1,20 +1,39 @@
 import { prisma } from '@documenso/prisma';
 
+import { AppError, AppErrorCode } from '../../errors/app-error';
+import { buildTeamWhereQuery } from '../../utils/teams';
+
 export type GetRecipientByIdOptions = {
-  id: number;
-  documentId: number;
+  recipientId: number;
+  userId: number;
+  teamId: number;
 };
 
-export const getRecipientById = async ({ documentId, id }: GetRecipientByIdOptions) => {
+/**
+ * Get a recipient by ID. This will also return the recipient signing token so
+ * be careful when using this.
+ */
+export const getRecipientById = async ({
+  recipientId,
+  userId,
+  teamId,
+}: GetRecipientByIdOptions) => {
   const recipient = await prisma.recipient.findFirst({
     where: {
-      documentId,
-      id,
+      id: recipientId,
+      document: {
+        team: buildTeamWhereQuery({ teamId, userId }),
+      },
+    },
+    include: {
+      fields: true,
     },
   });
 
   if (!recipient) {
-    throw new Error('Recipient not found');
+    throw new AppError(AppErrorCode.NOT_FOUND, {
+      message: 'Recipient not found',
+    });
   }
 
   return recipient;

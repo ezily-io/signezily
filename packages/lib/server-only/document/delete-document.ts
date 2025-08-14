@@ -1,37 +1,35 @@
-'use server';
-
 import { createElement } from 'react';
 
-import { msg } from '@lingui/macro';
+import { msg } from '@lingui/core/macro';
+import type { Document, DocumentMeta, Recipient, User } from '@prisma/client';
+import { DocumentStatus, SendStatus, WebhookTriggerEvents } from '@prisma/client';
 
 import { mailer } from '@documenso/email/mailer';
 import DocumentCancelTemplate from '@documenso/email/templates/document-cancel';
 import { prisma } from '@documenso/prisma';
-import type {
-  Document,
-  DocumentMeta,
-  Recipient,
-  Team,
-  TeamGlobalSettings,
-  User,
-} from '@documenso/prisma/client';
-import { DocumentStatus, SendStatus } from '@documenso/prisma/client';
 
-import { getI18nInstance } from '../../client-only/providers/i18n.server';
+import { getI18nInstance } from '../../client-only/providers/i18n-server';
 import { NEXT_PUBLIC_WEBAPP_URL } from '../../constants/app';
-import { FROM_ADDRESS, FROM_NAME } from '../../constants/email';
+import { AppError, AppErrorCode } from '../../errors/app-error';
 import { DOCUMENT_AUDIT_LOG_TYPE } from '../../types/document-audit-logs';
 import { extractDerivedDocumentEmailSettings } from '../../types/document-email';
-import type { RequestMetadata } from '../../universal/extract-request-metadata';
+import {
+  ZWebhookDocumentSchema,
+  mapDocumentToWebhookDocumentPayload,
+} from '../../types/webhook-payload';
+import type { ApiRequestMetadata } from '../../universal/extract-request-metadata';
+import { isDocumentCompleted } from '../../utils/document';
 import { createDocumentAuditLogData } from '../../utils/document-audit-logs';
 import { renderEmailWithI18N } from '../../utils/render-email-with-i18n';
-import { teamGlobalSettingsToBranding } from '../../utils/team-global-settings-to-branding';
+import { getEmailContext } from '../email/get-email-context';
+import { getMemberRoles } from '../team/get-member-roles';
+import { triggerWebhook } from '../webhooks/trigger/trigger-webhook';
 
 export type DeleteDocumentOptions = {
   id: number;
   userId: number;
-  teamId?: number;
-  requestMetadata?: RequestMetadata;
+  teamId: number;
+  requestMetadata: ApiRequestMetadata;
 };
 
 export const deleteDocument = async ({
@@ -47,7 +45,9 @@ export const deleteDocument = async ({
   });
 
   if (!user) {
-    throw new Error('User not found');
+    throw new AppError(AppErrorCode.NOT_FOUND, {
+      message: 'User not found',
+    });
   }
 
   const document = await prisma.document.findUnique({
@@ -55,27 +55,34 @@ export const deleteDocument = async ({
       id,
     },
     include: {
-      Recipient: true,
+      recipients: true,
       documentMeta: true,
-      team: {
-        include: {
-          members: true,
-          teamGlobalSettings: true,
-        },
-      },
     },
   });
 
-  if (!document || (teamId !== undefined && teamId !== document.teamId)) {
-    throw new Error('Document not found');
+  if (!document) {
+    throw new AppError(AppErrorCode.NOT_FOUND, {
+      message: 'Document not found',
+    });
   }
 
+  const isUserTeamMember = await getMemberRoles({
+    teamId: document.teamId,
+    reference: {
+      type: 'User',
+      id: userId,
+    },
+  })
+    .then(() => true)
+    .catch(() => false);
+
   const isUserOwner = document.userId === userId;
-  const isUserTeamMember = document.team?.members.some((member) => member.userId === userId);
-  const userRecipient = document.Recipient.find((recipient) => recipient.email === user.email);
+  const userRecipient = document.recipients.find((recipient) => recipient.email === user.email);
 
   if (!isUserOwner && !isUserTeamMember && !userRecipient) {
-    throw new Error('Not allowed');
+    throw new AppError(AppErrorCode.UNAUTHORIZED, {
+      message: 'Not allowed',
+    });
   }
 
   // Handle hard or soft deleting the actual document if user has permission.
@@ -83,7 +90,6 @@ export const deleteDocument = async ({
     await handleDocumentOwnerDelete({
       document,
       user,
-      team: document.team,
       requestMetadata,
     });
   }
@@ -105,6 +111,13 @@ export const deleteDocument = async ({
       });
   }
 
+  await triggerWebhook({
+    event: WebhookTriggerEvents.DOCUMENT_CANCELLED,
+    data: ZWebhookDocumentSchema.parse(mapDocumentToWebhookDocumentPayload(document)),
+    userId,
+    teamId,
+  });
+
   // Return partial document for API v1 response.
   return {
     id: document.id,
@@ -121,37 +134,39 @@ export const deleteDocument = async ({
 
 type HandleDocumentOwnerDeleteOptions = {
   document: Document & {
-    Recipient: Recipient[];
+    recipients: Recipient[];
     documentMeta: DocumentMeta | null;
   };
-  team?:
-    | (Team & {
-        teamGlobalSettings?: TeamGlobalSettings | null;
-      })
-    | null;
   user: User;
-  requestMetadata?: RequestMetadata;
+  requestMetadata: ApiRequestMetadata;
 };
 
 const handleDocumentOwnerDelete = async ({
   document,
   user,
-  team,
   requestMetadata,
 }: HandleDocumentOwnerDeleteOptions) => {
   if (document.deletedAt) {
     return;
   }
 
+  const { branding, emailLanguage, senderEmail, replyToEmail } = await getEmailContext({
+    emailType: 'RECIPIENT',
+    source: {
+      type: 'team',
+      teamId: document.teamId,
+    },
+    meta: document.documentMeta,
+  });
+
   // Soft delete completed documents.
-  if (document.status === DocumentStatus.COMPLETED) {
+  if (isDocumentCompleted(document.status)) {
     return await prisma.$transaction(async (tx) => {
       await tx.documentAuditLog.create({
         data: createDocumentAuditLogData({
           documentId: document.id,
           type: DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_DELETED,
-          user,
-          requestMetadata,
+          metadata: requestMetadata,
           data: {
             type: 'SOFT',
           },
@@ -177,8 +192,7 @@ const handleDocumentOwnerDelete = async ({
       data: createDocumentAuditLogData({
         documentId: document.id,
         type: DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_DELETED,
-        user,
-        requestMetadata,
+        metadata: requestMetadata,
         data: {
           type: 'HARD',
         },
@@ -205,7 +219,7 @@ const handleDocumentOwnerDelete = async ({
 
   // Send cancellation emails to recipients.
   await Promise.all(
-    document.Recipient.map(async (recipient) => {
+    document.recipients.map(async (recipient) => {
       if (recipient.sendStatus !== SendStatus.SENT) {
         return;
       }
@@ -219,30 +233,24 @@ const handleDocumentOwnerDelete = async ({
         assetBaseUrl,
       });
 
-      const branding = team?.teamGlobalSettings
-        ? teamGlobalSettingsToBranding(team.teamGlobalSettings)
-        : undefined;
-
       const [html, text] = await Promise.all([
-        renderEmailWithI18N(template, { lang: document.documentMeta?.language, branding }),
+        renderEmailWithI18N(template, { lang: emailLanguage, branding }),
         renderEmailWithI18N(template, {
-          lang: document.documentMeta?.language,
+          lang: emailLanguage,
           branding,
           plainText: true,
         }),
       ]);
 
-      const i18n = await getI18nInstance(document.documentMeta?.language);
+      const i18n = await getI18nInstance(emailLanguage);
 
       await mailer.sendMail({
         to: {
           address: recipient.email,
           name: recipient.name,
         },
-        from: {
-          name: FROM_NAME,
-          address: FROM_ADDRESS,
-        },
+        from: senderEmail,
+        replyTo: replyToEmail,
         subject: i18n._(msg`Document Cancelled`),
         html,
         text,

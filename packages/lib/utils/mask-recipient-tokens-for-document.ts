@@ -1,4 +1,5 @@
-import type { User } from '@documenso/prisma/client';
+import type { User } from '@prisma/client';
+
 import type { DocumentWithRecipients } from '@documenso/prisma/types/document-with-recipient';
 
 export type MaskRecipientTokensForDocumentOptions<T extends DocumentWithRecipients> = {
@@ -12,7 +13,7 @@ export const maskRecipientTokensForDocument = <T extends DocumentWithRecipients>
   user,
   token,
 }: MaskRecipientTokensForDocumentOptions<T>) => {
-  const maskedRecipients = document.Recipient.map((recipient) => {
+  const maskedRecipients = document.recipients.map((recipient) => {
     if (document.userId === user?.id) {
       return recipient;
     }

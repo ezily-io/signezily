@@ -49,8 +49,6 @@ Join us in creating the next generation of open trust infrastructure.
 
 ## Community and Next Steps 🎯
 
-We're currently working on a redesign of the application, including a revamp of the codebase, so Documenso can be more intuitive to use and robust to develop upon.
-
 - Check out the first source code release in this repository and test it.
 - Tell us what you think in the [Discussions](https://github.com/documenso/documenso/discussions).
 - Join the [Discord server](https://documen.so/discord) for any questions and getting to know to other community members.
@@ -72,7 +70,6 @@ Contact us if you are interested in our Enterprise plan for large organizations 
 
 <p align="left">
   <a href="https://www.typescriptlang.org"><img src="https://shields.io/badge/TypeScript-3178C6?logo=TypeScript&logoColor=FFF&style=flat-square" alt="TypeScript"></a>
-  <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white" alt="NextJS"></a>
   <a href="https://prisma.io"><img width="122" height="20" src="http://made-with.prisma.io/indigo.svg" alt="Made with Prisma" /></a>
   <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/tailwindcss-0F172A?&logo=tailwindcss" alt="Tailwind CSS"></a>
   <a href=""><img src="" alt=""></a>
@@ -83,18 +80,18 @@ Contact us if you are interested in our Enterprise plan for large organizations 
 </p>
 
 - [Typescript](https://www.typescriptlang.org/) - Language
+- [ReactRouter](https://reactrouter.com/) - Framework
 - [Next.js](https://nextjs.org/) - Framework
+- [Prisma](https://www.prisma.io/)  - ORM
 - [Prisma](https://www.prisma.io/) - ORM
 - [Tailwind](https://tailwindcss.com/) - CSS
 - [shadcn/ui](https://ui.shadcn.com/) - Component Library
-- [NextAuth.js](https://next-auth.js.org/) - Authentication
 - [react-email](https://react.email/) - Email Templates
 - [tRPC](https://trpc.io/) - API
 - [@documenso/pdf-sign](https://www.npmjs.com/package/@documenso/pdf-sign) - PDF Signatures (launching soon)
 - [React-PDF](https://github.com/wojtekmaj/react-pdf) - Viewing PDFs
 - [PDF-Lib](https://github.com/Hopding/pdf-lib) - PDF manipulation
 - [Stripe](https://stripe.com/) - Payments
-- [Vercel](https://vercel.com) - Hosting
 
 <!-- - Support for [opensignpdf (requires Java on server)](https://github.com/open-pdf-sign) is currently planned. -->
 
@@ -104,7 +101,7 @@ Contact us if you are interested in our Enterprise plan for large organizations 
 
 To run Documenso locally, you will need
 
-- Node.js (v18 or above)
+- Node.js (v22 or above)
 - Postgres SQL Database
 - Docker (optional)
 
@@ -167,10 +164,8 @@ git clone https://github.com/<your-username>/documenso
 
 4. Set the following environment variables:
 
-   - NEXTAUTH_URL
    - NEXTAUTH_SECRET
    - NEXT_PUBLIC_WEBAPP_URL
-   - NEXT_PUBLIC_MARKETING_URL
    - NEXT_PRIVATE_DATABASE_URL
    - NEXT_PRIVATE_DIRECT_DATABASE_URL
    - NEXT_PRIVATE_SMTP_FROM_NAME
@@ -241,29 +236,27 @@ cp .env.example .env
 
 The following environment variables must be set:
 
-- `NEXTAUTH_URL`
 - `NEXTAUTH_SECRET`
 - `NEXT_PUBLIC_WEBAPP_URL`
-- `NEXT_PUBLIC_MARKETING_URL`
 - `NEXT_PRIVATE_DATABASE_URL`
 - `NEXT_PRIVATE_DIRECT_DATABASE_URL`
 - `NEXT_PRIVATE_SMTP_FROM_NAME`
 - `NEXT_PRIVATE_SMTP_FROM_ADDRESS`
 
-> If you are using a reverse proxy in front of Documenso, don't forget to provide the public URL for both `NEXTAUTH_URL` and `NEXT_PUBLIC_WEBAPP_URL` variables!
+> If you are using a reverse proxy in front of Documenso, don't forget to provide the public URL for the `NEXT_PUBLIC_WEBAPP_URL` variable!
 
 Now you can install the dependencies and build it:
 
 ```
 npm i
-npm run build:web
+npm run build
 npm run prisma:migrate-deploy
 ```
 
 Finally, you can start it with:
 
 ```
-cd apps/web
+cd apps/remix
 npm run start
 ```
 
@@ -284,7 +277,7 @@ After=network.target
 Environment=PATH=/path/to/your/node/binaries
 Type=simple
 User=www-data
-WorkingDirectory=/var/www/documenso/apps/web
+WorkingDirectory=/var/www/documenso/apps/remix
 ExecStart=/usr/bin/next start -p 3500
 TimeoutSec=15
 Restart=always

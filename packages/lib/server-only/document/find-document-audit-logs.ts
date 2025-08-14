@@ -1,13 +1,16 @@
-import type { FindResultSet } from '@documenso/lib/types/find-result-set';
-import { prisma } from '@documenso/prisma';
-import type { DocumentAuditLog } from '@documenso/prisma/client';
-import type { Prisma } from '@documenso/prisma/client';
+import type { DocumentAuditLog, Prisma } from '@prisma/client';
 
+import { prisma } from '@documenso/prisma';
+
+import { AppError, AppErrorCode } from '../../errors/app-error';
 import { DOCUMENT_AUDIT_LOG_TYPE } from '../../types/document-audit-logs';
+import type { FindResultResponse } from '../../types/search-params';
 import { parseDocumentAuditLogData } from '../../utils/document-audit-logs';
+import { getDocumentWhereInput } from './get-document-by-id';
 
 export interface FindDocumentAuditLogsOptions {
   userId: number;
+  teamId: number;
   documentId: number;
   page?: number;
   perPage?: number;
@@ -21,6 +24,7 @@ export interface FindDocumentAuditLogsOptions {
 
 export const findDocumentAuditLogs = async ({
   userId,
+  teamId,
   documentId,
   page = 1,
   perPage = 30,
@@ -31,25 +35,19 @@ export const findDocumentAuditLogs = async ({
   const orderByColumn = orderBy?.column ?? 'createdAt';
   const orderByDirection = orderBy?.direction ?? 'desc';
 
-  const documentFilter = await prisma.document.findFirstOrThrow({
-    where: {
-      id: documentId,
-      OR: [
-        {
-          userId,
-        },
-        {
-          team: {
-            members: {
-              some: {
-                userId,
-              },
-            },
-          },
-        },
-      ],
-    },
+  const { documentWhereInput } = await getDocumentWhereInput({
+    documentId,
+    userId,
+    teamId,
   });
+
+  const document = await prisma.document.findFirst({
+    where: documentWhereInput,
+  });
+
+  if (!document) {
+    throw new AppError(AppErrorCode.NOT_FOUND);
+  }
 
   const whereClause: Prisma.DocumentAuditLogWhereInput = {
     documentId,
@@ -113,5 +111,5 @@ export const findDocumentAuditLogs = async ({
     perPage,
     totalPages: Math.ceil(count / perPage),
     nextCursor,
-  } satisfies FindResultSet<typeof parsedData> & { nextCursor?: string };
+  } satisfies FindResultResponse<typeof parsedData> & { nextCursor?: string };
 };

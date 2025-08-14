@@ -1,9 +1,12 @@
+import fontkit from '@pdf-lib/fontkit';
 import type { PDFField, PDFWidgetAnnotation } from 'pdf-lib';
-import { PDFCheckBox, PDFRadioGroup, PDFRef } from 'pdf-lib';
 import {
+  PDFCheckBox,
   PDFDict,
   type PDFDocument,
   PDFName,
+  PDFRadioGroup,
+  PDFRef,
   drawObject,
   popGraphicsState,
   pushGraphicsState,
@@ -11,10 +14,30 @@ import {
   translate,
 } from 'pdf-lib';
 
-export const flattenForm = (document: PDFDocument) => {
+import { NEXT_PUBLIC_WEBAPP_URL } from '../../constants/app';
+
+export const removeOptionalContentGroups = (document: PDFDocument) => {
+  const context = document.context;
+  const catalog = context.lookup(context.trailerInfo.Root);
+  if (catalog instanceof PDFDict) {
+    catalog.delete(PDFName.of('OCProperties'));
+  }
+};
+
+export const flattenForm = async (document: PDFDocument) => {
+  removeOptionalContentGroups(document);
+
   const form = document.getForm();
 
-  form.updateFieldAppearances();
+  const fontNoto = await fetch(`${NEXT_PUBLIC_WEBAPP_URL()}/fonts/noto-sans.ttf`).then(
+    async (res) => res.arrayBuffer(),
+  );
+
+  document.registerFontkit(fontkit);
+
+  const font = await document.embedFont(fontNoto);
+
+  form.updateFieldAppearances(font);
 
   for (const field of form.getFields()) {
     for (const widget of field.acroField.getWidgets()) {

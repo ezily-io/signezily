@@ -1,7 +1,9 @@
+import type { TeamProfile } from '@prisma/client';
+
 import { prisma } from '@documenso/prisma';
-import type { TeamProfile } from '@documenso/prisma/client';
 
 import { AppError, AppErrorCode } from '../../errors/app-error';
+import { buildTeamWhereQuery } from '../../utils/teams';
 import { updateTeamPublicProfile } from './update-team-public-profile';
 
 export type GetTeamPublicProfileOptions = {
@@ -19,21 +21,16 @@ export const getTeamPublicProfile = async ({
   teamId,
 }: GetTeamPublicProfileOptions): Promise<GetTeamPublicProfileResponse> => {
   const team = await prisma.team.findFirst({
-    where: {
-      id: teamId,
-      members: {
-        some: {
-          userId,
-        },
-      },
-    },
+    where: buildTeamWhereQuery({ teamId, userId }),
     include: {
       profile: true,
     },
   });
 
   if (!team) {
-    throw new AppError(AppErrorCode.NOT_FOUND, 'Team not found');
+    throw new AppError(AppErrorCode.NOT_FOUND, {
+      message: 'Team not found',
+    });
   }
 
   // Create and return the public profile.
@@ -47,7 +44,9 @@ export const getTeamPublicProfile = async ({
     });
 
     if (!profile) {
-      throw new AppError(AppErrorCode.NOT_FOUND, 'Failed to create public profile');
+      throw new AppError(AppErrorCode.NOT_FOUND, {
+        message: 'Failed to create public profile',
+      });
     }
 
     return {

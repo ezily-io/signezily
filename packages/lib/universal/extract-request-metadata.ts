@@ -1,7 +1,6 @@
-import type { NextApiRequest } from 'next';
-
-import type { RequestInternal } from 'next-auth';
 import { z } from 'zod';
+
+import { getIpAddress } from './get-ip-address';
 
 const ZIpSchema = z.string().ip();
 
@@ -12,34 +11,52 @@ export const ZRequestMetadataSchema = z.object({
 
 export type RequestMetadata = z.infer<typeof ZRequestMetadataSchema>;
 
-export const extractNextApiRequestMetadata = (req: NextApiRequest): RequestMetadata => {
-  const parsedIp = ZIpSchema.safeParse(req.headers['x-forwarded-for'] || req.socket.remoteAddress);
+export type ApiRequestMetadata = {
+  /**
+   * The general metadata of the request.
+   */
+  requestMetadata: RequestMetadata;
 
-  const ipAddress = parsedIp.success ? parsedIp.data : undefined;
-  const userAgent = req.headers['user-agent'];
+  /**
+   * The source of the request.
+   */
+  source: 'apiV1' | 'apiV2' | 'app';
 
-  return {
-    ipAddress,
-    userAgent,
+  /**
+   * The method of authentication used to access the API.
+   *
+   * If the request is not authenticated, the value will be `null`.
+   */
+  auth: 'api' | 'session' | null;
+
+  /**
+   * The user that is performing the action.
+   *
+   * If a team API key is used, the user will classified as the team.
+   */
+  auditUser?: {
+    id: number | null;
+    email: string | null;
+    name: string | null;
   };
 };
 
-export const extractNextAuthRequestMetadata = (
-  req: Pick<RequestInternal, 'body' | 'query' | 'headers' | 'method'>,
-): RequestMetadata => {
-  return extractNextHeaderRequestMetadata(req.headers ?? {});
-};
+export const extractRequestMetadata = (req: Request): RequestMetadata => {
+  let ip: string | undefined = undefined;
 
-export const extractNextHeaderRequestMetadata = (
-  headers: Record<string, string>,
-): RequestMetadata => {
-  const parsedIp = ZIpSchema.safeParse(headers?.['x-forwarded-for']);
+  try {
+    ip = getIpAddress(req);
+  } catch {
+    // Do nothing.
+  }
+
+  const parsedIp = ZIpSchema.safeParse(ip);
 
   const ipAddress = parsedIp.success ? parsedIp.data : undefined;
-  const userAgent = headers?.['user-agent'];
+  const userAgent = req.headers.get('user-agent');
 
   return {
     ipAddress,
-    userAgent,
+    userAgent: userAgent ?? undefined,
   };
 };

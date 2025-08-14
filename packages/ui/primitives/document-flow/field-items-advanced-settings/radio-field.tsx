@@ -1,8 +1,8 @@
-'use client';
-
 import { useEffect, useState } from 'react';
 
-import { Trans } from '@lingui/macro';
+import { msg } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/react/macro';
 import { ChevronDown, ChevronUp, Trash } from 'lucide-react';
 
 import { validateRadioField } from '@documenso/lib/advanced-fields-validation/validate-radio';
@@ -27,6 +27,8 @@ export const RadioFieldAdvancedSettings = ({
   handleFieldChange,
   handleErrors,
 }: RadioFieldAdvancedSettingsProps) => {
+  const { _ } = useLingui();
+
   const [showValidation, setShowValidation] = useState(false);
   const [values, setValues] = useState(
     fieldState.values ?? [{ id: 1, checked: false, value: 'Default value' }],
@@ -102,6 +104,18 @@ export const RadioFieldAdvancedSettings = ({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4">
+        <div>
+          <Label>
+            <Trans>Label</Trans>
+          </Label>
+          <Input
+            id="label"
+            className="bg-background mt-2"
+            placeholder={_(msg`Field label`)}
+            value={fieldState.label}
+            onChange={(e) => handleFieldChange('label', e.target.value)}
+          />
+        </div>
         <div className="flex flex-row items-center gap-2">
           <Switch
             className="bg-background"
@@ -141,7 +155,7 @@ export const RadioFieldAdvancedSettings = ({
           {values.map((value) => (
             <div key={value.id} className="mt-2 flex items-center gap-4">
               <Checkbox
-                className="data-[state=checked]:bg-documenso border-foreground/30 data-[state=checked]:ring-documenso dark:data-[state=checked]:ring-offset-background h-5 w-5 rounded-full data-[state=checked]:ring-1 data-[state=checked]:ring-offset-2 data-[state=checked]:ring-offset-white"
+                className="data-[state=checked]:bg-documenso border-foreground/30 data-[state=checked]:ring-primary dark:data-[state=checked]:ring-offset-background h-5 w-5 rounded-full data-[state=checked]:ring-1 data-[state=checked]:ring-offset-2 data-[state=checked]:ring-offset-white"
                 checked={value.checked}
                 onCheckedChange={(checked) => handleCheckedChange(Boolean(checked), value.id)}
               />

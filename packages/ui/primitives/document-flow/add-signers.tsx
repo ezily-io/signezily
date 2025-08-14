@@ -1,35 +1,40 @@
-'use client';
-
 import React, { useCallback, useId, useMemo, useRef, useState } from 'react';
 
 import type { DropResult, SensorAPI } from '@hello-pangea/dnd';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Trans, msg } from '@lingui/macro';
+import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/react/macro';
+import type { Field, Recipient } from '@prisma/client';
+import { DocumentSigningOrder, RecipientRole, SendStatus } from '@prisma/client';
 import { motion } from 'framer-motion';
-import { GripVerticalIcon, Plus, Trash } from 'lucide-react';
-import { useSession } from 'next-auth/react';
+import { GripVerticalIcon, HelpCircle, Plus, Trash } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { prop, sortBy } from 'remeda';
 
 import { useLimits } from '@documenso/ee/server-only/limits/provider/client';
+import { useCurrentOrganisation } from '@documenso/lib/client-only/providers/organisation';
+import { useSession } from '@documenso/lib/client-only/providers/session';
 import { ZRecipientAuthOptionsSchema } from '@documenso/lib/types/document-auth';
 import { nanoid } from '@documenso/lib/universal/id';
 import { canRecipientBeModified as utilCanRecipientBeModified } from '@documenso/lib/utils/recipients';
-import type { Field, Recipient } from '@documenso/prisma/client';
-import { DocumentSigningOrder, RecipientRole, SendStatus } from '@documenso/prisma/client';
 import { AnimateGenericFadeInOut } from '@documenso/ui/components/animate/animate-generic-fade-in-out';
 import { RecipientActionAuthSelect } from '@documenso/ui/components/recipient/recipient-action-auth-select';
 import { RecipientRoleSelect } from '@documenso/ui/components/recipient/recipient-role-select';
 import { cn } from '@documenso/ui/lib/utils';
 
+import {
+  DocumentReadOnlyFields,
+  mapFieldsWithRecipients,
+} from '../../components/document/document-read-only-fields';
 import { Button } from '../button';
 import { Checkbox } from '../checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../form/form';
 import { FormErrorMessage } from '../form/form-error-message';
 import { Input } from '../input';
 import { useStep } from '../stepper';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip';
 import { useToast } from '../use-toast';
 import type { TAddSignersFormSchema } from './add-signers.types';
 import { ZAddSignersFormSchema } from './add-signers.types';
@@ -40,7 +45,7 @@ import {
   DocumentFlowFormContainerHeader,
   DocumentFlowFormContainerStep,
 } from './document-flow-root';
-import { ShowFieldItem } from './show-field-item';
+import { SigningOrderConfirmation } from './signing-order-confirmation';
 import type { DocumentFlowStep } from './types';
 
 export type AddSignersFormProps = {
@@ -48,7 +53,7 @@ export type AddSignersFormProps = {
   recipients: Recipient[];
   fields: Field[];
   signingOrder?: DocumentSigningOrder | null;
-  isDocumentEnterprise: boolean;
+  allowDictateNextSigner?: boolean;
   onSubmit: (_data: TAddSignersFormSchema) => void;
   isDocumentPdfLoaded: boolean;
 };
@@ -58,21 +63,21 @@ export const AddSignersFormPartial = ({
   recipients,
   fields,
   signingOrder,
-  isDocumentEnterprise,
+  allowDictateNextSigner,
   onSubmit,
   isDocumentPdfLoaded,
 }: AddSignersFormProps) => {
   const { _ } = useLingui();
   const { toast } = useToast();
   const { remaining } = useLimits();
-  const { data: session } = useSession();
-
-  const user = session?.user;
+  const { user } = useSession();
 
   const initialId = useId();
   const $sensorApi = useRef<SensorAPI | null>(null);
 
   const { currentStep, totalSteps, previousStep } = useStep();
+
+  const organisation = useCurrentOrganisation();
 
   const defaultRecipients = [
     {
@@ -81,7 +86,7 @@ export const AddSignersFormPartial = ({
       email: '',
       role: RecipientRole.SIGNER,
       signingOrder: 1,
-      actionAuth: undefined,
+      actionAuth: [],
     },
   ];
 
@@ -106,6 +111,7 @@ export const AddSignersFormPartial = ({
             )
           : defaultRecipients,
       signingOrder: signingOrder || DocumentSigningOrder.PARALLEL,
+      allowDictateNextSigner: allowDictateNextSigner ?? false,
     },
   });
 
@@ -114,15 +120,20 @@ export const AddSignersFormPartial = ({
     const recipientHasAuthOptions = recipients.find((recipient) => {
       const recipientAuthOptions = ZRecipientAuthOptionsSchema.parse(recipient.authOptions);
 
-      return recipientAuthOptions?.accessAuth || recipientAuthOptions?.actionAuth;
+      return (
+        recipientAuthOptions.accessAuth.length > 0 || recipientAuthOptions.actionAuth.length > 0
+      );
     });
 
-    const formHasActionAuth = form.getValues('signers').find((signer) => signer.actionAuth);
+    const formHasActionAuth = form
+      .getValues('signers')
+      .find((signer) => signer.actionAuth.length > 0);
 
     return recipientHasAuthOptions !== undefined || formHasActionAuth !== undefined;
   }, [recipients, form]);
 
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(alwaysShowAdvancedSettings);
+  const [showSigningOrderConfirmation, setShowSigningOrderConfirmation] = useState(false);
 
   const {
     setValue,
@@ -133,6 +144,10 @@ export const AddSignersFormPartial = ({
 
   const watchedSigners = watch('signers');
   const isSigningOrderSequential = watch('signingOrder') === DocumentSigningOrder.SEQUENTIAL;
+
+  const hasAssistantRole = useMemo(() => {
+    return watchedSigners.some((signer) => signer.role === RecipientRole.ASSISTANT);
+  }, [watchedSigners]);
 
   const normalizeSigningOrders = (signers: typeof watchedSigners) => {
     return signers
@@ -180,7 +195,7 @@ export const AddSignersFormPartial = ({
       name: '',
       email: '',
       role: RecipientRole.SIGNER,
-      actionAuth: undefined,
+      actionAuth: [],
       signingOrder: signers.length > 0 ? (signers[signers.length - 1]?.signingOrder ?? 0) + 1 : 1,
     });
   };
@@ -198,10 +213,12 @@ export const AddSignersFormPartial = ({
       return;
     }
 
-    removeSigner(index);
-
-    const updatedSigners = signers.filter((_, idx) => idx !== index);
-    form.setValue('signers', normalizeSigningOrders(updatedSigners));
+    const formStateIndex = form.getValues('signers').findIndex((s) => s.formId === signer.formId);
+    if (formStateIndex !== -1) {
+      removeSigner(formStateIndex);
+      const updatedSigners = form.getValues('signers').filter((s) => s.formId !== signer.formId);
+      form.setValue('signers', normalizeSigningOrders(updatedSigners));
+    }
   };
 
   const onAddSelfSigner = () => {
@@ -214,7 +231,7 @@ export const AddSignersFormPartial = ({
         name: user?.name ?? '',
         email: user?.email ?? '',
         role: RecipientRole.SIGNER,
-        actionAuth: undefined,
+        actionAuth: [],
         signingOrder: signers.length > 0 ? (signers[signers.length - 1]?.signingOrder ?? 0) + 1 : 1,
       });
     }
@@ -233,6 +250,7 @@ export const AddSignersFormPartial = ({
       const items = Array.from(watchedSigners);
       const [reorderedSigner] = items.splice(result.source.index, 1);
 
+      // Find next valid position
       let insertIndex = result.destination.index;
       while (insertIndex < items.length && !canRecipientBeModified(items[insertIndex].nativeId)) {
         insertIndex++;
@@ -240,125 +258,116 @@ export const AddSignersFormPartial = ({
 
       items.splice(insertIndex, 0, reorderedSigner);
 
-      const updatedSigners = items.map((item, index) => ({
-        ...item,
-        signingOrder: !canRecipientBeModified(item.nativeId) ? item.signingOrder : index + 1,
+      const updatedSigners = items.map((signer, index) => ({
+        ...signer,
+        signingOrder: !canRecipientBeModified(signer.nativeId) ? signer.signingOrder : index + 1,
       }));
 
-      updatedSigners.forEach((item, index) => {
-        const keys: (keyof typeof item)[] = [
-          'formId',
-          'nativeId',
-          'email',
-          'name',
-          'role',
-          'signingOrder',
-          'actionAuth',
-        ];
-        keys.forEach((key) => {
-          form.setValue(`signers.${index}.${key}` as const, item[key]);
-        });
-      });
+      form.setValue('signers', updatedSigners);
 
-      const currentLength = form.getValues('signers').length;
-      if (currentLength > updatedSigners.length) {
-        for (let i = updatedSigners.length; i < currentLength; i++) {
-          form.unregister(`signers.${i}`);
-        }
+      const lastSigner = updatedSigners[updatedSigners.length - 1];
+      if (lastSigner.role === RecipientRole.ASSISTANT) {
+        toast({
+          title: _(msg`Warning: Assistant as last signer`),
+          description: _(
+            msg`Having an assistant as the last signer means they will be unable to take any action as there are no subsequent signers to assist.`,
+          ),
+        });
       }
 
       await form.trigger('signers');
     },
-    [form, canRecipientBeModified, watchedSigners],
+    [form, canRecipientBeModified, watchedSigners, toast],
   );
 
-  const triggerDragAndDrop = useCallback(
-    (fromIndex: number, toIndex: number) => {
-      if (!$sensorApi.current) {
+  const handleRoleChange = useCallback(
+    (index: number, role: RecipientRole) => {
+      const currentSigners = form.getValues('signers');
+      const signingOrder = form.getValues('signingOrder');
+
+      // Handle parallel to sequential conversion for assistants
+      if (role === RecipientRole.ASSISTANT && signingOrder === DocumentSigningOrder.PARALLEL) {
+        form.setValue('signingOrder', DocumentSigningOrder.SEQUENTIAL);
+        toast({
+          title: _(msg`Signing order is enabled.`),
+          description: _(msg`You cannot add assistants when signing order is disabled.`),
+          variant: 'destructive',
+        });
         return;
       }
 
-      const draggableId = signers[fromIndex].id;
+      const updatedSigners = currentSigners.map((signer, idx) => ({
+        ...signer,
+        role: idx === index ? role : signer.role,
+        signingOrder: !canRecipientBeModified(signer.nativeId) ? signer.signingOrder : idx + 1,
+      }));
 
-      const preDrag = $sensorApi.current.tryGetLock(draggableId);
+      form.setValue('signers', updatedSigners);
 
-      if (!preDrag) {
-        return;
+      if (role === RecipientRole.ASSISTANT && index === updatedSigners.length - 1) {
+        toast({
+          title: _(msg`Warning: Assistant as last signer`),
+          description: _(
+            msg`Having an assistant as the last signer means they will be unable to take any action as there are no subsequent signers to assist.`,
+          ),
+        });
       }
-
-      const drag = preDrag.snapLift();
-
-      setTimeout(() => {
-        // Move directly to the target index
-        if (fromIndex < toIndex) {
-          for (let i = fromIndex; i < toIndex; i++) {
-            drag.moveDown();
-          }
-        } else {
-          for (let i = fromIndex; i > toIndex; i--) {
-            drag.moveUp();
-          }
-        }
-
-        setTimeout(() => {
-          drag.drop();
-        }, 500);
-      }, 0);
     },
-    [signers],
-  );
-
-  const updateSigningOrders = useCallback(
-    (newIndex: number, oldIndex: number) => {
-      const updatedSigners = form.getValues('signers').map((signer, index) => {
-        if (index === oldIndex) {
-          return { ...signer, signingOrder: newIndex + 1 };
-        } else if (index >= newIndex && index < oldIndex) {
-          return {
-            ...signer,
-            signingOrder: !canRecipientBeModified(signer.nativeId)
-              ? signer.signingOrder
-              : (signer.signingOrder ?? index + 1) + 1,
-          };
-        } else if (index <= newIndex && index > oldIndex) {
-          return {
-            ...signer,
-            signingOrder: !canRecipientBeModified(signer.nativeId)
-              ? signer.signingOrder
-              : Math.max(1, (signer.signingOrder ?? index + 1) - 1),
-          };
-        }
-        return signer;
-      });
-
-      updatedSigners.forEach((signer, index) => {
-        form.setValue(`signers.${index}.signingOrder`, signer.signingOrder);
-      });
-    },
-    [form, canRecipientBeModified],
+    [form, toast, canRecipientBeModified],
   );
 
   const handleSigningOrderChange = useCallback(
     (index: number, newOrderString: string) => {
-      const newOrder = parseInt(newOrderString, 10);
-
-      if (!newOrderString.trim()) {
+      const trimmedOrderString = newOrderString.trim();
+      if (!trimmedOrderString) {
         return;
       }
 
-      if (Number.isNaN(newOrder)) {
-        form.setValue(`signers.${index}.signingOrder`, index + 1);
+      const newOrder = Number(trimmedOrderString);
+      if (!Number.isInteger(newOrder) || newOrder < 1) {
         return;
       }
 
-      const newIndex = newOrder - 1;
-      if (index !== newIndex) {
-        updateSigningOrders(newIndex, index);
-        triggerDragAndDrop(index, newIndex);
+      const currentSigners = form.getValues('signers');
+      const signer = currentSigners[index];
+
+      // Remove signer from current position and insert at new position
+      const remainingSigners = currentSigners.filter((_, idx) => idx !== index);
+      const newPosition = Math.min(Math.max(0, newOrder - 1), currentSigners.length - 1);
+      remainingSigners.splice(newPosition, 0, signer);
+
+      const updatedSigners = remainingSigners.map((s, idx) => ({
+        ...s,
+        signingOrder: !canRecipientBeModified(s.nativeId) ? s.signingOrder : idx + 1,
+      }));
+
+      form.setValue('signers', updatedSigners);
+
+      if (signer.role === RecipientRole.ASSISTANT && newPosition === remainingSigners.length - 1) {
+        toast({
+          title: _(msg`Warning: Assistant as last signer`),
+          description: _(
+            msg`Having an assistant as the last signer means they will be unable to take any action as there are no subsequent signers to assist.`,
+          ),
+        });
       }
     },
-    [form, triggerDragAndDrop, updateSigningOrders],
+    [form, canRecipientBeModified, toast],
   );
+
+  const handleSigningOrderDisable = useCallback(() => {
+    setShowSigningOrderConfirmation(false);
+
+    const currentSigners = form.getValues('signers');
+    const updatedSigners = currentSigners.map((signer) => ({
+      ...signer,
+      role: signer.role === RecipientRole.ASSISTANT ? RecipientRole.SIGNER : signer.role,
+    }));
+
+    form.setValue('signers', updatedSigners);
+    form.setValue('signingOrder', DocumentSigningOrder.PARALLEL);
+    form.setValue('allowDictateNextSigner', false);
+  }, [form]);
 
   return (
     <>
@@ -367,10 +376,13 @@ export const AddSignersFormPartial = ({
         description={documentFlow.description}
       />
       <DocumentFlowFormContainerContent>
-        {isDocumentPdfLoaded &&
-          fields.map((field, index) => (
-            <ShowFieldItem key={index} field={field} recipients={recipients} />
-          ))}
+        {isDocumentPdfLoaded && (
+          <DocumentReadOnlyFields
+            showRecipientColors={true}
+            recipientIds={recipients.map((recipient) => recipient.id)}
+            fields={mapFieldsWithRecipients(fields, recipients)}
+          />
+        )}
 
         <AnimateGenericFadeInOut motionKey={showAdvancedSettings ? 'Show' : 'Hide'}>
           <Form {...form}>
@@ -383,13 +395,22 @@ export const AddSignersFormPartial = ({
                     <Checkbox
                       {...field}
                       id="signingOrder"
-                      checkClassName="text-white"
                       checked={field.value === DocumentSigningOrder.SEQUENTIAL}
-                      onCheckedChange={(checked) =>
+                      onCheckedChange={(checked) => {
+                        if (!checked && hasAssistantRole) {
+                          setShowSigningOrderConfirmation(true);
+                          return;
+                        }
+
                         field.onChange(
                           checked ? DocumentSigningOrder.SEQUENTIAL : DocumentSigningOrder.PARALLEL,
-                        )
-                      }
+                        );
+
+                        // If sequential signing is turned off, disable dictate next signer
+                        if (!checked) {
+                          form.setValue('allowDictateNextSigner', false);
+                        }
+                      }}
                       disabled={isSubmitting || hasDocumentBeenSent}
                     />
                   </FormControl>
@@ -403,6 +424,50 @@ export const AddSignersFormPartial = ({
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="allowDictateNextSigner"
+              render={({ field: { value, ...field } }) => (
+                <FormItem className="mb-6 flex flex-row items-center space-x-2 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      {...field}
+                      id="allowDictateNextSigner"
+                      checked={value}
+                      onCheckedChange={field.onChange}
+                      disabled={isSubmitting || hasDocumentBeenSent || !isSigningOrderSequential}
+                    />
+                  </FormControl>
+
+                  <div className="flex items-center">
+                    <FormLabel
+                      htmlFor="allowDictateNextSigner"
+                      className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      <Trans>Allow signers to dictate next signer</Trans>
+                    </FormLabel>
+
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="text-muted-foreground ml-1 cursor-help">
+                          <HelpCircle className="h-3.5 w-3.5" />
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-80 p-4">
+                        <p>
+                          <Trans>
+                            When enabled, signers can choose who should sign next in the sequence
+                            instead of following the predefined order.
+                          </Trans>
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                </FormItem>
+              )}
+            />
+
             <DragDropContext
               onDragEnd={onDragEnd}
               sensors={[
@@ -569,36 +634,37 @@ export const AddSignersFormPartial = ({
                                 )}
                               />
 
-                              {showAdvancedSettings && isDocumentEnterprise && (
-                                <FormField
-                                  control={form.control}
-                                  name={`signers.${index}.actionAuth`}
-                                  render={({ field }) => (
-                                    <FormItem
-                                      className={cn('col-span-8', {
-                                        'mb-6':
-                                          form.formState.errors.signers?.[index] &&
-                                          !form.formState.errors.signers[index]?.actionAuth,
-                                        'col-span-10': isSigningOrderSequential,
-                                      })}
-                                    >
-                                      <FormControl>
-                                        <RecipientActionAuthSelect
-                                          {...field}
-                                          onValueChange={field.onChange}
-                                          disabled={
-                                            snapshot.isDragging ||
-                                            isSubmitting ||
-                                            !canRecipientBeModified(signer.nativeId)
-                                          }
-                                        />
-                                      </FormControl>
+                              {showAdvancedSettings &&
+                                organisation.organisationClaim.flags.cfr21 && (
+                                  <FormField
+                                    control={form.control}
+                                    name={`signers.${index}.actionAuth`}
+                                    render={({ field }) => (
+                                      <FormItem
+                                        className={cn('col-span-8', {
+                                          'mb-6':
+                                            form.formState.errors.signers?.[index] &&
+                                            !form.formState.errors.signers[index]?.actionAuth,
+                                          'col-span-10': isSigningOrderSequential,
+                                        })}
+                                      >
+                                        <FormControl>
+                                          <RecipientActionAuthSelect
+                                            {...field}
+                                            onValueChange={field.onChange}
+                                            disabled={
+                                              snapshot.isDragging ||
+                                              isSubmitting ||
+                                              !canRecipientBeModified(signer.nativeId)
+                                            }
+                                          />
+                                        </FormControl>
 
-                                      <FormMessage />
-                                    </FormItem>
-                                  )}
-                                />
-                              )}
+                                        <FormMessage />
+                                      </FormItem>
+                                    )}
+                                  />
+                                )}
 
                               <div className="col-span-2 flex gap-x-2">
                                 <FormField
@@ -614,7 +680,11 @@ export const AddSignersFormPartial = ({
                                       <FormControl>
                                         <RecipientRoleSelect
                                           {...field}
-                                          onValueChange={field.onChange}
+                                          isAssistantEnabled={isSigningOrderSequential}
+                                          onValueChange={(value) =>
+                                            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+                                            handleRoleChange(index, value as RecipientRole)
+                                          }
                                           disabled={
                                             snapshot.isDragging ||
                                             isSubmitting ||
@@ -692,12 +762,11 @@ export const AddSignersFormPartial = ({
               </Button>
             </div>
 
-            {!alwaysShowAdvancedSettings && isDocumentEnterprise && (
+            {!alwaysShowAdvancedSettings && organisation.organisationClaim.flags.cfr21 && (
               <div className="mt-4 flex flex-row items-center">
                 <Checkbox
                   id="showAdvancedRecipientSettings"
                   className="h-5 w-5"
-                  checkClassName="dark:text-white text-primary"
                   checked={showAdvancedSettings}
                   onCheckedChange={(value) => setShowAdvancedSettings(Boolean(value))}
                 />
@@ -712,6 +781,12 @@ export const AddSignersFormPartial = ({
             )}
           </Form>
         </AnimateGenericFadeInOut>
+
+        <SigningOrderConfirmation
+          open={showSigningOrderConfirmation}
+          onOpenChange={setShowSigningOrderConfirmation}
+          onConfirm={handleSigningOrderDisable}
+        />
       </DocumentFlowFormContainerContent>
 
       <DocumentFlowFormContainerFooter>

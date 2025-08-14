@@ -1,80 +1,96 @@
-'use client';
-
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Caveat } from 'next/font/google';
-
-import { CopyPlus, Settings2, Trash } from 'lucide-react';
+import { msg } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
+import { FieldType } from '@prisma/client';
+import { CopyPlus, Settings2, SquareStack, Trash } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { Rnd } from 'react-rnd';
-import { match } from 'ts-pattern';
+import { useSearchParams } from 'react-router';
 
+import { useElementBounds } from '@documenso/lib/client-only/hooks/use-element-bounds';
 import { PDF_VIEWER_PAGE_SELECTOR } from '@documenso/lib/constants/pdf-viewer';
 import type { TFieldMetaSchema } from '@documenso/lib/types/field-meta';
 import { ZCheckboxFieldMeta, ZRadioFieldMeta } from '@documenso/lib/types/field-meta';
 
-import { useSignerColors } from '../../lib/signer-colors';
+import { useRecipientColors } from '../../lib/recipient-colors';
 import { cn } from '../../lib/utils';
-import { CheckboxField } from './advanced-fields/checkbox';
-import { RadioField } from './advanced-fields/radio';
-import { FieldIcon } from './field-icon';
+import { FieldContent } from './field-content';
 import type { TDocumentFlowFormSchema } from './types';
 
 type Field = TDocumentFlowFormSchema['fields'][0];
 
-const fontCaveat = Caveat({
-  weight: ['500'],
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-caveat',
-});
-
 export type FieldItemProps = {
   field: Field;
+  fieldClassName?: string;
   passive?: boolean;
   disabled?: boolean;
   minHeight?: number;
   minWidth?: number;
+  defaultHeight?: number;
+  defaultWidth?: number;
   onResize?: (_node: HTMLElement) => void;
   onMove?: (_node: HTMLElement) => void;
   onRemove?: () => void;
   onDuplicate?: () => void;
+  onDuplicateAllPages?: () => void;
   onAdvancedSettings?: () => void;
   onFocus?: () => void;
   onBlur?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
   recipientIndex?: number;
-  hideRecipients?: boolean;
   hasErrors?: boolean;
+  active?: boolean;
+  onFieldActivate?: () => void;
+  onFieldDeactivate?: () => void;
 };
 
+/**
+ * The item when editing fields??
+ */
 export const FieldItem = ({
+  fieldClassName,
   field,
   passive,
   disabled,
   minHeight,
   minWidth,
+  defaultHeight,
+  defaultWidth,
   onResize,
   onMove,
   onRemove,
   onDuplicate,
+  onDuplicateAllPages,
+  onAdvancedSettings,
   onFocus,
   onBlur,
-  onAdvancedSettings,
   recipientIndex = 0,
-  hideRecipients = false,
   hasErrors,
+  active,
+  onFieldActivate,
+  onFieldDeactivate,
 }: FieldItemProps) => {
-  const [active, setActive] = useState(false);
+  const { _ } = useLingui();
+  const [searchParams] = useSearchParams();
+
   const [coords, setCoords] = useState({
     pageX: 0,
     pageY: 0,
-    pageHeight: 0,
-    pageWidth: 0,
+    pageHeight: defaultHeight || 0,
+    pageWidth: defaultWidth || 0,
   });
   const [settingsActive, setSettingsActive] = useState(false);
-  const $el = useRef(null);
+  const $el = useRef<HTMLDivElement>(null);
 
-  const signerStyles = useSignerColors(recipientIndex);
+  const $pageBounds = useElementBounds(
+    `${PDF_VIEWER_PAGE_SELECTOR}[data-page-number="${field.pageNumber}"]`,
+  );
+
+  const signerStyles = useRecipientColors(recipientIndex);
+
+  const isDevMode = searchParams.get('devmode') === 'true';
 
   const advancedField = [
     'NUMBER',
@@ -146,6 +162,8 @@ export const FieldItem = ({
       });
 
       if (isOutsideOfField) {
+        setSettingsActive(false);
+        onFieldDeactivate?.();
         onBlur?.();
       }
     };
@@ -174,9 +192,33 @@ export const FieldItem = ({
     () => hasFieldMetaValues('CHECKBOX', field.fieldMeta, ZCheckboxFieldMeta),
     [field.fieldMeta],
   );
+
   const radioHasValues = useMemo(
     () => hasFieldMetaValues('RADIO', field.fieldMeta, ZRadioFieldMeta),
     [field.fieldMeta],
+  );
+
+  const hasCheckedValues = (fieldMeta: TFieldMetaSchema, type: FieldType) => {
+    if (!fieldMeta || (type !== FieldType.RADIO && type !== FieldType.CHECKBOX)) {
+      return false;
+    }
+
+    if (type === FieldType.RADIO) {
+      const parsed = ZRadioFieldMeta.parse(fieldMeta);
+      return parsed.values?.some((value) => value.checked) ?? false;
+    }
+
+    if (type === FieldType.CHECKBOX) {
+      const parsed = ZCheckboxFieldMeta.parse(fieldMeta);
+      return parsed.values?.some((value) => value.checked) ?? false;
+    }
+
+    return false;
+  };
+
+  const fieldHasCheckedValues = useMemo(
+    () => hasCheckedValues(field.fieldMeta, field.type),
+    [field.fieldMeta, field.type],
   );
 
   const fixedSize = checkBoxHasValues || radioHasValues;
@@ -184,87 +226,112 @@ export const FieldItem = ({
   return createPortal(
     <Rnd
       key={coords.pageX + coords.pageY + coords.pageHeight + coords.pageWidth}
-      className={cn('group z-20', {
+      className={cn('dark-mode-disabled group', {
         'pointer-events-none': passive,
         'pointer-events-none cursor-not-allowed opacity-75': disabled,
-        'z-10': !active || disabled,
+        'z-50': active && !disabled,
+        'z-20': !active && !disabled,
+        'z-10': disabled,
       })}
       minHeight={fixedSize ? '' : minHeight || 'auto'}
       minWidth={fixedSize ? '' : minWidth || 'auto'}
       default={{
         x: coords.pageX,
         y: coords.pageY,
-        height: fixedSize ? '' : coords.pageHeight,
-        width: fixedSize ? '' : coords.pageWidth,
+        height: fixedSize ? 'auto' : coords.pageHeight,
+        width: fixedSize ? 'auto' : coords.pageWidth,
       }}
+      maxWidth={fixedSize && $pageBounds?.width ? $pageBounds.width - coords.pageX : undefined}
       bounds={`${PDF_VIEWER_PAGE_SELECTOR}[data-page-number="${field.pageNumber}"]`}
-      onDragStart={() => setActive(true)}
-      onResizeStart={() => setActive(true)}
+      onDragStart={() => onFieldActivate?.()}
+      onResizeStart={() => onFieldActivate?.()}
+      onMouseEnter={() => onFocus?.()}
+      onMouseLeave={() => onBlur?.()}
       enableResizing={!fixedSize}
+      resizeHandleStyles={{
+        bottom: { bottom: -8, cursor: 'ns-resize' },
+        top: { top: -8, cursor: 'ns-resize' },
+        left: { cursor: 'ew-resize' },
+        right: { cursor: 'ew-resize' },
+      }}
       onResizeStop={(_e, _d, ref) => {
-        setActive(false);
+        onFieldDeactivate?.();
         onResize?.(ref);
       }}
       onDragStop={(_e, d) => {
-        setActive(false);
+        onFieldDeactivate?.();
         onMove?.(d.node);
       }}
     >
+      {(field.type === FieldType.RADIO || field.type === FieldType.CHECKBOX) &&
+        field.fieldMeta?.label && (
+          <div
+            className={cn(
+              'absolute -top-16 left-0 right-0 rounded-md p-2 text-center text-xs text-gray-700',
+              {
+                'bg-foreground/5 border-primary border': !fieldHasCheckedValues,
+                'bg-documenso-200 border-primary border': fieldHasCheckedValues,
+              },
+            )}
+          >
+            {field.fieldMeta.label}
+          </div>
+        )}
+
       <div
         className={cn(
-          'relative flex h-full w-full items-center justify-center bg-white',
-          !hasErrors && signerStyles.default.base,
-          !hasErrors && signerStyles.default.fieldItem,
+          'group/field-item relative flex h-full w-full items-center justify-center rounded-[2px] bg-white/90 px-2 ring-2 transition-colors',
+          !hasErrors && signerStyles.base,
+          !hasErrors && signerStyles.fieldItem,
+          fieldClassName,
           {
-            'rounded-lg border border-red-400 bg-red-400/20 shadow-[0_0_0_5px_theme(colors.red.500/10%),0_0_0_2px_theme(colors.red.500/40%),0_0_0_0.5px_theme(colors.red.500)]':
+            'rounded-[2px] border bg-red-400/20 shadow-[0_0_0_5px_theme(colors.red.500/10%),0_0_0_2px_theme(colors.red.500/40%),0_0_0_0.5px_theme(colors.red.500)] ring-red-400':
               hasErrors,
           },
           !fixedSize && '[container-type:size]',
         )}
         data-error={hasErrors ? 'true' : undefined}
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           setSettingsActive((prev) => !prev);
+          onFieldActivate?.();
           onFocus?.();
         }}
         ref={$el}
         data-field-id={field.nativeId}
       >
-        {match(field.type)
-          .with('CHECKBOX', () => <CheckboxField field={field} />)
-          .with('RADIO', () => <RadioField field={field} />)
-          .otherwise(() => (
-            <FieldIcon
-              fieldMeta={field.fieldMeta}
-              type={field.type}
-              signerEmail={field.signerEmail}
-              fontCaveatClassName={fontCaveat.className}
-            />
-          ))}
+        <FieldContent field={field} />
 
-        {!hideRecipients && (
-          <div className="absolute -right-5 top-0 z-20 hidden h-full w-5 items-center justify-center group-hover:flex">
-            <div
-              className={cn(
-                'flex h-5 w-5 flex-col items-center justify-center rounded-r-md text-[0.5rem] font-bold text-white',
-                signerStyles.default.fieldItemInitials,
-                {
-                  '!opacity-50': disabled || passive,
-                },
-              )}
-            >
-              {(field.signerEmail?.charAt(0)?.toUpperCase() ?? '') +
-                (field.signerEmail?.charAt(1)?.toUpperCase() ?? '')}
-            </div>
+        {/* On hover, display recipient initials on side of field.  */}
+        <div className="absolute -right-5 top-0 z-20 hidden h-full w-5 items-center justify-center group-hover:flex">
+          <div
+            className={cn(
+              'flex h-5 w-5 flex-col items-center justify-center rounded-r-md text-[0.5rem] font-bold text-white opacity-0 transition duration-200 group-hover/field-item:opacity-100',
+              signerStyles.fieldItemInitials,
+              {
+                '!opacity-50': disabled || passive,
+              },
+            )}
+          >
+            {(field.signerEmail?.charAt(0)?.toUpperCase() ?? '') +
+              (field.signerEmail?.charAt(1)?.toUpperCase() ?? '')}
+          </div>
+        </div>
+
+        {isDevMode && (
+          <div className="text-muted-foreground absolute -top-6 left-0 right-0 text-center text-[10px]">
+            {`x: ${field.pageX.toFixed(2)}, y: ${field.pageY.toFixed(2)}`}
           </div>
         )}
       </div>
 
       {!disabled && settingsActive && (
-        <div className="mt-1 flex justify-center">
-          <div className="dark:bg-background group flex items-center justify-evenly gap-x-1 rounded-md border bg-gray-900 p-0.5">
+        <div className="absolute z-[60] mt-1 flex w-full items-center justify-center">
+          <div className="group flex items-center justify-evenly gap-x-1 rounded-md border bg-gray-900 p-0.5">
             {advancedField && (
               <button
-                className="dark:text-muted-foreground/50 dark:hover:text-muted-foreground dark:hover:bg-foreground/10 rounded-sm p-1.5 text-gray-400 transition-colors hover:bg-white/10 hover:text-gray-100"
+                title={_(msg`Advanced settings`)}
+                className="rounded-sm p-1.5 text-gray-400 transition-colors hover:bg-white/10 hover:text-gray-100"
                 onClick={onAdvancedSettings}
                 onTouchEnd={onAdvancedSettings}
               >
@@ -273,7 +340,8 @@ export const FieldItem = ({
             )}
 
             <button
-              className="dark:text-muted-foreground/50 dark:hover:text-muted-foreground dark:hover:bg-foreground/10 rounded-sm p-1.5 text-gray-400 transition-colors hover:bg-white/10 hover:text-gray-100"
+              title={_(msg`Duplicate`)}
+              className="rounded-sm p-1.5 text-gray-400 transition-colors hover:bg-white/10 hover:text-gray-100"
               onClick={onDuplicate}
               onTouchEnd={onDuplicate}
             >
@@ -281,7 +349,17 @@ export const FieldItem = ({
             </button>
 
             <button
-              className="dark:text-muted-foreground/50 dark:hover:text-muted-foreground dark:hover:bg-foreground/10 rounded-sm p-1.5 text-gray-400 transition-colors hover:bg-white/10 hover:text-gray-100"
+              title={_(msg`Duplicate on all pages`)}
+              className="rounded-sm p-1.5 text-gray-400 transition-colors hover:bg-white/10 hover:text-gray-100"
+              onClick={onDuplicateAllPages}
+              onTouchEnd={onDuplicateAllPages}
+            >
+              <SquareStack className="h-3 w-3" />
+            </button>
+
+            <button
+              title={_(msg`Remove`)}
+              className="rounded-sm p-1.5 text-gray-400 transition-colors hover:bg-white/10 hover:text-gray-100"
               onClick={onRemove}
               onTouchEnd={onRemove}
             >

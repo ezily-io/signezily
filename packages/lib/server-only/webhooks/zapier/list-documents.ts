@@ -1,39 +1,36 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { Webhook } from '@prisma/client';
 
 import { findDocuments } from '@documenso/lib/server-only/document/find-documents';
 import { getRecipientsForDocument } from '@documenso/lib/server-only/recipient/get-recipients-for-document';
-import type { Webhook } from '@documenso/prisma/client';
 
 import { getWebhooksByTeamId } from '../get-webhooks-by-team-id';
-import { getWebhooksByUserId } from '../get-webhooks-by-user-id';
 import { validateApiToken } from './validateApiToken';
 
-export const listDocumentsHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+export const listDocumentsHandler = async (req: Request) => {
   try {
-    const { authorization } = req.headers;
+    const authorization = req.headers.get('authorization');
+
+    if (!authorization) {
+      return new Response('Unauthorized', { status: 401 });
+    }
+
     const { user, userId, teamId } = await validateApiToken({ authorization });
 
     let allWebhooks: Webhook[] = [];
 
     const documents = await findDocuments({
       userId: userId ?? user.id,
-      teamId: teamId ?? undefined,
+      teamId,
       perPage: 1,
     });
 
     const recipients = await getRecipientsForDocument({
       documentId: documents.data[0].id,
       userId: userId ?? user.id,
-      teamId: teamId ?? undefined,
+      teamId,
     });
 
-    if (userId) {
-      allWebhooks = await getWebhooksByUserId(userId);
-    }
-
-    if (teamId) {
-      allWebhooks = await getWebhooksByTeamId(teamId, user.id);
-    }
+    allWebhooks = await getWebhooksByTeamId(teamId, user.id);
 
     if (documents && documents.data.length > 0 && allWebhooks.length > 0 && recipients.length > 0) {
       const testWebhook = {
@@ -55,13 +52,18 @@ export const listDocumentsHandler = async (req: NextApiRequest, res: NextApiResp
         },
       };
 
-      return res.status(200).json([testWebhook]);
+      return Response.json([testWebhook]);
     }
 
-    return res.status(200).json([]);
+    return Response.json([]);
   } catch (err) {
-    return res.status(500).json({
-      message: 'Internal Server Error',
-    });
+    console.error(err);
+
+    return Response.json(
+      {
+        message: 'Internal Server Error',
+      },
+      { status: 500 },
+    );
   }
 };

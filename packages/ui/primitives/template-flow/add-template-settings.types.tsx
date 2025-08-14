@@ -1,6 +1,10 @@
+import { msg } from '@lingui/core/macro';
+import { DocumentDistributionMethod } from '@prisma/client';
+import { DocumentVisibility } from '@prisma/client';
 import { z } from 'zod';
 
 import { DEFAULT_DOCUMENT_DATE_FORMAT } from '@documenso/lib/constants/date-formats';
+import { DocumentSignatureType } from '@documenso/lib/constants/document';
 import { SUPPORTED_LANGUAGE_CODES } from '@documenso/lib/constants/i18n';
 import { DEFAULT_DOCUMENT_TIME_ZONE } from '@documenso/lib/constants/time-zones';
 import {
@@ -9,24 +13,26 @@ import {
 } from '@documenso/lib/types/document-auth';
 import { ZDocumentEmailSettingsSchema } from '@documenso/lib/types/document-email';
 import { isValidRedirectUrl } from '@documenso/lib/utils/is-valid-redirect-url';
-
-import { ZMapNegativeOneToUndefinedSchema } from '../document-flow/add-settings.types';
-import { DocumentDistributionMethod } from '.prisma/client';
+import {
+  ZDocumentMetaDateFormatSchema,
+  ZDocumentMetaTimezoneSchema,
+} from '@documenso/trpc/server/document-router/schema';
 
 export const ZAddTemplateSettingsFormSchema = z.object({
   title: z.string().trim().min(1, { message: "Title can't be empty" }),
   externalId: z.string().optional(),
-  globalAccessAuth: ZMapNegativeOneToUndefinedSchema.pipe(
-    ZDocumentAccessAuthTypesSchema.optional(),
-  ),
-  globalActionAuth: ZMapNegativeOneToUndefinedSchema.pipe(
-    ZDocumentActionAuthTypesSchema.optional(),
-  ),
+  visibility: z.nativeEnum(DocumentVisibility).optional(),
+  globalAccessAuth: z
+    .array(z.union([ZDocumentAccessAuthTypesSchema, z.literal('-1')]))
+    .transform((val) => (val.length === 1 && val[0] === '-1' ? [] : val))
+    .optional()
+    .default([]),
+  globalActionAuth: z.array(ZDocumentActionAuthTypesSchema).optional().default([]),
   meta: z.object({
     subject: z.string(),
     message: z.string(),
-    timezone: z.string().optional().default(DEFAULT_DOCUMENT_TIME_ZONE),
-    dateFormat: z.string().optional().default(DEFAULT_DOCUMENT_DATE_FORMAT),
+    timezone: ZDocumentMetaTimezoneSchema.default(DEFAULT_DOCUMENT_TIME_ZONE),
+    dateFormat: ZDocumentMetaDateFormatSchema.default(DEFAULT_DOCUMENT_DATE_FORMAT),
     distributionMethod: z
       .nativeEnum(DocumentDistributionMethod)
       .optional()
@@ -42,7 +48,15 @@ export const ZAddTemplateSettingsFormSchema = z.object({
       .union([z.string(), z.enum(SUPPORTED_LANGUAGE_CODES)])
       .optional()
       .default('en'),
+    emailId: z.string().nullable(),
+    emailReplyTo: z.preprocess(
+      (val) => (val === '' ? undefined : val),
+      z.string().email().optional(),
+    ),
     emailSettings: ZDocumentEmailSettingsSchema,
+    signatureTypes: z.array(z.nativeEnum(DocumentSignatureType)).min(1, {
+      message: msg`At least one signature type must be enabled`.id,
+    }),
   }),
 });
 

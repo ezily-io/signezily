@@ -1,13 +1,3 @@
-import { z } from 'zod';
-
-import { SUPPORTED_LANGUAGE_CODES } from '@documenso/lib/constants/i18n';
-import {
-  ZDocumentAccessAuthTypesSchema,
-  ZDocumentActionAuthTypesSchema,
-} from '@documenso/lib/types/document-auth';
-import { ZDocumentEmailSettingsSchema } from '@documenso/lib/types/document-email';
-import { ZBaseTableSearchParamsSchema } from '@documenso/lib/types/search-params';
-import { isValidRedirectUrl } from '@documenso/lib/utils/is-valid-redirect-url';
 import {
   DocumentDistributionMethod,
   DocumentSigningOrder,
@@ -15,44 +5,182 @@ import {
   DocumentStatus,
   DocumentVisibility,
   FieldType,
-  RecipientRole,
-} from '@documenso/prisma/client';
+} from '@prisma/client';
+import { z } from 'zod';
 
-export const ZFindDocumentsQuerySchema = ZBaseTableSearchParamsSchema.extend({
-  teamId: z.number().min(1).optional(),
-  templateId: z.number().min(1).optional(),
-  search: z
-    .string()
-    .optional()
-    .catch(() => undefined),
-  source: z.nativeEnum(DocumentSource).optional(),
-  status: z.nativeEnum(DocumentStatus).optional(),
-  orderBy: z
-    .object({
-      column: z.enum(['createdAt']),
-      direction: z.enum(['asc', 'desc']),
-    })
+import { VALID_DATE_FORMAT_VALUES } from '@documenso/lib/constants/date-formats';
+import { SUPPORTED_LANGUAGE_CODES } from '@documenso/lib/constants/i18n';
+import {
+  ZDocumentLiteSchema,
+  ZDocumentManySchema,
+  ZDocumentSchema,
+} from '@documenso/lib/types/document';
+import {
+  ZDocumentAccessAuthTypesSchema,
+  ZDocumentActionAuthTypesSchema,
+} from '@documenso/lib/types/document-auth';
+import { ZDocumentEmailSettingsSchema } from '@documenso/lib/types/document-email';
+import { ZDocumentFormValuesSchema } from '@documenso/lib/types/document-form-values';
+import {
+  ZFieldHeightSchema,
+  ZFieldPageNumberSchema,
+  ZFieldPageXSchema,
+  ZFieldPageYSchema,
+  ZFieldWidthSchema,
+} from '@documenso/lib/types/field';
+import { ZFieldAndMetaSchema } from '@documenso/lib/types/field-meta';
+import { ZFindResultResponse, ZFindSearchParamsSchema } from '@documenso/lib/types/search-params';
+import { isValidRedirectUrl } from '@documenso/lib/utils/is-valid-redirect-url';
+import { ExtendedDocumentStatus } from '@documenso/prisma/types/extended-document-status';
+
+import { ZCreateRecipientSchema } from '../recipient-router/schema';
+
+/**
+ * Required for empty responses since we currently can't 201 requests for our openapi setup.
+ *
+ * Without this it will throw an error in Speakeasy SDK when it tries to parse an empty response.
+ */
+export const ZSuccessResponseSchema = z.object({
+  success: z.literal(true),
+});
+
+export const ZGenericSuccessResponse = {
+  success: true,
+} satisfies z.infer<typeof ZSuccessResponseSchema>;
+
+export const ZDocumentTitleSchema = z
+  .string()
+  .trim()
+  .min(1)
+  .max(255)
+  .describe('The title of the document.');
+
+export const ZDocumentExternalIdSchema = z
+  .string()
+  .trim()
+  .describe('The external ID of the document.');
+
+export const ZDocumentVisibilitySchema = z
+  .nativeEnum(DocumentVisibility)
+  .describe('The visibility of the document.');
+
+export const ZDocumentMetaTimezoneSchema = z
+  .string()
+  .describe(
+    'The timezone to use for date fields and signing the document. Example Etc/UTC, Australia/Melbourne',
+  );
+// Cooked.
+// .refine((value) => TIME_ZONES.includes(value), {
+//   message: 'Invalid timezone. Please provide a valid timezone',
+// });
+
+export type TDocumentMetaTimezone = z.infer<typeof ZDocumentMetaTimezoneSchema>;
+
+export const ZDocumentMetaDateFormatSchema = z
+  .enum(VALID_DATE_FORMAT_VALUES)
+  .describe('The date format to use for date fields and signing the document.');
+
+export type TDocumentMetaDateFormat = z.infer<typeof ZDocumentMetaDateFormatSchema>;
+
+export const ZDocumentMetaRedirectUrlSchema = z
+  .string()
+  .describe('The URL to which the recipient should be redirected after signing the document.')
+  .refine((value) => value === undefined || value === '' || isValidRedirectUrl(value), {
+    message: 'Please enter a valid URL, make sure you include http:// or https:// part of the url.',
+  });
+
+export const ZDocumentMetaLanguageSchema = z
+  .enum(SUPPORTED_LANGUAGE_CODES)
+  .describe('The language to use for email communications with recipients.');
+
+export const ZDocumentMetaSubjectSchema = z
+  .string()
+  .describe('The subject of the email that will be sent to the recipients.');
+
+export const ZDocumentMetaMessageSchema = z
+  .string()
+  .describe('The message of the email that will be sent to the recipients.');
+
+export const ZDocumentMetaDistributionMethodSchema = z
+  .nativeEnum(DocumentDistributionMethod)
+  .describe('The distribution method to use when sending the document to the recipients.');
+
+export const ZDocumentMetaTypedSignatureEnabledSchema = z
+  .boolean()
+  .describe('Whether to allow recipients to sign using a typed signature.');
+
+export const ZDocumentMetaDrawSignatureEnabledSchema = z
+  .boolean()
+  .describe('Whether to allow recipients to sign using a draw signature.');
+
+export const ZDocumentMetaUploadSignatureEnabledSchema = z
+  .boolean()
+  .describe('Whether to allow recipients to sign using an uploaded signature.');
+
+export const ZFindDocumentsRequestSchema = ZFindSearchParamsSchema.extend({
+  templateId: z
+    .number()
+    .describe('Filter documents by the template ID used to create it.')
     .optional(),
-}).omit({ query: true });
+  source: z
+    .nativeEnum(DocumentSource)
+    .describe('Filter documents by how it was created.')
+    .optional(),
+  status: z
+    .nativeEnum(DocumentStatus)
+    .describe('Filter documents by the current status')
+    .optional(),
+  folderId: z.string().describe('Filter documents by folder ID').optional(),
+  orderByColumn: z.enum(['createdAt']).optional(),
+  orderByDirection: z.enum(['asc', 'desc']).describe('').default('desc'),
+});
 
-export const ZFindDocumentAuditLogsQuerySchema = ZBaseTableSearchParamsSchema.extend({
+export const ZFindDocumentsResponseSchema = ZFindResultResponse.extend({
+  data: ZDocumentManySchema.array(),
+});
+
+export type TFindDocumentsResponse = z.infer<typeof ZFindDocumentsResponseSchema>;
+
+export const ZFindDocumentsInternalRequestSchema = ZFindDocumentsRequestSchema.extend({
+  period: z.enum(['7d', '14d', '30d']).optional(),
+  senderIds: z.array(z.number()).optional(),
+  status: z.nativeEnum(ExtendedDocumentStatus).optional(),
+  folderId: z.string().optional(),
+});
+
+export const ZFindDocumentsInternalResponseSchema = ZFindResultResponse.extend({
+  data: ZDocumentManySchema.array(),
+  stats: z.object({
+    [ExtendedDocumentStatus.DRAFT]: z.number(),
+    [ExtendedDocumentStatus.PENDING]: z.number(),
+    [ExtendedDocumentStatus.COMPLETED]: z.number(),
+    [ExtendedDocumentStatus.REJECTED]: z.number(),
+    [ExtendedDocumentStatus.INBOX]: z.number(),
+    [ExtendedDocumentStatus.ALL]: z.number(),
+  }),
+});
+
+export type TFindDocumentsInternalResponse = z.infer<typeof ZFindDocumentsInternalResponseSchema>;
+
+export const ZFindDocumentAuditLogsQuerySchema = ZFindSearchParamsSchema.extend({
   documentId: z.number().min(1),
   cursor: z.string().optional(),
   filterForRecentActivity: z.boolean().optional(),
-  orderBy: z
-    .object({
-      column: z.enum(['createdAt', 'type']),
-      direction: z.enum(['asc', 'desc']),
-    })
-    .optional(),
+  orderByColumn: z.enum(['createdAt', 'type']).optional(),
+  orderByDirection: z.enum(['asc', 'desc']).default('desc'),
 });
 
 export const ZGetDocumentByIdQuerySchema = z.object({
-  id: z.number().min(1),
-  teamId: z.number().min(1).optional(),
+  documentId: z.number(),
 });
 
-export type TGetDocumentByIdQuerySchema = z.infer<typeof ZGetDocumentByIdQuerySchema>;
+export const ZDuplicateDocumentRequestSchema = z.object({
+  documentId: z.number(),
+});
+
+export const ZDuplicateDocumentResponseSchema = z.object({
+  documentId: z.number(),
+});
 
 export const ZGetDocumentByTokenQuerySchema = z.object({
   token: z.string().min(1),
@@ -60,75 +188,80 @@ export const ZGetDocumentByTokenQuerySchema = z.object({
 
 export type TGetDocumentByTokenQuerySchema = z.infer<typeof ZGetDocumentByTokenQuerySchema>;
 
-export const ZGetDocumentWithDetailsByIdQuerySchema = z.object({
-  id: z.number().min(1),
-  teamId: z.number().min(1).optional(),
+export const ZGetDocumentWithDetailsByIdRequestSchema = z.object({
+  documentId: z.number(),
+  folderId: z.string().describe('Filter documents by folder ID').optional(),
 });
 
-export type TGetDocumentWithDetailsByIdQuerySchema = z.infer<
-  typeof ZGetDocumentWithDetailsByIdQuerySchema
->;
+export const ZGetDocumentWithDetailsByIdResponseSchema = ZDocumentSchema;
 
-export const ZCreateDocumentMutationSchema = z.object({
-  title: z.string().min(1),
+export const ZCreateDocumentRequestSchema = z.object({
+  title: ZDocumentTitleSchema,
   documentDataId: z.string().min(1),
-  teamId: z.number().optional(),
+  timezone: ZDocumentMetaTimezoneSchema.optional(),
+  folderId: z.string().describe('The ID of the folder to create the document in').optional(),
 });
 
-export type TCreateDocumentMutationSchema = z.infer<typeof ZCreateDocumentMutationSchema>;
-
-export const ZSetSettingsForDocumentMutationSchema = z.object({
-  documentId: z.number(),
-  teamId: z.number().min(1).optional(),
-  data: z.object({
-    title: z.string().min(1).optional(),
-    externalId: z.string().nullish(),
-    visibility: z.nativeEnum(DocumentVisibility).optional(),
-    globalAccessAuth: ZDocumentAccessAuthTypesSchema.nullable().optional(),
-    globalActionAuth: ZDocumentActionAuthTypesSchema.nullable().optional(),
-  }),
-  meta: z.object({
-    timezone: z.string(),
-    dateFormat: z.string(),
-    redirectUrl: z
-      .string()
-      .optional()
-      .refine((value) => value === undefined || value === '' || isValidRedirectUrl(value), {
-        message:
-          'Please enter a valid URL, make sure you include http:// or https:// part of the url.',
+export const ZCreateDocumentV2RequestSchema = z.object({
+  title: ZDocumentTitleSchema,
+  externalId: ZDocumentExternalIdSchema.optional(),
+  visibility: ZDocumentVisibilitySchema.optional(),
+  globalAccessAuth: z.array(ZDocumentAccessAuthTypesSchema).optional(),
+  globalActionAuth: z.array(ZDocumentActionAuthTypesSchema).optional(),
+  formValues: ZDocumentFormValuesSchema.optional(),
+  recipients: z
+    .array(
+      ZCreateRecipientSchema.extend({
+        fields: ZFieldAndMetaSchema.and(
+          z.object({
+            pageNumber: ZFieldPageNumberSchema,
+            pageX: ZFieldPageXSchema,
+            pageY: ZFieldPageYSchema,
+            width: ZFieldWidthSchema,
+            height: ZFieldHeightSchema,
+          }),
+        )
+          .array()
+          .optional(),
       }),
-    language: z.enum(SUPPORTED_LANGUAGE_CODES).optional(),
-  }),
+    )
+    .refine(
+      (recipients) => {
+        const emails = recipients.map((recipient) => recipient.email);
+
+        return new Set(emails).size === emails.length;
+      },
+      { message: 'Recipients must have unique emails' },
+    )
+    .optional(),
+  meta: z
+    .object({
+      subject: ZDocumentMetaSubjectSchema.optional(),
+      message: ZDocumentMetaMessageSchema.optional(),
+      timezone: ZDocumentMetaTimezoneSchema.optional(),
+      dateFormat: ZDocumentMetaDateFormatSchema.optional(),
+      distributionMethod: ZDocumentMetaDistributionMethodSchema.optional(),
+      signingOrder: z.nativeEnum(DocumentSigningOrder).optional(),
+      redirectUrl: ZDocumentMetaRedirectUrlSchema.optional(),
+      language: ZDocumentMetaLanguageSchema.optional(),
+      typedSignatureEnabled: ZDocumentMetaTypedSignatureEnabledSchema.optional(),
+      drawSignatureEnabled: ZDocumentMetaDrawSignatureEnabledSchema.optional(),
+      uploadSignatureEnabled: ZDocumentMetaUploadSignatureEnabledSchema.optional(),
+      emailSettings: ZDocumentEmailSettingsSchema.optional(),
+    })
+    .optional(),
 });
 
-export type TSetGeneralSettingsForDocumentMutationSchema = z.infer<
-  typeof ZSetSettingsForDocumentMutationSchema
->;
+export type TCreateDocumentV2Request = z.infer<typeof ZCreateDocumentV2RequestSchema>;
 
-export const ZSetTitleForDocumentMutationSchema = z.object({
-  documentId: z.number(),
-  teamId: z.number().min(1).optional(),
-  title: z.string().min(1),
+export const ZCreateDocumentV2ResponseSchema = z.object({
+  document: ZDocumentSchema,
+  uploadUrl: z
+    .string()
+    .describe(
+      'The URL to upload the document PDF to. Use a PUT request with the file via form-data',
+    ),
 });
-
-export type TSetTitleForDocumentMutationSchema = z.infer<typeof ZSetTitleForDocumentMutationSchema>;
-
-export const ZSetRecipientsForDocumentMutationSchema = z.object({
-  documentId: z.number(),
-  teamId: z.number().min(1).optional(),
-  recipients: z.array(
-    z.object({
-      id: z.number().nullish(),
-      email: z.string().min(1).email(),
-      name: z.string(),
-      role: z.nativeEnum(RecipientRole),
-    }),
-  ),
-});
-
-export type TSetRecipientsForDocumentMutationSchema = z.infer<
-  typeof ZSetRecipientsForDocumentMutationSchema
->;
 
 export const ZSetFieldsForDocumentMutationSchema = z.object({
   documentId: z.number(),
@@ -150,25 +283,25 @@ export type TSetFieldsForDocumentMutationSchema = z.infer<
   typeof ZSetFieldsForDocumentMutationSchema
 >;
 
-export const ZSendDocumentMutationSchema = z.object({
-  documentId: z.number(),
-  teamId: z.number().optional(),
-  meta: z.object({
-    subject: z.string(),
-    message: z.string(),
-    timezone: z.string().optional(),
-    dateFormat: z.string().optional(),
-    distributionMethod: z.nativeEnum(DocumentDistributionMethod).optional(),
-    redirectUrl: z
-      .string()
-      .optional()
-      .refine((value) => value === undefined || value === '' || isValidRedirectUrl(value), {
-        message:
-          'Please enter a valid URL, make sure you include http:// or https:// part of the url.',
-      }),
-    emailSettings: ZDocumentEmailSettingsSchema.optional(),
-  }),
+export const ZDistributeDocumentRequestSchema = z.object({
+  documentId: z.number().describe('The ID of the document to send.'),
+  meta: z
+    .object({
+      subject: ZDocumentMetaSubjectSchema.optional(),
+      message: ZDocumentMetaMessageSchema.optional(),
+      timezone: ZDocumentMetaTimezoneSchema.optional(),
+      dateFormat: ZDocumentMetaDateFormatSchema.optional(),
+      distributionMethod: ZDocumentMetaDistributionMethodSchema.optional(),
+      redirectUrl: ZDocumentMetaRedirectUrlSchema.optional(),
+      language: ZDocumentMetaLanguageSchema.optional(),
+      emailId: z.string().nullish(),
+      emailReplyTo: z.string().email().nullish(),
+      emailSettings: ZDocumentEmailSettingsSchema.optional(),
+    })
+    .optional(),
 });
+
+export const ZDistributeDocumentResponseSchema = ZDocumentLiteSchema;
 
 export const ZSetPasswordForDocumentMutationSchema = z.object({
   documentId: z.number(),
@@ -188,30 +321,19 @@ export type TSetSigningOrderForDocumentMutationSchema = z.infer<
   typeof ZSetSigningOrderForDocumentMutationSchema
 >;
 
-export const ZUpdateTypedSignatureSettingsMutationSchema = z.object({
-  documentId: z.number(),
-  teamId: z.number().optional(),
-  typedSignatureEnabled: z.boolean(),
-});
-
-export type TUpdateTypedSignatureSettingsMutationSchema = z.infer<
-  typeof ZUpdateTypedSignatureSettingsMutationSchema
->;
-
 export const ZResendDocumentMutationSchema = z.object({
   documentId: z.number(),
-  recipients: z.array(z.number()).min(1),
-  teamId: z.number().min(1).optional(),
+  recipients: z
+    .array(z.number())
+    .min(1)
+    .describe('The IDs of the recipients to redistribute the document to.'),
 });
 
-export type TSendDocumentMutationSchema = z.infer<typeof ZSendDocumentMutationSchema>;
-
-export const ZDeleteDraftDocumentMutationSchema = z.object({
-  id: z.number().min(1),
-  teamId: z.number().min(1).optional(),
+export const ZDeleteDocumentMutationSchema = z.object({
+  documentId: z.number(),
 });
 
-export type TDeleteDraftDocumentMutationSchema = z.infer<typeof ZDeleteDraftDocumentMutationSchema>;
+export type TDeleteDocumentMutationSchema = z.infer<typeof ZDeleteDocumentMutationSchema>;
 
 export const ZSearchDocumentsMutationSchema = z.object({
   query: z.string(),
@@ -219,15 +341,27 @@ export const ZSearchDocumentsMutationSchema = z.object({
 
 export const ZDownloadAuditLogsMutationSchema = z.object({
   documentId: z.number(),
-  teamId: z.number().optional(),
 });
 
 export const ZDownloadCertificateMutationSchema = z.object({
   documentId: z.number(),
-  teamId: z.number().optional(),
 });
 
-export const ZMoveDocumentsToTeamSchema = z.object({
-  documentId: z.number(),
-  teamId: z.number(),
+export const ZDownloadDocumentRequestSchema = z.object({
+  documentId: z.number().describe('The ID of the document to download.'),
+  version: z
+    .enum(['original', 'signed'])
+    .describe(
+      'The version of the document to download. "signed" returns the completed document with signatures, "original" returns the original uploaded document.',
+    )
+    .default('signed'),
 });
+
+export const ZDownloadDocumentResponseSchema = z.object({
+  downloadUrl: z.string().describe('Pre-signed URL for downloading the PDF file'),
+  filename: z.string().describe('The filename of the PDF file'),
+  contentType: z.string().describe('MIME type of the file'),
+});
+
+export type TDownloadDocumentRequest = z.infer<typeof ZDownloadDocumentRequestSchema>;
+export type TDownloadDocumentResponse = z.infer<typeof ZDownloadDocumentResponseSchema>;

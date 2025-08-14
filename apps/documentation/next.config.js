@@ -1,3 +1,5 @@
+import nextra from 'nextra';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: process.env.DOCKER_OUTPUT ? 'standalone' : undefined,
@@ -10,9 +12,10 @@ const nextConfig = {
   ],
 };
 
-const withNextra = require('nextra')({
+const withNextra = nextra({
   theme: 'nextra-theme-docs',
   themeConfig: './theme.config.tsx',
+  codeHighlight: true,
 });
 
-module.exports = withNextra(nextConfig);
+export default withNextra(nextConfig);

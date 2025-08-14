@@ -1,23 +1,30 @@
+import { TeamMemberRole } from '@prisma/client';
+import type { Prisma, User } from '@prisma/client';
+import { SigningStatus } from '@prisma/client';
+import { DocumentVisibility } from '@prisma/client';
 import { DateTime } from 'luxon';
 import { match } from 'ts-pattern';
 
 import type { PeriodSelectorValue } from '@documenso/lib/server-only/document/find-documents';
 import { prisma } from '@documenso/prisma';
-import { TeamMemberRole } from '@documenso/prisma/client';
-import type { Prisma, User } from '@documenso/prisma/client';
-import { SigningStatus } from '@documenso/prisma/client';
-import { DocumentVisibility } from '@documenso/prisma/client';
 import { isExtendedDocumentStatus } from '@documenso/prisma/guards/is-extended-document-status';
 import { ExtendedDocumentStatus } from '@documenso/prisma/types/extended-document-status';
 
 export type GetStatsInput = {
-  user: User;
+  user: Pick<User, 'id' | 'email'>;
   team?: Omit<GetTeamCountsOption, 'createdAt'>;
   period?: PeriodSelectorValue;
   search?: string;
+  folderId?: string;
 };
 
-export const getStats = async ({ user, period, search, ...options }: GetStatsInput) => {
+export const getStats = async ({
+  user,
+  period,
+  search = '',
+  folderId,
+  ...options
+}: GetStatsInput) => {
   let createdAt: Prisma.DocumentWhereInput['createdAt'];
 
   if (period) {
@@ -37,13 +44,15 @@ export const getStats = async ({ user, period, search, ...options }: GetStatsInp
         currentUserEmail: user.email,
         userId: user.id,
         search,
+        folderId,
       })
-    : getCounts({ user, createdAt, search }));
+    : getCounts({ user, createdAt, search, folderId }));
 
   const stats: Record<ExtendedDocumentStatus, number> = {
     [ExtendedDocumentStatus.DRAFT]: 0,
     [ExtendedDocumentStatus.PENDING]: 0,
     [ExtendedDocumentStatus.COMPLETED]: 0,
+    [ExtendedDocumentStatus.REJECTED]: 0,
     [ExtendedDocumentStatus.INBOX]: 0,
     [ExtendedDocumentStatus.ALL]: 0,
   };
@@ -64,6 +73,10 @@ export const getStats = async ({ user, period, search, ...options }: GetStatsInp
     if (stat.status === ExtendedDocumentStatus.PENDING) {
       stats[ExtendedDocumentStatus.PENDING] += stat._count._all;
     }
+
+    if (stat.status === ExtendedDocumentStatus.REJECTED) {
+      stats[ExtendedDocumentStatus.REJECTED] += stat._count._all;
+    }
   });
 
   Object.keys(stats).forEach((key) => {
@@ -76,19 +89,22 @@ export const getStats = async ({ user, period, search, ...options }: GetStatsInp
 };
 
 type GetCountsOption = {
-  user: User;
+  user: Pick<User, 'id' | 'email'>;
   createdAt: Prisma.DocumentWhereInput['createdAt'];
   search?: string;
+  folderId?: string | null;
 };
 
-const getCounts = async ({ user, createdAt, search }: GetCountsOption) => {
+const getCounts = async ({ user, createdAt, search, folderId }: GetCountsOption) => {
   const searchFilter: Prisma.DocumentWhereInput = {
     OR: [
       { title: { contains: search, mode: 'insensitive' } },
-      { Recipient: { some: { name: { contains: search, mode: 'insensitive' } } } },
-      { Recipient: { some: { email: { contains: search, mode: 'insensitive' } } } },
+      { recipients: { some: { name: { contains: search, mode: 'insensitive' } } } },
+      { recipients: { some: { email: { contains: search, mode: 'insensitive' } } } },
     ],
   };
+
+  const rootPageFilter = folderId === undefined ? { folderId: null } : {};
 
   return Promise.all([
     // Owner counts.
@@ -100,9 +116,8 @@ const getCounts = async ({ user, createdAt, search }: GetCountsOption) => {
       where: {
         userId: user.id,
         createdAt,
-        teamId: null,
         deletedAt: null,
-        AND: [searchFilter],
+        AND: [searchFilter, rootPageFilter, folderId ? { folderId } : {}],
       },
     }),
     // Not signed counts.
@@ -113,7 +128,7 @@ const getCounts = async ({ user, createdAt, search }: GetCountsOption) => {
       },
       where: {
         status: ExtendedDocumentStatus.PENDING,
-        Recipient: {
+        recipients: {
           some: {
             email: user.email,
             signingStatus: SigningStatus.NOT_SIGNED,
@@ -121,7 +136,7 @@ const getCounts = async ({ user, createdAt, search }: GetCountsOption) => {
           },
         },
         createdAt,
-        AND: [searchFilter],
+        AND: [searchFilter, rootPageFilter, folderId ? { folderId } : {}],
       },
     }),
     // Has signed counts.
@@ -132,7 +147,7 @@ const getCounts = async ({ user, createdAt, search }: GetCountsOption) => {
       },
       where: {
         createdAt,
-        User: {
+        user: {
           email: {
             not: user.email,
           },
@@ -140,7 +155,7 @@ const getCounts = async ({ user, createdAt, search }: GetCountsOption) => {
         OR: [
           {
             status: ExtendedDocumentStatus.PENDING,
-            Recipient: {
+            recipients: {
               some: {
                 email: user.email,
                 signingStatus: SigningStatus.SIGNED,
@@ -150,7 +165,7 @@ const getCounts = async ({ user, createdAt, search }: GetCountsOption) => {
           },
           {
             status: ExtendedDocumentStatus.COMPLETED,
-            Recipient: {
+            recipients: {
               some: {
                 email: user.email,
                 signingStatus: SigningStatus.SIGNED,
@@ -159,7 +174,7 @@ const getCounts = async ({ user, createdAt, search }: GetCountsOption) => {
             },
           },
         ],
-        AND: [searchFilter],
+        AND: [searchFilter, rootPageFilter, folderId ? { folderId } : {}],
       },
     }),
   ]);
@@ -174,10 +189,11 @@ type GetTeamCountsOption = {
   createdAt: Prisma.DocumentWhereInput['createdAt'];
   currentTeamMemberRole?: TeamMemberRole;
   search?: string;
+  folderId?: string | null;
 };
 
 const getTeamCounts = async (options: GetTeamCountsOption) => {
-  const { createdAt, teamId, teamEmail } = options;
+  const { createdAt, teamId, teamEmail, folderId } = options;
 
   const senderIds = options.senderIds ?? [];
 
@@ -191,8 +207,8 @@ const getTeamCounts = async (options: GetTeamCountsOption) => {
   const searchFilter: Prisma.DocumentWhereInput = {
     OR: [
       { title: { contains: options.search, mode: 'insensitive' } },
-      { Recipient: { some: { name: { contains: options.search, mode: 'insensitive' } } } },
-      { Recipient: { some: { email: { contains: options.search, mode: 'insensitive' } } } },
+      { recipients: { some: { name: { contains: options.search, mode: 'insensitive' } } } },
+      { recipients: { some: { email: { contains: options.search, mode: 'insensitive' } } } },
     ],
   };
 
@@ -201,6 +217,7 @@ const getTeamCounts = async (options: GetTeamCountsOption) => {
     createdAt,
     teamId,
     deletedAt: null,
+    folderId,
   };
 
   let notSignedCountsGroupByArgs = null;
@@ -234,7 +251,7 @@ const getTeamCounts = async (options: GetTeamCountsOption) => {
           {
             OR: [
               { userId: options.userId },
-              { Recipient: { some: { email: options.currentUserEmail } } },
+              { recipients: { some: { email: options.currentUserEmail } } },
             ],
           },
         ],
@@ -257,7 +274,7 @@ const getTeamCounts = async (options: GetTeamCountsOption) => {
           teamId,
         },
         {
-          User: {
+          user: {
             email: teamEmail,
           },
         },
@@ -273,8 +290,9 @@ const getTeamCounts = async (options: GetTeamCountsOption) => {
       where: {
         userId: userIdWhereClause,
         createdAt,
+        folderId,
         status: ExtendedDocumentStatus.PENDING,
-        Recipient: {
+        recipients: {
           some: {
             email: teamEmail,
             signingStatus: SigningStatus.NOT_SIGNED,
@@ -293,10 +311,11 @@ const getTeamCounts = async (options: GetTeamCountsOption) => {
       where: {
         userId: userIdWhereClause,
         createdAt,
+        folderId,
         OR: [
           {
             status: ExtendedDocumentStatus.PENDING,
-            Recipient: {
+            recipients: {
               some: {
                 email: teamEmail,
                 signingStatus: SigningStatus.SIGNED,
@@ -307,14 +326,13 @@ const getTeamCounts = async (options: GetTeamCountsOption) => {
           },
           {
             status: ExtendedDocumentStatus.COMPLETED,
-            Recipient: {
+            recipients: {
               some: {
                 email: teamEmail,
                 signingStatus: SigningStatus.SIGNED,
                 documentDeletedAt: null,
               },
             },
-            deletedAt: null,
           },
         ],
       },

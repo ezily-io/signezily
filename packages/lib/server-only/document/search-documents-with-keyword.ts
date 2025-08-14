@@ -1,10 +1,14 @@
+import { DocumentStatus } from '@prisma/client';
+import type { Document, Recipient, User } from '@prisma/client';
+import { DocumentVisibility, TeamMemberRole } from '@prisma/client';
 import { match } from 'ts-pattern';
 
-import { formatDocumentsPath } from '@documenso/lib/utils/teams';
+import {
+  buildTeamWhereQuery,
+  formatDocumentsPath,
+  getHighestTeamRoleInGroup,
+} from '@documenso/lib/utils/teams';
 import { prisma } from '@documenso/prisma';
-import { DocumentStatus } from '@documenso/prisma/client';
-import type { Document, Recipient, User } from '@documenso/prisma/client';
-import { DocumentVisibility, TeamMemberRole } from '@documenso/prisma/client';
 
 export type SearchDocumentsWithKeywordOptions = {
   query: string;
@@ -35,7 +39,15 @@ export const searchDocumentsWithKeyword = async ({
           deletedAt: null,
         },
         {
-          Recipient: {
+          externalId: {
+            contains: query,
+            mode: 'insensitive',
+          },
+          userId: userId,
+          deletedAt: null,
+        },
+        {
+          recipients: {
             some: {
               email: {
                 contains: query,
@@ -48,7 +60,7 @@ export const searchDocumentsWithKeyword = async ({
         },
         {
           status: DocumentStatus.COMPLETED,
-          Recipient: {
+          recipients: {
             some: {
               email: user.email,
             },
@@ -60,7 +72,7 @@ export const searchDocumentsWithKeyword = async ({
         },
         {
           status: DocumentStatus.PENDING,
-          Recipient: {
+          recipients: {
             some: {
               email: user.email,
             },
@@ -76,31 +88,35 @@ export const searchDocumentsWithKeyword = async ({
             contains: query,
             mode: 'insensitive',
           },
-          teamId: {
-            not: null,
+          team: buildTeamWhereQuery({ teamId: undefined, userId }),
+          deletedAt: null,
+        },
+        {
+          externalId: {
+            contains: query,
+            mode: 'insensitive',
           },
-          team: {
-            members: {
-              some: {
-                userId: userId,
-              },
-            },
-          },
+          team: buildTeamWhereQuery({ teamId: undefined, userId }),
           deletedAt: null,
         },
       ],
     },
     include: {
-      Recipient: true,
+      recipients: true,
       team: {
         select: {
           url: true,
-          members: {
+          teamGroups: {
             where: {
-              userId: userId,
-            },
-            select: {
-              role: true,
+              organisationGroup: {
+                organisationGroupMembers: {
+                  some: {
+                    organisationMember: {
+                      userId,
+                    },
+                  },
+                },
+              },
             },
           },
         },
@@ -122,7 +138,9 @@ export const searchDocumentsWithKeyword = async ({
         return true;
       }
 
-      const teamMemberRole = document.team?.members[0]?.role;
+      const teamMemberRole = getHighestTeamRoleInGroup(
+        document.team.teamGroups.filter((tg) => tg.teamId === document.teamId),
+      );
 
       if (!teamMemberRole) {
         return false;
@@ -140,7 +158,7 @@ export const searchDocumentsWithKeyword = async ({
       return canAccessDocument;
     })
     .map((document) => {
-      const { Recipient, ...documentWithoutRecipient } = document;
+      const { recipients, ...documentWithoutRecipient } = document;
 
       let documentPath;
 
@@ -149,13 +167,13 @@ export const searchDocumentsWithKeyword = async ({
       } else if (document.teamId && document.team) {
         documentPath = `${formatDocumentsPath(document.team.url)}/${document.id}`;
       } else {
-        documentPath = getSigningLink(Recipient, user);
+        documentPath = getSigningLink(recipients, user);
       }
 
       return {
         ...documentWithoutRecipient,
         path: documentPath,
-        value: [document.id, document.title, ...document.Recipient.map((r) => r.email)].join(' '),
+        value: [document.id, document.title, ...document.recipients.map((r) => r.email)].join(' '),
       };
     });
 

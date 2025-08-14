@@ -1,3 +1,5 @@
+import type { Field } from '@prisma/client';
+import { FieldType } from '@prisma/client';
 import { isDeepEqual } from 'remeda';
 
 import { validateCheckboxField } from '@documenso/lib/advanced-fields-validation/validate-checkbox';
@@ -15,71 +17,55 @@ import {
   ZRadioFieldMeta,
   ZTextFieldMeta,
 } from '@documenso/lib/types/field-meta';
-import type { RequestMetadata } from '@documenso/lib/universal/extract-request-metadata';
+import type { ApiRequestMetadata } from '@documenso/lib/universal/extract-request-metadata';
 import {
   createDocumentAuditLogData,
   diffFieldChanges,
 } from '@documenso/lib/utils/document-audit-logs';
 import { prisma } from '@documenso/prisma';
-import type { Field } from '@documenso/prisma/client';
-import { FieldType } from '@documenso/prisma/client';
 
 import { AppError, AppErrorCode } from '../../errors/app-error';
 import { canRecipientFieldsBeModified } from '../../utils/recipients';
+import { getDocumentWhereInput } from '../document/get-document-by-id';
 
 export interface SetFieldsForDocumentOptions {
   userId: number;
+  teamId: number;
   documentId: number;
   fields: FieldData[];
-  requestMetadata?: RequestMetadata;
+  requestMetadata: ApiRequestMetadata;
 }
 
 export const setFieldsForDocument = async ({
   userId,
+  teamId,
   documentId,
   fields,
   requestMetadata,
-}: SetFieldsForDocumentOptions): Promise<Field[]> => {
-  const document = await prisma.document.findFirst({
-    where: {
-      id: documentId,
-      OR: [
-        {
-          userId,
-        },
-        {
-          team: {
-            members: {
-              some: {
-                userId,
-              },
-            },
-          },
-        },
-      ],
-    },
-    include: {
-      Recipient: true,
-    },
+}: SetFieldsForDocumentOptions) => {
+  const { documentWhereInput } = await getDocumentWhereInput({
+    documentId,
+    userId,
+    teamId,
   });
 
-  const user = await prisma.user.findFirstOrThrow({
-    where: {
-      id: userId,
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
+  const document = await prisma.document.findFirst({
+    where: documentWhereInput,
+    include: {
+      recipients: true,
     },
   });
 
   if (!document) {
-    throw new Error('Document not found');
+    throw new AppError(AppErrorCode.NOT_FOUND, {
+      message: 'Document not found',
+    });
   }
 
   if (document.completedAt) {
-    throw new Error('Document already complete');
+    throw new AppError(AppErrorCode.INVALID_REQUEST, {
+      message: 'Document already complete',
+    });
   }
 
   const existingFields = await prisma.field.findMany({
@@ -87,7 +73,7 @@ export const setFieldsForDocument = async ({
       documentId,
     },
     include: {
-      Recipient: true,
+      recipient: true,
     },
   });
 
@@ -98,13 +84,15 @@ export const setFieldsForDocument = async ({
   const linkedFields = fields.map((field) => {
     const existing = existingFields.find((existingField) => existingField.id === field.id);
 
-    const recipient = document.Recipient.find(
+    const recipient = document.recipients.find(
       (recipient) => recipient.email.toLowerCase() === field.signerEmail.toLowerCase(),
     );
 
     // Each field MUST have a recipient associated with it.
     if (!recipient) {
-      throw new AppError(AppErrorCode.INVALID_REQUEST, `Recipient not found for field ${field.id}`);
+      throw new AppError(AppErrorCode.INVALID_REQUEST, {
+        message: `Recipient not found for field ${field.id}`,
+      });
     }
 
     // Check whether the existing field can be modified.
@@ -113,10 +101,10 @@ export const setFieldsForDocument = async ({
       hasFieldBeenChanged(existing, field) &&
       !canRecipientFieldsBeModified(recipient, existingFields)
     ) {
-      throw new AppError(
-        AppErrorCode.INVALID_REQUEST,
-        'Cannot modify a field where the recipient has already interacted with the document',
-      );
+      throw new AppError(AppErrorCode.INVALID_REQUEST, {
+        message:
+          'Cannot modify a field where the recipient has already interacted with the document',
+      });
     }
 
     return {
@@ -231,12 +219,12 @@ export const setFieldsForDocument = async ({
             customText: '',
             inserted: false,
             fieldMeta: parsedFieldMeta,
-            Document: {
+            document: {
               connect: {
                 id: documentId,
               },
             },
-            Recipient: {
+            recipient: {
               connect: {
                 documentId_email: {
                   documentId,
@@ -266,8 +254,7 @@ export const setFieldsForDocument = async ({
             data: createDocumentAuditLogData({
               type: DOCUMENT_AUDIT_LOG_TYPE.FIELD_UPDATED,
               documentId: documentId,
-              user,
-              requestMetadata,
+              metadata: requestMetadata,
               data: {
                 changes,
                 ...baseAuditLog,
@@ -282,8 +269,7 @@ export const setFieldsForDocument = async ({
             data: createDocumentAuditLogData({
               type: DOCUMENT_AUDIT_LOG_TYPE.FIELD_CREATED,
               documentId: documentId,
-              user,
-              requestMetadata,
+              metadata: requestMetadata,
               data: {
                 ...baseAuditLog,
               },
@@ -311,11 +297,10 @@ export const setFieldsForDocument = async ({
           createDocumentAuditLogData({
             type: DOCUMENT_AUDIT_LOG_TYPE.FIELD_DELETED,
             documentId: documentId,
-            user,
-            requestMetadata,
+            metadata: requestMetadata,
             data: {
               fieldId: field.secondaryId,
-              fieldRecipientEmail: field.Recipient?.email ?? '',
+              fieldRecipientEmail: field.recipient?.email ?? '',
               fieldRecipientId: field.recipientId ?? -1,
               fieldType: field.type,
             },
@@ -333,7 +318,9 @@ export const setFieldsForDocument = async ({
     return !isRemoved && !isUpdated;
   });
 
-  return [...filteredFields, ...persistedFields];
+  return {
+    fields: [...filteredFields, ...persistedFields],
+  };
 };
 
 /**

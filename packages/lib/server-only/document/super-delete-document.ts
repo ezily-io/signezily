@@ -1,23 +1,21 @@
-'use server';
-
 import { createElement } from 'react';
 
-import { msg } from '@lingui/macro';
+import { msg } from '@lingui/core/macro';
+import { DocumentStatus, SendStatus } from '@prisma/client';
 
 import { mailer } from '@documenso/email/mailer';
 import DocumentCancelTemplate from '@documenso/email/templates/document-cancel';
 import { prisma } from '@documenso/prisma';
-import { DocumentStatus, SendStatus } from '@documenso/prisma/client';
 
-import { getI18nInstance } from '../../client-only/providers/i18n.server';
+import { getI18nInstance } from '../../client-only/providers/i18n-server';
 import { NEXT_PUBLIC_WEBAPP_URL } from '../../constants/app';
-import { FROM_ADDRESS, FROM_NAME } from '../../constants/email';
+import { AppError, AppErrorCode } from '../../errors/app-error';
 import { DOCUMENT_AUDIT_LOG_TYPE } from '../../types/document-audit-logs';
 import { extractDerivedDocumentEmailSettings } from '../../types/document-email';
 import type { RequestMetadata } from '../../universal/extract-request-metadata';
 import { createDocumentAuditLogData } from '../../utils/document-audit-logs';
 import { renderEmailWithI18N } from '../../utils/render-email-with-i18n';
-import { teamGlobalSettingsToBranding } from '../../utils/team-global-settings-to-branding';
+import { getEmailContext } from '../email/get-email-context';
 
 export type SuperDeleteDocumentOptions = {
   id: number;
@@ -30,22 +28,28 @@ export const superDeleteDocument = async ({ id, requestMetadata }: SuperDeleteDo
       id,
     },
     include: {
-      Recipient: true,
+      recipients: true,
       documentMeta: true,
-      User: true,
-      team: {
-        include: {
-          teamGlobalSettings: true,
-        },
-      },
+      user: true,
     },
   });
 
   if (!document) {
-    throw new Error('Document not found');
+    throw new AppError(AppErrorCode.NOT_FOUND, {
+      message: 'Document not found',
+    });
   }
 
-  const { status, User: user } = document;
+  const { branding, settings, senderEmail, replyToEmail } = await getEmailContext({
+    emailType: 'RECIPIENT',
+    source: {
+      type: 'team',
+      teamId: document.teamId,
+    },
+    meta: document.documentMeta,
+  });
+
+  const { status, user } = document;
 
   const isDocumentDeletedEmailEnabled = extractDerivedDocumentEmailSettings(
     document.documentMeta,
@@ -54,11 +58,11 @@ export const superDeleteDocument = async ({ id, requestMetadata }: SuperDeleteDo
   // if the document is pending, send cancellation emails to all recipients
   if (
     status === DocumentStatus.PENDING &&
-    document.Recipient.length > 0 &&
+    document.recipients.length > 0 &&
     isDocumentDeletedEmailEnabled
   ) {
     await Promise.all(
-      document.Recipient.map(async (recipient) => {
+      document.recipients.map(async (recipient) => {
         if (recipient.sendStatus !== SendStatus.SENT) {
           return;
         }
@@ -71,30 +75,26 @@ export const superDeleteDocument = async ({ id, requestMetadata }: SuperDeleteDo
           assetBaseUrl,
         });
 
-        const branding = document.team?.teamGlobalSettings
-          ? teamGlobalSettingsToBranding(document.team.teamGlobalSettings)
-          : undefined;
+        const lang = document.documentMeta?.language ?? settings.documentLanguage;
 
         const [html, text] = await Promise.all([
-          renderEmailWithI18N(template, { lang: document.documentMeta?.language, branding }),
+          renderEmailWithI18N(template, { lang, branding }),
           renderEmailWithI18N(template, {
-            lang: document.documentMeta?.language,
+            lang,
             branding,
             plainText: true,
           }),
         ]);
 
-        const i18n = await getI18nInstance(document.documentMeta?.language);
+        const i18n = await getI18nInstance(lang);
 
         await mailer.sendMail({
           to: {
             address: recipient.email,
             name: recipient.name,
           },
-          from: {
-            name: FROM_NAME,
-            address: FROM_ADDRESS,
-          },
+          from: senderEmail,
+          replyTo: replyToEmail,
           subject: i18n._(msg`Document Cancelled`),
           html,
           text,

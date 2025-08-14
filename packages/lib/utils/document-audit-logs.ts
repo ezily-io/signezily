@@ -1,9 +1,9 @@
 import type { I18n } from '@lingui/core';
-import { msg } from '@lingui/macro';
+import { msg } from '@lingui/core/macro';
+import type { DocumentAuditLog, DocumentMeta, Field, Recipient } from '@prisma/client';
+import { RecipientRole } from '@prisma/client';
+import { isDeepEqual } from 'remeda';
 import { match } from 'ts-pattern';
-
-import type { DocumentAuditLog, DocumentMeta, Field, Recipient } from '@documenso/prisma/client';
-import { RecipientRole } from '@documenso/prisma/client';
 
 import type {
   TDocumentAuditLog,
@@ -19,14 +19,15 @@ import {
   ZDocumentAuditLogSchema,
 } from '../types/document-audit-logs';
 import { ZRecipientAuthOptionsSchema } from '../types/document-auth';
-import type { RequestMetadata } from '../universal/extract-request-metadata';
+import type { ApiRequestMetadata, RequestMetadata } from '../universal/extract-request-metadata';
 
 type CreateDocumentAuditLogDataOptions<T = TDocumentAuditLog['type']> = {
   documentId: number;
   type: T;
   data: Extract<TDocumentAuditLog, { type: T }>['data'];
-  user: { email?: string; id?: number | null; name?: string | null } | null;
+  user?: { email?: string | null; id?: number | null; name?: string | null } | null;
   requestMetadata?: RequestMetadata;
+  metadata?: ApiRequestMetadata;
 };
 
 export type CreateDocumentAuditLogDataResponse = Pick<
@@ -42,16 +43,31 @@ export const createDocumentAuditLogData = <T extends TDocumentAuditLog['type']>(
   data,
   user,
   requestMetadata,
+  metadata,
 }: CreateDocumentAuditLogDataOptions<T>): CreateDocumentAuditLogDataResponse => {
+  let userId: number | null = metadata?.auditUser?.id || null;
+  let email: string | null = metadata?.auditUser?.email || null;
+  let name: string | null = metadata?.auditUser?.name || null;
+
+  // Prioritize explicit user parameter over metadata audit user.
+  if (user) {
+    userId = user.id || null;
+    email = user.email || null;
+    name = user.name || null;
+  }
+
+  const ipAddress = metadata?.requestMetadata.ipAddress ?? requestMetadata?.ipAddress ?? null;
+  const userAgent = metadata?.requestMetadata.userAgent ?? requestMetadata?.userAgent ?? null;
+
   return {
     type,
     data,
     documentId,
-    userId: user?.id ?? null,
-    email: user?.email ?? null,
-    name: user?.name ?? null,
-    userAgent: requestMetadata?.userAgent ?? null,
-    ipAddress: requestMetadata?.ipAddress ?? null,
+    userId,
+    email,
+    name,
+    userAgent,
+    ipAddress,
   };
 };
 
@@ -91,7 +107,7 @@ export const diffRecipientChanges = (
   const newActionAuth =
     newAuthOptions?.actionAuth === undefined ? oldActionAuth : newAuthOptions.actionAuth;
 
-  if (oldAccessAuth !== newAccessAuth) {
+  if (!isDeepEqual(oldAccessAuth, newAccessAuth)) {
     diffs.push({
       type: RECIPIENT_DIFF_TYPE.ACCESS_AUTH,
       from: oldAccessAuth ?? '',
@@ -99,7 +115,7 @@ export const diffRecipientChanges = (
     });
   }
 
-  if (oldActionAuth !== newActionAuth) {
+  if (!isDeepEqual(oldActionAuth, newActionAuth)) {
     diffs.push({
       type: RECIPIENT_DIFF_TYPE.ACTION_AUTH,
       from: oldActionAuth ?? '',
@@ -189,12 +205,18 @@ export const diffDocumentMetaChanges = (
   const oldTimezone = oldData?.timezone ?? '';
   const oldPassword = oldData?.password ?? null;
   const oldRedirectUrl = oldData?.redirectUrl ?? '';
+  const oldEmailId = oldData?.emailId || null;
+  const oldEmailReplyTo = oldData?.emailReplyTo || null;
+  const oldEmailSettings = oldData?.emailSettings || null;
 
   const newDateFormat = newData?.dateFormat ?? '';
   const newMessage = newData?.message ?? '';
   const newSubject = newData?.subject ?? '';
   const newTimezone = newData?.timezone ?? '';
   const newRedirectUrl = newData?.redirectUrl ?? '';
+  const newEmailId = newData?.emailId || null;
+  const newEmailReplyTo = newData?.emailReplyTo || null;
+  const newEmailSettings = newData?.emailSettings || null;
 
   if (oldDateFormat !== newDateFormat) {
     diffs.push({
@@ -239,6 +261,30 @@ export const diffDocumentMetaChanges = (
   if (oldPassword !== newData.password) {
     diffs.push({
       type: DOCUMENT_META_DIFF_TYPE.PASSWORD,
+    });
+  }
+
+  if (oldEmailId !== newEmailId) {
+    diffs.push({
+      type: DOCUMENT_META_DIFF_TYPE.EMAIL_ID,
+      from: oldEmailId,
+      to: newEmailId,
+    });
+  }
+
+  if (oldEmailReplyTo !== newEmailReplyTo) {
+    diffs.push({
+      type: DOCUMENT_META_DIFF_TYPE.EMAIL_REPLY_TO,
+      from: oldEmailReplyTo,
+      to: newEmailReplyTo,
+    });
+  }
+
+  if (!isDeepEqual(oldEmailSettings, newEmailSettings)) {
+    diffs.push({
+      type: DOCUMENT_META_DIFF_TYPE.EMAIL_SETTINGS,
+      from: JSON.stringify(oldEmailSettings),
+      to: JSON.stringify(newEmailSettings),
     });
   }
 
@@ -298,6 +344,10 @@ export const formatDocumentAuditLogAction = (
       anonymous: msg`Field unsigned`,
       identified: msg`${prefix} unsigned a field`,
     }))
+    .with({ type: DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_FIELD_PREFILLED }, () => ({
+      anonymous: msg`Field prefilled by assistant`,
+      identified: msg`${prefix} prefilled a field`,
+    }))
     .with({ type: DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_VISIBILITY_UPDATED }, () => ({
       anonymous: msg`Document visibility updated`,
       identified: msg`${prefix} updated the document visibility`,
@@ -317,6 +367,10 @@ export const formatDocumentAuditLogAction = (
     .with({ type: DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_OPENED }, () => ({
       anonymous: msg`Document opened`,
       identified: msg`${prefix} opened the document`,
+    }))
+    .with({ type: DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_VIEWED }, () => ({
+      anonymous: msg`Document viewed`,
+      identified: msg`${prefix} viewed the document`,
     }))
     .with({ type: DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_TITLE_UPDATED }, () => ({
       anonymous: msg`Document title updated`,

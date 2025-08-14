@@ -1,10 +1,11 @@
+import type { Document, Recipient } from '@prisma/client';
 import { verifyAuthenticationResponse } from '@simplewebauthn/server';
 import { match } from 'ts-pattern';
 
 import { prisma } from '@documenso/prisma';
-import type { Document, Recipient } from '@documenso/prisma/client';
 
 import { verifyTwoFactorAuthenticationToken } from '../2fa/verify-2fa-token';
+import { verifyPassword } from '../2fa/verify-password';
 import { AppError, AppErrorCode } from '../../errors/app-error';
 import type { TDocumentAuth, TDocumentAuthMethods } from '../../types/document-auth';
 import { DocumentAuth } from '../../types/document-auth';
@@ -60,23 +61,26 @@ export const isRecipientAuthorized = async ({
     recipientAuth: recipient.authOptions,
   });
 
-  const authMethod: TDocumentAuth | null =
+  const authMethods: TDocumentAuth[] =
     type === 'ACCESS' ? derivedRecipientAccessAuth : derivedRecipientActionAuth;
 
   // Early true return when auth is not required.
-  if (!authMethod || authMethod === DocumentAuth.EXPLICIT_NONE) {
+  if (
+    authMethods.length === 0 ||
+    authMethods.some((method) => method === DocumentAuth.EXPLICIT_NONE)
+  ) {
     return true;
   }
 
   // Create auth options when none are passed for account.
-  if (!authOptions && authMethod === DocumentAuth.ACCOUNT) {
+  if (!authOptions && authMethods.some((method) => method === DocumentAuth.ACCOUNT)) {
     authOptions = {
       type: DocumentAuth.ACCOUNT,
     };
   }
 
   // Authentication required does not match provided method.
-  if (!authOptions || authOptions.type !== authMethod || !userId) {
+  if (!authOptions || !authMethods.includes(authOptions.type) || !userId) {
     return false;
   }
 
@@ -106,7 +110,9 @@ export const isRecipientAuthorized = async ({
 
       // Should not be possible.
       if (!user) {
-        throw new AppError(AppErrorCode.NOT_FOUND, 'User not found');
+        throw new AppError(AppErrorCode.NOT_FOUND, {
+          message: 'User not found',
+        });
       }
 
       return await verifyTwoFactorAuthenticationToken({
@@ -114,6 +120,15 @@ export const isRecipientAuthorized = async ({
         totpCode: token,
         window: 10, // 5 minutes worth of tokens
       });
+    })
+    .with({ type: DocumentAuth.PASSWORD }, async ({ password }) => {
+      return await verifyPassword({
+        userId,
+        password,
+      });
+    })
+    .with({ type: DocumentAuth.EXPLICIT_NONE }, () => {
+      return true;
     })
     .exhaustive();
 };
@@ -158,13 +173,15 @@ const verifyPasskey = async ({
 }: VerifyPasskeyOptions): Promise<void> => {
   const passkey = await prisma.passkey.findFirst({
     where: {
-      credentialId: Buffer.from(authenticationResponse.id, 'base64'),
+      credentialId: new Uint8Array(Buffer.from(authenticationResponse.id, 'base64')),
       userId,
     },
   });
 
   if (!passkey) {
-    throw new AppError(AppErrorCode.NOT_FOUND, 'Passkey not found');
+    throw new AppError(AppErrorCode.NOT_FOUND, {
+      message: 'Passkey not found',
+    });
   }
 
   const verificationToken = await prisma.verificationToken
@@ -177,11 +194,15 @@ const verifyPasskey = async ({
     .catch(() => null);
 
   if (!verificationToken) {
-    throw new AppError(AppErrorCode.NOT_FOUND, 'Token not found');
+    throw new AppError(AppErrorCode.NOT_FOUND, {
+      message: 'Token not found',
+    });
   }
 
   if (verificationToken.expires < new Date()) {
-    throw new AppError(AppErrorCode.EXPIRED_CODE, 'Token expired');
+    throw new AppError(AppErrorCode.EXPIRED_CODE, {
+      message: 'Token expired',
+    });
   }
 
   const { rpId, origin } = getAuthenticatorOptions();
@@ -199,7 +220,9 @@ const verifyPasskey = async ({
   }).catch(() => null); // May want to log this for insights.
 
   if (verification?.verified !== true) {
-    throw new AppError(AppErrorCode.UNAUTHORIZED, 'User is not authorized');
+    throw new AppError(AppErrorCode.UNAUTHORIZED, {
+      message: 'User is not authorized',
+    });
   }
 
   await prisma.passkey.update({

@@ -7,8 +7,8 @@ import { mailer } from '@documenso/email/mailer';
 import LineSupportEmailTemplate from '@documenso/email/templates/line-support';
 import { prisma } from '@documenso/prisma';
 
-import { getI18nInstance } from '../../../client-only/providers/i18n.server';
-import { WEBAPP_BASE_URL } from '../../../constants/app';
+import { getI18nInstance } from '../../../client-only/providers/i18n-server';
+import { NEXT_PUBLIC_WEBAPP_URL } from '../../../constants/app';
 import { SUPPORT_EMAIL } from '../../../constants/email';
 import { renderEmailWithI18N } from '../../../utils/render-email-with-i18n';
 import type { JobDefinition } from '../../client/_internal/job';
@@ -36,7 +36,7 @@ export const SEND_LINE_SUPPORT_EMAIL_JOB_DEFINITION = {
 
     await io.runTask(`send-line-support-email_${member.id}`, async () => {
       const emailContent = createElement(LineSupportEmailTemplate, {
-        assetBaseUrl: WEBAPP_BASE_URL,
+        assetBaseUrl: NEXT_PUBLIC_WEBAPP_URL(),
         memberName: member.name || '',
         memberEmail: member.email,
       });

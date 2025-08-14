@@ -1,5 +1,4 @@
-import { TRPCError } from '@trpc/server';
-
+import { AppError, AppErrorCode } from '@documenso/lib/errors/app-error';
 import { findDocuments } from '@documenso/lib/server-only/admin/get-all-documents';
 import { getEntireDocument } from '@documenso/lib/server-only/admin/get-entire-document';
 import { updateRecipient } from '@documenso/lib/server-only/admin/update-recipient';
@@ -9,153 +8,197 @@ import { sendDeleteEmail } from '@documenso/lib/server-only/document/send-delete
 import { superDeleteDocument } from '@documenso/lib/server-only/document/super-delete-document';
 import { upsertSiteSetting } from '@documenso/lib/server-only/site-settings/upsert-site-setting';
 import { deleteUser } from '@documenso/lib/server-only/user/delete-user';
+import { disableUser } from '@documenso/lib/server-only/user/disable-user';
+import { enableUser } from '@documenso/lib/server-only/user/enable-user';
 import { getUserById } from '@documenso/lib/server-only/user/get-user-by-id';
-import { extractNextApiRequestMetadata } from '@documenso/lib/universal/extract-request-metadata';
-import { DocumentStatus } from '@documenso/prisma/client';
+import { isDocumentCompleted } from '@documenso/lib/utils/document';
 
 import { adminProcedure, router } from '../trpc';
+import { createAdminOrganisationRoute } from './create-admin-organisation';
+import { createStripeCustomerRoute } from './create-stripe-customer';
+import { createSubscriptionClaimRoute } from './create-subscription-claim';
+import { deleteSubscriptionClaimRoute } from './delete-subscription-claim';
+import { findAdminOrganisationsRoute } from './find-admin-organisations';
+import { findSubscriptionClaimsRoute } from './find-subscription-claims';
+import { getAdminOrganisationRoute } from './get-admin-organisation';
 import {
   ZAdminDeleteDocumentMutationSchema,
   ZAdminDeleteUserMutationSchema,
+  ZAdminDisableUserMutationSchema,
+  ZAdminEnableUserMutationSchema,
   ZAdminFindDocumentsQuerySchema,
   ZAdminResealDocumentMutationSchema,
   ZAdminUpdateProfileMutationSchema,
   ZAdminUpdateRecipientMutationSchema,
   ZAdminUpdateSiteSettingMutationSchema,
 } from './schema';
+import { updateAdminOrganisationRoute } from './update-admin-organisation';
+import { updateSubscriptionClaimRoute } from './update-subscription-claim';
 
 export const adminRouter = router({
+  organisation: {
+    find: findAdminOrganisationsRoute,
+    get: getAdminOrganisationRoute,
+    create: createAdminOrganisationRoute,
+    update: updateAdminOrganisationRoute,
+  },
+  claims: {
+    find: findSubscriptionClaimsRoute,
+    create: createSubscriptionClaimRoute,
+    update: updateSubscriptionClaimRoute,
+    delete: deleteSubscriptionClaimRoute,
+  },
+  stripe: {
+    createCustomer: createStripeCustomerRoute,
+  },
+
+  // Todo: migrate old routes
   findDocuments: adminProcedure.input(ZAdminFindDocumentsQuerySchema).query(async ({ input }) => {
-    const { term, page, perPage } = input;
+    const { query, page, perPage } = input;
 
-    try {
-      return await findDocuments({ term, page, perPage });
-    } catch (err) {
-      console.error(err);
-
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: 'We were unable to retrieve the documents. Please try again.',
-      });
-    }
+    return await findDocuments({ query, page, perPage });
   }),
 
   updateUser: adminProcedure
     .input(ZAdminUpdateProfileMutationSchema)
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const { id, name, email, roles } = input;
 
-      try {
-        return await updateUser({ id, name, email, roles });
-      } catch (err) {
-        console.error(err);
+      ctx.logger.info({
+        input: {
+          id,
+          roles,
+        },
+      });
 
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'We were unable to retrieve the specified account. Please try again.',
-        });
-      }
+      return await updateUser({ id, name, email, roles });
     }),
 
   updateRecipient: adminProcedure
     .input(ZAdminUpdateRecipientMutationSchema)
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const { id, name, email } = input;
 
-      try {
-        return await updateRecipient({ id, name, email });
-      } catch (err) {
-        console.error(err);
+      ctx.logger.info({
+        input: {
+          id,
+        },
+      });
 
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'We were unable to update the recipient provided.',
-        });
-      }
+      return await updateRecipient({ id, name, email });
     }),
 
   updateSiteSetting: adminProcedure
     .input(ZAdminUpdateSiteSettingMutationSchema)
     .mutation(async ({ ctx, input }) => {
-      try {
-        const { id, enabled, data } = input;
+      const { id, enabled, data } = input;
 
-        return await upsertSiteSetting({
+      ctx.logger.info({
+        input: {
           id,
-          enabled,
-          data,
-          userId: ctx.user.id,
-        });
-      } catch (err) {
-        console.error(err);
+        },
+      });
 
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'We were unable to update the site setting provided.',
-        });
-      }
+      return await upsertSiteSetting({
+        id,
+        enabled,
+        data,
+        userId: ctx.user.id,
+      });
     }),
 
   resealDocument: adminProcedure
     .input(ZAdminResealDocumentMutationSchema)
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const { id } = input;
 
-      try {
-        const document = await getEntireDocument({ id });
+      ctx.logger.info({
+        input: {
+          id,
+        },
+      });
 
-        const isResealing = document.status === DocumentStatus.COMPLETED;
+      const document = await getEntireDocument({ id });
 
-        return await sealDocument({ documentId: id, isResealing });
-      } catch (err) {
-        console.error('resealDocument error', err);
+      const isResealing = isDocumentCompleted(document.status);
 
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'We were unable to reseal the document provided.',
-        });
-      }
+      return await sealDocument({ documentId: id, isResealing });
     }),
 
-  deleteUser: adminProcedure.input(ZAdminDeleteUserMutationSchema).mutation(async ({ input }) => {
-    const { id, email } = input;
+  enableUser: adminProcedure
+    .input(ZAdminEnableUserMutationSchema)
+    .mutation(async ({ input, ctx }) => {
+      const { id } = input;
 
-    try {
-      const user = await getUserById({ id });
+      ctx.logger.info({
+        input: {
+          id,
+        },
+      });
 
-      if (user.email !== email) {
-        throw new Error('Email does not match');
+      const user = await getUserById({ id }).catch(() => null);
+
+      if (!user) {
+        throw new AppError(AppErrorCode.NOT_FOUND, {
+          message: 'User not found',
+        });
       }
 
-      return await deleteUser({ id });
-    } catch (err) {
-      console.error(err);
+      return await enableUser({ id });
+    }),
 
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: 'We were unable to delete the specified account. Please try again.',
+  disableUser: adminProcedure
+    .input(ZAdminDisableUserMutationSchema)
+    .mutation(async ({ input, ctx }) => {
+      const { id } = input;
+
+      ctx.logger.info({
+        input: {
+          id,
+        },
       });
-    }
-  }),
+
+      const user = await getUserById({ id }).catch(() => null);
+
+      if (!user) {
+        throw new AppError(AppErrorCode.NOT_FOUND, {
+          message: 'User not found',
+        });
+      }
+
+      return await disableUser({ id });
+    }),
+
+  deleteUser: adminProcedure
+    .input(ZAdminDeleteUserMutationSchema)
+    .mutation(async ({ input, ctx }) => {
+      const { id } = input;
+
+      ctx.logger.info({
+        input: {
+          id,
+        },
+      });
+
+      return await deleteUser({ id });
+    }),
 
   deleteDocument: adminProcedure
     .input(ZAdminDeleteDocumentMutationSchema)
     .mutation(async ({ ctx, input }) => {
       const { id, reason } = input;
-      try {
-        await sendDeleteEmail({ documentId: id, reason });
 
-        return await superDeleteDocument({
+      ctx.logger.info({
+        input: {
           id,
-          requestMetadata: extractNextApiRequestMetadata(ctx.req),
-        });
-      } catch (err) {
-        console.error(err);
+        },
+      });
 
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'We were unable to delete the specified document. Please try again.',
-        });
-      }
+      await sendDeleteEmail({ documentId: id, reason });
+
+      return await superDeleteDocument({
+        id,
+        requestMetadata: ctx.metadata.requestMetadata,
+      });
     }),
 });

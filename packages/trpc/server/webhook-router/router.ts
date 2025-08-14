@@ -1,137 +1,132 @@
-import { TRPCError } from '@trpc/server';
-
 import { createWebhook } from '@documenso/lib/server-only/webhooks/create-webhook';
 import { deleteWebhookById } from '@documenso/lib/server-only/webhooks/delete-webhook-by-id';
 import { editWebhook } from '@documenso/lib/server-only/webhooks/edit-webhook';
 import { getWebhookById } from '@documenso/lib/server-only/webhooks/get-webhook-by-id';
 import { getWebhooksByTeamId } from '@documenso/lib/server-only/webhooks/get-webhooks-by-team-id';
-import { getWebhooksByUserId } from '@documenso/lib/server-only/webhooks/get-webhooks-by-user-id';
+import { triggerTestWebhook } from '@documenso/lib/server-only/webhooks/trigger-test-webhook';
 
 import { authenticatedProcedure, router } from '../trpc';
 import {
-  ZCreateWebhookMutationSchema,
-  ZDeleteWebhookMutationSchema,
-  ZEditWebhookMutationSchema,
-  ZGetTeamWebhooksQuerySchema,
-  ZGetWebhookByIdQuerySchema,
+  ZCreateWebhookRequestSchema,
+  ZDeleteWebhookRequestSchema,
+  ZEditWebhookRequestSchema,
+  ZGetTeamWebhooksRequestSchema,
+  ZGetWebhookByIdRequestSchema,
+  ZTriggerTestWebhookRequestSchema,
 } from './schema';
 
 export const webhookRouter = router({
-  getWebhooks: authenticatedProcedure.query(async ({ ctx }) => {
-    try {
-      return await getWebhooksByUserId(ctx.user.id);
-    } catch (err) {
-      console.error(err);
-
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: 'We were unable to fetch your webhooks. Please try again later.',
-      });
-    }
-  }),
-
   getTeamWebhooks: authenticatedProcedure
-    .input(ZGetTeamWebhooksQuerySchema)
+    .input(ZGetTeamWebhooksRequestSchema)
     .query(async ({ ctx, input }) => {
       const { teamId } = input;
 
-      try {
-        return await getWebhooksByTeamId(teamId, ctx.user.id);
-      } catch (err) {
-        console.error(err);
+      ctx.logger.info({
+        input: {
+          teamId,
+        },
+      });
 
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'We were unable to fetch your webhooks. Please try again later.',
-        });
-      }
+      return await getWebhooksByTeamId(teamId, ctx.user.id);
     }),
 
   getWebhookById: authenticatedProcedure
-    .input(ZGetWebhookByIdQuerySchema)
+    .input(ZGetWebhookByIdRequestSchema)
     .query(async ({ input, ctx }) => {
-      try {
-        const { id, teamId } = input;
+      const { id, teamId } = input;
 
-        return await getWebhookById({
+      ctx.logger.info({
+        input: {
           id,
-          userId: ctx.user.id,
           teamId,
-        });
-      } catch (err) {
-        console.error(err);
+        },
+      });
 
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'We were unable to fetch your webhook. Please try again later.',
-        });
-      }
+      return await getWebhookById({
+        id,
+        userId: ctx.user.id,
+        teamId,
+      });
     }),
 
   createWebhook: authenticatedProcedure
-    .input(ZCreateWebhookMutationSchema)
+    .input(ZCreateWebhookRequestSchema)
     .mutation(async ({ input, ctx }) => {
       const { enabled, eventTriggers, secret, webhookUrl, teamId } = input;
 
-      try {
-        return await createWebhook({
-          enabled,
-          secret,
-          webhookUrl,
-          eventTriggers,
+      ctx.logger.info({
+        input: {
           teamId,
-          userId: ctx.user.id,
-        });
-      } catch (err) {
-        console.error(err);
+        },
+      });
 
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'We were unable to create this webhook. Please try again later.',
-        });
-      }
+      return await createWebhook({
+        enabled,
+        secret,
+        webhookUrl,
+        eventTriggers,
+        teamId,
+        userId: ctx.user.id,
+      });
     }),
 
   deleteWebhook: authenticatedProcedure
-    .input(ZDeleteWebhookMutationSchema)
+    .input(ZDeleteWebhookRequestSchema)
     .mutation(async ({ input, ctx }) => {
-      try {
-        const { id, teamId } = input;
+      const { id, teamId } = input;
 
-        return await deleteWebhookById({
+      ctx.logger.info({
+        input: {
           id,
           teamId,
-          userId: ctx.user.id,
-        });
-      } catch (err) {
-        console.error(err);
+        },
+      });
 
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'We were unable to create this webhook. Please try again later.',
-        });
-      }
+      return await deleteWebhookById({
+        id,
+        teamId,
+        userId: ctx.user.id,
+      });
     }),
 
   editWebhook: authenticatedProcedure
-    .input(ZEditWebhookMutationSchema)
+    .input(ZEditWebhookRequestSchema)
     .mutation(async ({ input, ctx }) => {
-      try {
-        const { id, teamId, ...data } = input;
+      const { id, teamId, ...data } = input;
 
-        return await editWebhook({
+      ctx.logger.info({
+        input: {
           id,
-          data,
-          userId: ctx.user.id,
           teamId,
-        });
-      } catch (err) {
-        console.error(err);
+        },
+      });
 
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'We were unable to create this webhook. Please try again later.',
-        });
-      }
+      return await editWebhook({
+        id,
+        data,
+        userId: ctx.user.id,
+        teamId,
+      });
+    }),
+
+  testWebhook: authenticatedProcedure
+    .input(ZTriggerTestWebhookRequestSchema)
+    .mutation(async ({ input, ctx }) => {
+      const { id, event, teamId } = input;
+
+      ctx.logger.info({
+        input: {
+          id,
+          event,
+          teamId,
+        },
+      });
+
+      return await triggerTestWebhook({
+        id,
+        event,
+        userId: ctx.user.id,
+        teamId,
+      });
     }),
 });

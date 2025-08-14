@@ -1,8 +1,10 @@
-import { Trans, msg } from '@lingui/macro';
+import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/react/macro';
+import type { RecipientRole } from '@prisma/client';
+import { OrganisationType } from '@prisma/client';
 
 import { RECIPIENT_ROLES_DESCRIPTION } from '@documenso/lib/constants/recipient-roles';
-import type { RecipientRole } from '@documenso/prisma/client';
 
 import { Body, Container, Head, Hr, Html, Img, Link, Preview, Section, Text } from '../components';
 import { useBranding } from '../providers/branding';
@@ -14,10 +16,10 @@ export type DocumentInviteEmailTemplateProps = Partial<TemplateDocumentInvitePro
   customBody?: string;
   role: RecipientRole;
   selfSigner?: boolean;
-  isTeamInvite?: boolean;
   teamName?: string;
   teamEmail?: string;
   includeSenderDetails?: boolean;
+  organisationType?: OrganisationType;
 };
 
 export const DocumentInviteEmailTemplate = ({
@@ -29,9 +31,9 @@ export const DocumentInviteEmailTemplate = ({
   customBody,
   role,
   selfSigner = false,
-  isTeamInvite = false,
-  teamName,
+  teamName = '',
   includeSenderDetails,
+  organisationType,
 }: DocumentInviteEmailTemplateProps) => {
   const { _ } = useLingui();
   const branding = useBranding();
@@ -40,9 +42,9 @@ export const DocumentInviteEmailTemplate = ({
 
   let previewText = msg`${inviterName} has invited you to ${action} ${documentName}`;
 
-  if (isTeamInvite) {
+  if (organisationType === OrganisationType.ORGANISATION) {
     previewText = includeSenderDetails
-      ? msg`${inviterName} on behalf of ${teamName} has invited you to ${action} ${documentName}`
+      ? msg`${inviterName} on behalf of "${teamName}" has invited you to ${action} ${documentName}`
       : msg`${teamName} has invited you to ${action} ${documentName}`;
   }
 
@@ -77,7 +79,7 @@ export const DocumentInviteEmailTemplate = ({
                 assetBaseUrl={assetBaseUrl}
                 role={role}
                 selfSigner={selfSigner}
-                isTeamInvite={isTeamInvite}
+                organisationType={organisationType}
                 teamName={teamName}
                 includeSenderDetails={includeSenderDetails}
               />
@@ -86,14 +88,16 @@ export const DocumentInviteEmailTemplate = ({
 
           <Container className="mx-auto mt-12 max-w-xl">
             <Section>
-              <Text className="my-4 text-base font-semibold">
-                <Trans>
-                  {inviterName}{' '}
-                  <Link className="font-normal text-slate-400" href="mailto:{inviterEmail}">
-                    ({inviterEmail})
-                  </Link>
-                </Trans>
-              </Text>
+              {organisationType === OrganisationType.PERSONAL && (
+                <Text className="my-4 text-base font-semibold">
+                  <Trans>
+                    {inviterName}{' '}
+                    <Link className="font-normal text-slate-400" href="mailto:{inviterEmail}">
+                      ({inviterEmail})
+                    </Link>
+                  </Trans>
+                </Text>
+              )}
 
               <Text className="mt-2 text-base text-slate-400">
                 {customBody ? (

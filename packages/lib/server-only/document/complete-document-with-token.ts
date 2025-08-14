@@ -1,18 +1,29 @@
-import { DOCUMENT_AUDIT_LOG_TYPE } from '@documenso/lib/types/document-audit-logs';
-import type { RequestMetadata } from '@documenso/lib/universal/extract-request-metadata';
-import { createDocumentAuditLogData } from '@documenso/lib/utils/document-audit-logs';
-import { prisma } from '@documenso/prisma';
 import {
   DocumentSigningOrder,
   DocumentStatus,
   RecipientRole,
   SendStatus,
   SigningStatus,
-} from '@documenso/prisma/client';
-import { WebhookTriggerEvents } from '@documenso/prisma/client';
+  WebhookTriggerEvents,
+} from '@prisma/client';
 
+import {
+  DOCUMENT_AUDIT_LOG_TYPE,
+  RECIPIENT_DIFF_TYPE,
+} from '@documenso/lib/types/document-audit-logs';
+import type { RequestMetadata } from '@documenso/lib/universal/extract-request-metadata';
+import { fieldsContainUnsignedRequiredField } from '@documenso/lib/utils/advanced-fields-helpers';
+import { createDocumentAuditLogData } from '@documenso/lib/utils/document-audit-logs';
+import { prisma } from '@documenso/prisma';
+
+import { AppError, AppErrorCode } from '../../errors/app-error';
 import { jobs } from '../../jobs/client';
 import type { TRecipientActionAuth } from '../../types/document-auth';
+import {
+  ZWebhookDocumentSchema,
+  mapDocumentToWebhookDocumentPayload,
+} from '../../types/webhook-payload';
+import { extractDocumentAuthMethods } from '../../utils/document-auth';
 import { getIsRecipientsTurnToSign } from '../recipient/get-is-recipient-turn';
 import { triggerWebhook } from '../webhooks/trigger/trigger-webhook';
 import { sendPendingEmail } from './send-pending-email';
@@ -23,13 +34,17 @@ export type CompleteDocumentWithTokenOptions = {
   userId?: number;
   authOptions?: TRecipientActionAuth;
   requestMetadata?: RequestMetadata;
+  nextSigner?: {
+    email: string;
+    name: string;
+  };
 };
 
 const getDocument = async ({ token, documentId }: CompleteDocumentWithTokenOptions) => {
   return await prisma.document.findFirstOrThrow({
     where: {
       id: documentId,
-      Recipient: {
+      recipients: {
         some: {
           token,
         },
@@ -37,7 +52,7 @@ const getDocument = async ({ token, documentId }: CompleteDocumentWithTokenOptio
     },
     include: {
       documentMeta: true,
-      Recipient: {
+      recipients: {
         where: {
           token,
         },
@@ -50,6 +65,7 @@ export const completeDocumentWithToken = async ({
   token,
   documentId,
   requestMetadata,
+  nextSigner,
 }: CompleteDocumentWithTokenOptions) => {
   const document = await getDocument({ token, documentId });
 
@@ -57,14 +73,21 @@ export const completeDocumentWithToken = async ({
     throw new Error(`Document ${document.id} must be pending`);
   }
 
-  if (document.Recipient.length === 0) {
+  if (document.recipients.length === 0) {
     throw new Error(`Document ${document.id} has no recipient with token ${token}`);
   }
 
-  const [recipient] = document.Recipient;
+  const [recipient] = document.recipients;
 
   if (recipient.signingStatus === SigningStatus.SIGNED) {
     throw new Error(`Recipient ${recipient.id} has already signed`);
+  }
+
+  if (recipient.signingStatus === SigningStatus.REJECTED) {
+    throw new AppError(AppErrorCode.UNKNOWN_ERROR, {
+      message: 'Recipient has already rejected the document',
+      statusCode: 400,
+    });
   }
 
   if (document.documentMeta?.signingOrder === DocumentSigningOrder.SEQUENTIAL) {
@@ -84,7 +107,7 @@ export const completeDocumentWithToken = async ({
     },
   });
 
-  if (fields.some((field) => !field.inserted)) {
+  if (fieldsContainUnsignedRequiredField(fields)) {
     throw new Error(`Recipient ${recipient.id} has unsigned fields`);
   }
 
@@ -118,6 +141,11 @@ export const completeDocumentWithToken = async ({
       },
     });
 
+    const authOptions = extractDocumentAuthMethods({
+      documentAuth: document.authOptions,
+      recipientAuth: recipient.authOptions,
+    });
+
     await tx.documentAuditLog.create({
       data: createDocumentAuditLogData({
         type: DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_RECIPIENT_COMPLETED,
@@ -132,16 +160,27 @@ export const completeDocumentWithToken = async ({
           recipientName: recipient.name,
           recipientId: recipient.id,
           recipientRole: recipient.role,
-          // actionAuth: derivedRecipientActionAuth || undefined,
+          actionAuth: authOptions.derivedRecipientActionAuth,
         },
       }),
     });
+  });
+
+  await jobs.triggerJob({
+    name: 'send.recipient.signed.email',
+    payload: {
+      documentId: document.id,
+      recipientId: recipient.id,
+    },
   });
 
   const pendingRecipients = await prisma.recipient.findMany({
     select: {
       id: true,
       signingOrder: true,
+      name: true,
+      email: true,
+      role: true,
     },
     where: {
       documentId: document.id,
@@ -164,9 +203,49 @@ export const completeDocumentWithToken = async ({
       const [nextRecipient] = pendingRecipients;
 
       await prisma.$transaction(async (tx) => {
+        if (nextSigner && document.documentMeta?.allowDictateNextSigner) {
+          await tx.documentAuditLog.create({
+            data: createDocumentAuditLogData({
+              type: DOCUMENT_AUDIT_LOG_TYPE.RECIPIENT_UPDATED,
+              documentId: document.id,
+              user: {
+                name: recipient.name,
+                email: recipient.email,
+              },
+              requestMetadata,
+              data: {
+                recipientEmail: nextRecipient.email,
+                recipientName: nextRecipient.name,
+                recipientId: nextRecipient.id,
+                recipientRole: nextRecipient.role,
+                changes: [
+                  {
+                    type: RECIPIENT_DIFF_TYPE.NAME,
+                    from: nextRecipient.name,
+                    to: nextSigner.name,
+                  },
+                  {
+                    type: RECIPIENT_DIFF_TYPE.EMAIL,
+                    from: nextRecipient.email,
+                    to: nextSigner.email,
+                  },
+                ],
+              },
+            }),
+          });
+        }
+
         await tx.recipient.update({
           where: { id: nextRecipient.id },
-          data: { sendStatus: SendStatus.SENT },
+          data: {
+            sendStatus: SendStatus.SENT,
+            ...(nextSigner && document.documentMeta?.allowDictateNextSigner
+              ? {
+                  name: nextSigner.name,
+                  email: nextSigner.email,
+                }
+              : {}),
+          },
         });
 
         await jobs.triggerJob({
@@ -185,7 +264,7 @@ export const completeDocumentWithToken = async ({
   const haveAllRecipientsSigned = await prisma.document.findFirst({
     where: {
       id: document.id,
-      Recipient: {
+      recipients: {
         every: {
           OR: [{ signingStatus: SigningStatus.SIGNED }, { role: RecipientRole.CC }],
         },
@@ -203,11 +282,19 @@ export const completeDocumentWithToken = async ({
     });
   }
 
-  const updatedDocument = await getDocument({ token, documentId });
+  const updatedDocument = await prisma.document.findFirstOrThrow({
+    where: {
+      id: document.id,
+    },
+    include: {
+      documentMeta: true,
+      recipients: true,
+    },
+  });
 
   await triggerWebhook({
     event: WebhookTriggerEvents.DOCUMENT_SIGNED,
-    data: updatedDocument,
+    data: ZWebhookDocumentSchema.parse(mapDocumentToWebhookDocumentPayload(updatedDocument)),
     userId: updatedDocument.userId,
     teamId: updatedDocument.teamId ?? undefined,
   });

@@ -1,23 +1,20 @@
 import { hash } from '@node-rs/bcrypt';
+import type { User } from '@prisma/client';
 
-import { getStripeCustomerByUser } from '@documenso/ee/server-only/stripe/get-customer';
-import { updateSubscriptionItemQuantity } from '@documenso/ee/server-only/stripe/update-subscription-item-quantity';
 import { prisma } from '@documenso/prisma';
-import { IdentityProvider, TeamMemberInviteStatus } from '@documenso/prisma/client';
 
-import { IS_BILLING_ENABLED } from '../../constants/app';
 import { SALT_ROUNDS } from '../../constants/auth';
 import { AppError, AppErrorCode } from '../../errors/app-error';
+import { createPersonalOrganisation } from '../organisation/create-organisation';
 
 export interface CreateUserOptions {
   name: string;
   email: string;
   password: string;
   signature?: string | null;
-  url?: string;
 }
 
-export const createUser = async ({ name, email, password, signature, url }: CreateUserOptions) => {
+export const createUser = async ({ name, email, password, signature }: CreateUserOptions) => {
   const hashedPassword = await hash(password, SALT_ROUNDS);
 
   const userExists = await prisma.user.findFirst({
@@ -27,116 +24,49 @@ export const createUser = async ({ name, email, password, signature, url }: Crea
   });
 
   if (userExists) {
-    throw new Error('User already exists');
+    throw new AppError(AppErrorCode.ALREADY_EXISTS);
   }
 
-  if (url) {
-    const urlExists = await prisma.user.findFirst({
-      where: {
-        url,
+  const user = await prisma.$transaction(async (tx) => {
+    const user = await tx.user.create({
+      data: {
+        name,
+        email: email.toLowerCase(),
+        password: hashedPassword, // Todo: (RR7) Drop password.
+        signature,
       },
     });
 
-    if (urlExists) {
-      throw new AppError(
-        AppErrorCode.PROFILE_URL_TAKEN,
-        'Profile username is taken',
-        'The profile username is already taken',
-      );
-    }
-  }
+    // Todo: (RR7) Migrate to use this after RR7.
+    // await tx.account.create({
+    //   data: {
+    //     userId: user.id,
+    //     type: 'emailPassword', // Todo: (RR7)
+    //     provider: 'DOCUMENSO', // Todo: (RR7) Enums
+    //     providerAccountId: user.id.toString(),
+    //     password: hashedPassword,
+    //   },
+    // });
 
-  const user = await prisma.user.create({
-    data: {
-      name,
-      email: email.toLowerCase(),
-      password: hashedPassword,
-      signature,
-      identityProvider: IdentityProvider.DOCUMENSO,
-      url,
-    },
+    return user;
   });
 
-  const acceptedTeamInvites = await prisma.teamMemberInvite.findMany({
-    where: {
-      status: TeamMemberInviteStatus.ACCEPTED,
-      email: {
-        equals: email,
-        mode: 'insensitive',
-      },
-    },
+  // Not used at the moment, uncomment if required.
+  await onCreateUserHook(user).catch((err) => {
+    // Todo: (RR7) Add logging.
+    console.error(err);
   });
 
-  // For each team invite, add the user to the team and delete the team invite.
-  // If an error occurs, reset the invitation to not accepted.
-  await Promise.allSettled(
-    acceptedTeamInvites.map(async (invite) =>
-      prisma
-        .$transaction(
-          async (tx) => {
-            await tx.teamMember.create({
-              data: {
-                teamId: invite.teamId,
-                userId: user.id,
-                role: invite.role,
-              },
-            });
+  return user;
+};
 
-            await tx.teamMemberInvite.delete({
-              where: {
-                id: invite.id,
-              },
-            });
-
-            if (!IS_BILLING_ENABLED()) {
-              return;
-            }
-
-            const team = await tx.team.findFirstOrThrow({
-              where: {
-                id: invite.teamId,
-              },
-              include: {
-                members: {
-                  select: {
-                    id: true,
-                  },
-                },
-                subscription: true,
-              },
-            });
-
-            if (team.subscription) {
-              await updateSubscriptionItemQuantity({
-                priceId: team.subscription.priceId,
-                subscriptionId: team.subscription.planId,
-                quantity: team.members.length,
-              });
-            }
-          },
-          { timeout: 30_000 },
-        )
-        .catch(async () => {
-          await prisma.teamMemberInvite.update({
-            where: {
-              id: invite.id,
-            },
-            data: {
-              status: TeamMemberInviteStatus.PENDING,
-            },
-          });
-        }),
-    ),
-  );
-
-  // Update the user record with a new or existing Stripe customer record.
-  if (IS_BILLING_ENABLED()) {
-    try {
-      return await getStripeCustomerByUser(user).then((session) => session.user);
-    } catch (err) {
-      console.error(err);
-    }
-  }
+/**
+ * Should be run after a user is created, example during email password signup or google sign in.
+ *
+ * @returns User
+ */
+export const onCreateUserHook = async (user: User) => {
+  await createPersonalOrganisation({ userId: user.id });
 
   return user;
 };

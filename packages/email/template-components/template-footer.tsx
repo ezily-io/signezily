@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 
 import { Link, Section, Text } from '../components';
 import { useBranding } from '../providers/branding';
@@ -16,8 +16,8 @@ export const TemplateFooter = ({ isDocument = true }: TemplateFooterProps) => {
         <Text className="my-4 text-base text-slate-400">
           <Trans>
             This document was sent using{' '}
-            <Link className="text-[#B978FA]" href="https://documen.so/mail-footer">
-              Documenso.
+            <Link className="text-[#B978FA]" href="https://app.sign.ezily.io/">
+              SignEzily.
             </Link>
           </Trans>
         </Text>

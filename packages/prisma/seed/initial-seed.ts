@@ -1,130 +1,131 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { hashSync } from '@documenso/lib/server-only/auth/hash';
-
 import { prisma } from '..';
-import { DocumentDataType, DocumentSource, Role, TeamMemberRole } from '../client';
+import { DocumentDataType, DocumentSource } from '../client';
+import { seedPendingDocument } from './documents';
+import { seedDirectTemplate, seedTemplate } from './templates';
+import { seedUser } from './users';
+
+const createDocumentData = async ({ documentData }: { documentData: string }) => {
+  return prisma.documentData.create({
+    data: {
+      type: DocumentDataType.BYTES_64,
+      data: documentData,
+      initialData: documentData,
+    },
+  });
+};
 
 export const seedDatabase = async () => {
   const examplePdf = fs
     .readFileSync(path.join(__dirname, '../../../assets/example.pdf'))
     .toString('base64');
 
-  const exampleUser = await prisma.user.upsert({
+  const exampleUserExists = await prisma.user.findFirst({
     where: {
       email: 'example@documenso.com',
     },
-    create: {
-      name: 'Example User',
-      email: 'example@documenso.com',
-      emailVerified: new Date(),
-      password: hashSync('password'),
-      roles: [Role.USER],
-    },
-    update: {},
   });
 
-  const adminUser = await prisma.user.upsert({
+  const adminUserExists = await prisma.user.findFirst({
     where: {
       email: 'admin@documenso.com',
     },
-    create: {
-      name: 'Admin User',
-      email: 'admin@documenso.com',
-      emailVerified: new Date(),
-      password: hashSync('password'),
-      roles: [Role.USER, Role.ADMIN],
-    },
-    update: {},
   });
 
-  const examplePdfData = await prisma.documentData.upsert({
-    where: {
-      id: 'clmn0kv5k0000pe04vcqg5zla',
-    },
-    create: {
-      id: 'clmn0kv5k0000pe04vcqg5zla',
-      type: DocumentDataType.BYTES_64,
-      data: examplePdf,
-      initialData: examplePdf,
-    },
-    update: {},
-  });
-
-  await prisma.document.create({
-    data: {
-      source: DocumentSource.DOCUMENT,
-      title: 'Example Document',
-      documentDataId: examplePdfData.id,
-      userId: exampleUser.id,
-      Recipient: {
-        create: {
-          name: String(adminUser.name),
-          email: adminUser.email,
-          token: Math.random().toString(36).slice(2, 9),
-        },
-      },
-    },
-  });
-
-  const testUsers = [
-    'test@documenso.com',
-    'test2@documenso.com',
-    'test3@documenso.com',
-    'test4@documenso.com',
-  ];
-
-  const createdUsers = [];
-
-  for (const email of testUsers) {
-    const testUser = await prisma.user.upsert({
-      where: {
-        email: email,
-      },
-      create: {
-        name: 'Test User',
-        email: email,
-        emailVerified: new Date(),
-        password: hashSync('password'),
-        roles: [Role.USER],
-      },
-      update: {},
-    });
-
-    createdUsers.push(testUser);
+  if (exampleUserExists || adminUserExists) {
+    return;
   }
 
-  const team1 = await prisma.team.create({
-    data: {
-      name: 'Team 1',
-      url: 'team1',
-      ownerUserId: createdUsers[0].id,
-    },
+  const exampleUser = await seedUser({
+    name: 'Example User',
+    email: 'example@documenso.com',
   });
 
-  const team2 = await prisma.team.create({
-    data: {
-      name: 'Team 2',
-      url: 'team2',
-      ownerUserId: createdUsers[1].id,
-    },
+  const adminUser = await seedUser({
+    name: 'Admin User',
+    email: 'admin@documenso.com',
+    isAdmin: true,
   });
 
-  for (const team of [team1, team2]) {
-    await prisma.teamMember.createMany({
-      data: [
-        {
-          teamId: team.id,
-          userId: createdUsers[1].id,
-          role: TeamMemberRole.ADMIN,
+  for (let i = 1; i <= 4; i++) {
+    const documentData = await createDocumentData({ documentData: examplePdf });
+
+    await prisma.document.create({
+      data: {
+        source: DocumentSource.DOCUMENT,
+        title: `Example Document ${i}`,
+        documentDataId: documentData.id,
+        userId: exampleUser.user.id,
+        teamId: exampleUser.team.id,
+        recipients: {
+          create: {
+            name: String(adminUser.user.name),
+            email: adminUser.user.email,
+            token: Math.random().toString(36).slice(2, 9),
+          },
         },
-        {
-          teamId: team.id,
-          userId: createdUsers[2].id,
-          role: TeamMemberRole.MEMBER,
-        },
-      ],
+      },
     });
   }
+
+  for (let i = 1; i <= 4; i++) {
+    const documentData = await createDocumentData({ documentData: examplePdf });
+
+    await prisma.document.create({
+      data: {
+        source: DocumentSource.DOCUMENT,
+        title: `Document ${i}`,
+        documentDataId: documentData.id,
+        userId: adminUser.user.id,
+        teamId: adminUser.team.id,
+        recipients: {
+          create: {
+            name: String(exampleUser.user.name),
+            email: exampleUser.user.email,
+            token: Math.random().toString(36).slice(2, 9),
+          },
+        },
+      },
+    });
+  }
+
+  await seedPendingDocument(exampleUser.user, exampleUser.team.id, [adminUser.user], {
+    key: 'example-pending',
+    createDocumentOptions: {
+      title: 'Pending Document',
+    },
+  });
+
+  await seedPendingDocument(adminUser.user, adminUser.team.id, [exampleUser.user], {
+    key: 'admin-pending',
+    createDocumentOptions: {
+      title: 'Pending Document',
+    },
+  });
+
+  await Promise.all([
+    seedTemplate({
+      title: 'Template 1',
+      userId: exampleUser.user.id,
+      teamId: exampleUser.team.id,
+    }),
+    seedDirectTemplate({
+      title: 'Direct Template 1',
+      userId: exampleUser.user.id,
+      teamId: exampleUser.team.id,
+    }),
+
+    seedTemplate({
+      title: 'Template 1',
+      userId: adminUser.user.id,
+      teamId: adminUser.team.id,
+    }),
+    seedDirectTemplate({
+      title: 'Direct Template 1',
+      userId: adminUser.user.id,
+      teamId: adminUser.team.id,
+    }),
+  ]);
 };

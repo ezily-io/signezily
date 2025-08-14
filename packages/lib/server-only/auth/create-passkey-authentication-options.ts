@@ -1,9 +1,9 @@
+import type { Passkey } from '@prisma/client';
 import { generateAuthenticationOptions } from '@simplewebauthn/server';
 import type { AuthenticatorTransportFuture } from '@simplewebauthn/types';
 import { DateTime } from 'luxon';
 
 import { prisma } from '@documenso/prisma';
-import type { Passkey } from '@documenso/prisma/client';
 
 import { AppError, AppErrorCode } from '../../errors/app-error';
 import { getAuthenticatorOptions } from '../../utils/authenticator';
@@ -40,7 +40,9 @@ export const createPasskeyAuthenticationOptions = async ({
     });
 
     if (!preferredPasskey) {
-      throw new AppError(AppErrorCode.NOT_FOUND, 'Requested passkey not found');
+      throw new AppError(AppErrorCode.NOT_FOUND, {
+        message: 'Requested passkey not found',
+      });
     }
   }
 

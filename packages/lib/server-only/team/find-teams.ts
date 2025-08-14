@@ -1,11 +1,15 @@
-import type { FindResultSet } from '@documenso/lib/types/find-result-set';
+import type { Team } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+
 import { prisma } from '@documenso/prisma';
-import type { Team } from '@documenso/prisma/client';
-import { Prisma } from '@documenso/prisma/client';
+
+import type { FindResultResponse } from '../../types/search-params';
+import { getHighestTeamRoleInGroup } from '../../utils/teams';
 
 export interface FindTeamsOptions {
   userId: number;
-  term?: string;
+  organisationId: string;
+  query?: string;
   page?: number;
   perPage?: number;
   orderBy?: {
@@ -16,7 +20,8 @@ export interface FindTeamsOptions {
 
 export const findTeams = async ({
   userId,
-  term,
+  organisationId,
+  query,
   page = 1,
   perPage = 10,
   orderBy,
@@ -25,16 +30,27 @@ export const findTeams = async ({
   const orderByDirection = orderBy?.direction ?? 'desc';
 
   const whereClause: Prisma.TeamWhereInput = {
-    members: {
+    organisation: {
+      id: organisationId,
+    },
+    teamGroups: {
       some: {
-        userId,
+        organisationGroup: {
+          organisationGroupMembers: {
+            some: {
+              organisationMember: {
+                userId,
+              },
+            },
+          },
+        },
       },
     },
   };
 
-  if (term && term.length > 0) {
+  if (query && query.length > 0) {
     whereClause.name = {
-      contains: term,
+      contains: query,
       mode: Prisma.QueryMode.insensitive,
     };
   }
@@ -48,9 +64,17 @@ export const findTeams = async ({
         [orderByColumn]: orderByDirection,
       },
       include: {
-        members: {
+        teamGroups: {
           where: {
-            userId,
+            organisationGroup: {
+              organisationGroupMembers: {
+                some: {
+                  organisationMember: {
+                    userId,
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -62,8 +86,7 @@ export const findTeams = async ({
 
   const maskedData = data.map((team) => ({
     ...team,
-    currentTeamMember: team.members[0],
-    members: undefined,
+    currentTeamRole: getHighestTeamRoleInGroup(team.teamGroups),
   }));
 
   return {
@@ -72,5 +95,5 @@ export const findTeams = async ({
     currentPage: Math.max(page, 1),
     perPage,
     totalPages: Math.ceil(count / perPage),
-  } satisfies FindResultSet<typeof maskedData>;
+  } satisfies FindResultResponse<typeof maskedData>;
 };

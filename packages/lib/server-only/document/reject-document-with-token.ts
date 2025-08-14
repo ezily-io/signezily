@@ -1,9 +1,9 @@
 import { SigningStatus } from '@prisma/client';
-import { TRPCError } from '@trpc/server';
 
 import { jobs } from '@documenso/lib/jobs/client';
 import { prisma } from '@documenso/prisma';
 
+import { AppError, AppErrorCode } from '../../errors/app-error';
 import { DOCUMENT_AUDIT_LOG_TYPE } from '../../types/document-audit-logs';
 import type { RequestMetadata } from '../../universal/extract-request-metadata';
 import { createDocumentAuditLogData } from '../../utils/document-audit-logs';
@@ -28,24 +28,23 @@ export async function rejectDocumentWithToken({
       documentId,
     },
     include: {
-      Document: {
+      document: {
         include: {
-          User: true,
+          user: true,
+          recipients: true,
+          documentMeta: true,
         },
       },
     },
   });
 
-  const document = recipient?.Document;
+  const document = recipient?.document;
 
   if (!recipient || !document) {
-    throw new TRPCError({
-      code: 'NOT_FOUND',
+    throw new AppError(AppErrorCode.NOT_FOUND, {
       message: 'Document or recipient not found',
     });
   }
-
-  // Add the audit log entry before updating the recipient
 
   // Update the recipient status to rejected
   const [updatedRecipient] = await prisma.$transaction([
@@ -79,12 +78,31 @@ export async function rejectDocumentWithToken({
     }),
   ]);
 
-  // Send email notifications
+  // Trigger the seal document job to process the document asynchronously
+  await jobs.triggerJob({
+    name: 'internal.seal-document',
+    payload: {
+      documentId,
+      requestMetadata,
+    },
+  });
+
+  // Send email notifications to the rejecting recipient
   await jobs.triggerJob({
     name: 'send.signing.rejected.emails',
     payload: {
       recipientId: recipient.id,
       documentId,
+    },
+  });
+
+  // Send cancellation emails to other recipients
+  await jobs.triggerJob({
+    name: 'send.document.cancelled.emails',
+    payload: {
+      documentId,
+      cancellationReason: reason,
+      requestMetadata,
     },
   });
 

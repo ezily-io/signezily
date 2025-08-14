@@ -1,11 +1,16 @@
-import { nanoid } from '@documenso/lib/universal/id';
+import { DocumentSource, type RecipientRole } from '@prisma/client';
+
+import { nanoid, prefixedId } from '@documenso/lib/universal/id';
 import { prisma } from '@documenso/prisma';
-import { DocumentSource, type RecipientRole } from '@documenso/prisma/client';
+
+import { extractDerivedDocumentMeta } from '../../utils/document';
+import { buildTeamWhereQuery } from '../../utils/teams';
+import { getTeamSettings } from '../team/get-team-settings';
 
 export type CreateDocumentFromTemplateLegacyOptions = {
   templateId: number;
   userId: number;
-  teamId?: number;
+  teamId: number;
   recipients?: {
     name?: string;
     email: string;
@@ -26,38 +31,24 @@ export const createDocumentFromTemplateLegacy = async ({
   const template = await prisma.template.findUnique({
     where: {
       id: templateId,
-      ...(teamId
-        ? {
-            team: {
-              id: teamId,
-              members: {
-                some: {
-                  userId,
-                },
-              },
-            },
-          }
-        : {
-            userId,
-            teamId: null,
-          }),
+      team: buildTeamWhereQuery({ teamId, userId }),
     },
     include: {
-      Recipient: true,
-      Field: true,
+      recipients: true,
+      fields: true,
       templateDocumentData: true,
       templateMeta: true,
-      team: {
-        include: {
-          teamGlobalSettings: true,
-        },
-      },
     },
   });
 
   if (!template) {
     throw new Error('Template not found.');
   }
+
+  const settings = await getTeamSettings({
+    userId,
+    teamId,
+  });
 
   const documentData = await prisma.documentData.create({
     data: {
@@ -69,15 +60,17 @@ export const createDocumentFromTemplateLegacy = async ({
 
   const document = await prisma.document.create({
     data: {
+      qrToken: prefixedId('qr'),
       source: DocumentSource.TEMPLATE,
       templateId: template.id,
       userId,
       teamId: template.teamId,
       title: template.title,
-      visibility: template.team?.teamGlobalSettings?.documentVisibility,
+      visibility: settings.documentVisibility,
       documentDataId: documentData.id,
-      Recipient: {
-        create: template.Recipient.map((recipient) => ({
+      useLegacyFieldInsertion: template.useLegacyFieldInsertion ?? false,
+      recipients: {
+        create: template.recipients.map((recipient) => ({
           email: recipient.email,
           name: recipient.name,
           role: recipient.role,
@@ -86,21 +79,12 @@ export const createDocumentFromTemplateLegacy = async ({
         })),
       },
       documentMeta: {
-        create: {
-          subject: template.templateMeta?.subject,
-          message: template.templateMeta?.message,
-          timezone: template.templateMeta?.timezone,
-          dateFormat: template.templateMeta?.dateFormat,
-          redirectUrl: template.templateMeta?.redirectUrl,
-          signingOrder: template.templateMeta?.signingOrder ?? undefined,
-          language:
-            template.templateMeta?.language || template.team?.teamGlobalSettings?.documentLanguage,
-        },
+        create: extractDerivedDocumentMeta(settings, template.templateMeta),
       },
     },
 
     include: {
-      Recipient: {
+      recipients: {
         orderBy: {
           id: 'asc',
         },
@@ -110,10 +94,10 @@ export const createDocumentFromTemplateLegacy = async ({
   });
 
   await prisma.field.createMany({
-    data: template.Field.map((field) => {
-      const recipient = template.Recipient.find((recipient) => recipient.id === field.recipientId);
+    data: template.fields.map((field) => {
+      const recipient = template.recipients.find((recipient) => recipient.id === field.recipientId);
 
-      const documentRecipient = document.Recipient.find((doc) => doc.email === recipient?.email);
+      const documentRecipient = document.recipients.find((doc) => doc.email === recipient?.email);
 
       if (!documentRecipient) {
         throw new Error('Recipient not found.');
@@ -135,9 +119,9 @@ export const createDocumentFromTemplateLegacy = async ({
   });
 
   if (recipients && recipients.length > 0) {
-    document.Recipient = await Promise.all(
+    document.recipients = await Promise.all(
       recipients.map(async (recipient, index) => {
-        const existingRecipient = document.Recipient.at(index);
+        const existingRecipient = document.recipients.at(index);
 
         return await prisma.recipient.upsert({
           where: {

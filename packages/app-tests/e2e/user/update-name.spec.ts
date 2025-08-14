@@ -4,23 +4,16 @@ import { getUserByEmail } from '@documenso/lib/server-only/user/get-user-by-emai
 import { seedUser } from '@documenso/prisma/seed/users';
 
 import { apiSignin } from '../fixtures/authentication';
+import { signSignaturePad } from '../fixtures/signature';
 
 test('[USER] update full name', async ({ page }) => {
-  const user = await seedUser();
+  const { user } = await seedUser();
 
   await apiSignin({ page, email: user.email, redirectPath: '/settings/profile' });
 
   await page.getByLabel('Full Name').fill('John Doe');
 
-  const canvas = page.locator('canvas').first();
-  const box = await canvas.boundingBox();
-
-  if (box) {
-    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-    await page.mouse.down();
-    await page.mouse.move(box.x + box.width / 4, box.y + box.height / 4);
-    await page.mouse.up();
-  }
+  await signSignaturePad(page);
 
   await page.getByRole('button', { name: 'Update profile' }).click();
 

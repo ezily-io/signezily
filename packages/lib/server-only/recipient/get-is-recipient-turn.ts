@@ -1,5 +1,6 @@
+import { DocumentSigningOrder, SigningStatus } from '@prisma/client';
+
 import { prisma } from '@documenso/prisma';
-import { DocumentSigningOrder, SigningStatus } from '@documenso/prisma/client';
 
 export type GetIsRecipientTurnOptions = {
   token: string;
@@ -8,7 +9,7 @@ export type GetIsRecipientTurnOptions = {
 export async function getIsRecipientsTurnToSign({ token }: GetIsRecipientTurnOptions) {
   const document = await prisma.document.findFirstOrThrow({
     where: {
-      Recipient: {
+      recipients: {
         some: {
           token,
         },
@@ -16,7 +17,7 @@ export async function getIsRecipientsTurnToSign({ token }: GetIsRecipientTurnOpt
     },
     include: {
       documentMeta: true,
-      Recipient: {
+      recipients: {
         orderBy: {
           signingOrder: 'asc',
         },
@@ -28,7 +29,7 @@ export async function getIsRecipientsTurnToSign({ token }: GetIsRecipientTurnOpt
     return true;
   }
 
-  const recipients = document.Recipient;
+  const { recipients } = document;
 
   const currentRecipientIndex = recipients.findIndex((r) => r.token === token);
 

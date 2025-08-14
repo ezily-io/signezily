@@ -1,5 +1,3 @@
-'use client';
-
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
 import { isDeepEqual } from 'remeda';
@@ -24,7 +22,7 @@ export const useLimits = () => {
 
 export type LimitsProviderProps = {
   initialValue?: TLimitsResponseSchema;
-  teamId?: number;
+  teamId: number;
   children?: React.ReactNode;
 };
 

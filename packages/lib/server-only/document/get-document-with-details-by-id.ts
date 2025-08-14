@@ -1,32 +1,70 @@
 import { prisma } from '@documenso/prisma';
-import type { DocumentWithDetails } from '@documenso/prisma/types/document';
 
+import { AppError, AppErrorCode } from '../../errors/app-error';
 import { getDocumentWhereInput } from './get-document-by-id';
 
 export type GetDocumentWithDetailsByIdOptions = {
-  id: number;
+  documentId: number;
   userId: number;
-  teamId?: number;
+  teamId: number;
+  folderId?: string;
 };
 
 export const getDocumentWithDetailsById = async ({
-  id,
+  documentId,
   userId,
   teamId,
-}: GetDocumentWithDetailsByIdOptions): Promise<DocumentWithDetails> => {
-  const documentWhereInput = await getDocumentWhereInput({
-    documentId: id,
+  folderId,
+}: GetDocumentWithDetailsByIdOptions) => {
+  const { documentWhereInput } = await getDocumentWhereInput({
+    documentId,
     userId,
     teamId,
   });
 
-  return await prisma.document.findFirstOrThrow({
-    where: documentWhereInput,
+  const document = await prisma.document.findFirst({
+    where: {
+      ...documentWhereInput,
+      folderId,
+    },
     include: {
       documentData: true,
       documentMeta: true,
-      Recipient: true,
-      Field: true,
+      recipients: true,
+      folder: true,
+      fields: {
+        include: {
+          signature: true,
+          recipient: {
+            select: {
+              name: true,
+              email: true,
+              signingStatus: true,
+            },
+          },
+        },
+      },
+      team: {
+        select: {
+          id: true,
+          url: true,
+        },
+      },
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
     },
   });
+
+  if (!document) {
+    throw new AppError(AppErrorCode.NOT_FOUND, {
+      message: 'Document not found',
+    });
+  }
+
+  return document;
 };

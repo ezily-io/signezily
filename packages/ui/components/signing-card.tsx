@@ -1,14 +1,8 @@
-'use client';
-
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import type { StaticImageData } from 'next/image';
-import Image from 'next/image';
-
+import type { Signature } from '@prisma/client';
 import { animate, motion, useMotionTemplate, useMotionValue, useTransform } from 'framer-motion';
 import { P, match } from 'ts-pattern';
-
-import type { Signature } from '@documenso/prisma/client';
 
 import { cn } from '../lib/utils';
 import { Card, CardContent } from '../primitives/card';
@@ -17,7 +11,7 @@ export type SigningCardProps = {
   className?: string;
   name: string;
   signature?: Signature;
-  signingCelebrationImage?: StaticImageData;
+  signingCelebrationImage?: string;
 };
 
 /**
@@ -30,7 +24,7 @@ export const SigningCard = ({
   signingCelebrationImage,
 }: SigningCardProps) => {
   return (
-    <div className={cn('relative w-full max-w-xs md:max-w-sm', className)}>
+    <div className={cn('relative w-full max-w-sm md:max-w-md', className)}>
       <SigningCardContent name={name} signature={signature} />
 
       {signingCelebrationImage && (
@@ -54,7 +48,7 @@ export const SigningCard3D = ({
 
   const [trackMouse, setTrackMouse] = useState(false);
 
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<number | undefined>();
 
   const cardX = useMotionValue(0);
   const cardY = useMotionValue(0);
@@ -109,7 +103,7 @@ export const SigningCard3D = ({
       clearTimeout(timeoutRef.current);
 
       // Revert the card back to the center position after the mouse stops moving.
-      timeoutRef.current = setTimeout(() => {
+      timeoutRef.current = window.setTimeout(() => {
         void animate(cardX, 0, { duration: 2, ease: 'backInOut' });
         void animate(cardY, 0, { duration: 2, ease: 'backInOut' });
 
@@ -126,12 +120,15 @@ export const SigningCard3D = ({
 
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
+      if (timeoutRef.current) {
+        window.clearTimeout(timeoutRef.current);
+      }
     };
   }, [onMouseMove]);
 
   return (
     <div
-      className={cn('relative w-full max-w-xs md:max-w-sm', className)}
+      className={cn('relative w-full max-w-sm md:max-w-md', className)}
       style={{ perspective: 800 }}
     >
       <motion.div
@@ -213,7 +210,7 @@ const SigningCardContent = ({ className, name, signature }: SigningCardContentPr
 };
 
 type SigningCardImageProps = {
-  signingCelebrationImage: StaticImageData;
+  signingCelebrationImage: string;
 };
 
 const SigningCardImage = ({ signingCelebrationImage }: SigningCardImageProps) => {
@@ -233,7 +230,7 @@ const SigningCardImage = ({ signingCelebrationImage }: SigningCardImageProps) =>
         duration: 0.5,
       }}
     >
-      <Image
+      <img
         src={signingCelebrationImage}
         alt="background pattern"
         className="w-full dark:brightness-150 dark:contrast-[70%] dark:invert dark:sepia"
@@ -241,7 +238,6 @@ const SigningCardImage = ({ signingCelebrationImage }: SigningCardImageProps) =>
           mask: 'radial-gradient(rgba(255, 255, 255, 1) 0%, transparent 67%)',
           WebkitMask: 'radial-gradient(rgba(255, 255, 255, 1) 0%, transparent 67%)',
         }}
-        priority
       />
     </motion.div>
   );

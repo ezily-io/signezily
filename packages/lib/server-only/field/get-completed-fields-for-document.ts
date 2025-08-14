@@ -1,5 +1,6 @@
+import { SigningStatus } from '@prisma/client';
+
 import { prisma } from '@documenso/prisma';
-import { SigningStatus } from '@documenso/prisma/client';
 
 export type GetCompletedFieldsForDocumentOptions = {
   documentId: number;
@@ -11,14 +12,14 @@ export const getCompletedFieldsForDocument = async ({
   return await prisma.field.findMany({
     where: {
       documentId,
-      Recipient: {
+      recipient: {
         signingStatus: SigningStatus.SIGNED,
       },
       inserted: true,
     },
     include: {
-      Signature: true,
-      Recipient: {
+      signature: true,
+      recipient: {
         select: {
           name: true,
           email: true,

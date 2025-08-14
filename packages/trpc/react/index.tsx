@@ -1,8 +1,5 @@
-'use client';
+import { useMemo, useState } from 'react';
 
-import { useState } from 'react';
-
-import type { QueryClientConfig } from '@tanstack/react-query';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink, httpLink, splitLink } from '@trpc/client';
 import { createTRPCReact } from '@trpc/react-query';
@@ -35,47 +32,33 @@ export const trpc = createTRPCReact<AppRouter>({
 
 export interface TrpcProviderProps {
   children: React.ReactNode;
+  headers?: Record<string, string>;
 }
 
-export function TrpcProvider({ children }: TrpcProviderProps) {
-  let queryClientConfig: QueryClientConfig | undefined;
+export function TrpcProvider({ children, headers }: TrpcProviderProps) {
+  const [queryClient] = useState(() => new QueryClient());
 
-  const isDevelopingOffline =
-    typeof window !== 'undefined' &&
-    window.location.hostname === 'localhost' &&
-    !window.navigator.onLine;
-
-  if (isDevelopingOffline) {
-    queryClientConfig = {
-      defaultOptions: {
-        queries: {
-          networkMode: 'always',
-        },
-        mutations: {
-          networkMode: 'always',
-        },
-      },
-    };
-  }
-
-  const [queryClient] = useState(() => new QueryClient(queryClientConfig));
-
-  const [trpcClient] = useState(() =>
-    trpc.createClient({
-      transformer: SuperJSON,
-
-      links: [
-        splitLink({
-          condition: (op) => op.context.skipBatch === true,
-          true: httpLink({
-            url: `${getBaseUrl()}/api/trpc`,
+  // May cause remounting issues.
+  const trpcClient = useMemo(
+    () =>
+      trpc.createClient({
+        links: [
+          splitLink({
+            condition: (op) => op.context.skipBatch === true,
+            true: httpLink({
+              url: `${getBaseUrl()}/api/trpc`,
+              headers,
+              transformer: SuperJSON,
+            }),
+            false: httpBatchLink({
+              url: `${getBaseUrl()}/api/trpc`,
+              headers,
+              transformer: SuperJSON,
+            }),
           }),
-          false: httpBatchLink({
-            url: `${getBaseUrl()}/api/trpc`,
-          }),
-        }),
-      ],
-    }),
+        ],
+      }),
+    [headers],
   );
 
   return (

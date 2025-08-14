@@ -1,14 +1,16 @@
+import type { Team } from '@prisma/client';
+
 import { prisma } from '@documenso/prisma';
-import type { Team } from '@documenso/prisma/client';
 
 import type { RequestMetadata } from '../../universal/extract-request-metadata';
 import { createDocumentAuditLogData } from '../../utils/document-audit-logs';
+import { buildTeamWhereQuery } from '../../utils/teams';
 
 export type DeleteFieldOptions = {
   fieldId: number;
   documentId: number;
   userId: number;
-  teamId?: number;
+  teamId: number;
   requestMetadata?: RequestMetadata;
 };
 
@@ -22,27 +24,13 @@ export const deleteField = async ({
   const field = await prisma.field.delete({
     where: {
       id: fieldId,
-      Document: {
+      document: {
         id: documentId,
-        ...(teamId
-          ? {
-              team: {
-                id: teamId,
-                members: {
-                  some: {
-                    userId,
-                  },
-                },
-              },
-            }
-          : {
-              userId,
-              teamId: null,
-            }),
+        team: buildTeamWhereQuery({ teamId, userId }),
       },
     },
     include: {
-      Recipient: true,
+      recipient: true,
     },
   });
 
@@ -78,7 +66,7 @@ export const deleteField = async ({
       },
       data: {
         fieldId: field.secondaryId,
-        fieldRecipientEmail: field.Recipient?.email ?? '',
+        fieldRecipientEmail: field.recipient?.email ?? '',
         fieldRecipientId: field.recipientId ?? -1,
         fieldType: field.type,
       },

@@ -1,29 +1,36 @@
-import { DOCUMENT_AUDIT_LOG_TYPE } from '@documenso/lib/types/document-audit-logs';
-import type { RequestMetadata } from '@documenso/lib/universal/extract-request-metadata';
-import { putPdfFile } from '@documenso/lib/universal/upload/put-file';
-import { createDocumentAuditLogData } from '@documenso/lib/utils/document-audit-logs';
-import { prisma } from '@documenso/prisma';
 import {
   DocumentSigningOrder,
   DocumentStatus,
   RecipientRole,
   SendStatus,
   SigningStatus,
-} from '@documenso/prisma/client';
-import { WebhookTriggerEvents } from '@documenso/prisma/client';
+  WebhookTriggerEvents,
+} from '@prisma/client';
+
+import { DOCUMENT_AUDIT_LOG_TYPE } from '@documenso/lib/types/document-audit-logs';
+import type { ApiRequestMetadata } from '@documenso/lib/universal/extract-request-metadata';
+import { createDocumentAuditLogData } from '@documenso/lib/utils/document-audit-logs';
+import { prisma } from '@documenso/prisma';
 
 import { jobs } from '../../jobs/client';
 import { extractDerivedDocumentEmailSettings } from '../../types/document-email';
-import { getFile } from '../../universal/upload/get-file';
+import {
+  ZWebhookDocumentSchema,
+  mapDocumentToWebhookDocumentPayload,
+} from '../../types/webhook-payload';
+import { getFileServerSide } from '../../universal/upload/get-file.server';
+import { putPdfFileServerSide } from '../../universal/upload/put-file.server';
+import { isDocumentCompleted } from '../../utils/document';
 import { insertFormValuesInPdf } from '../pdf/insert-form-values-in-pdf';
 import { triggerWebhook } from '../webhooks/trigger/trigger-webhook';
+import { getDocumentWhereInput } from './get-document-by-id';
 
 export type SendDocumentOptions = {
   documentId: number;
   userId: number;
-  teamId?: number;
+  teamId: number;
   sendEmail?: boolean;
-  requestMetadata?: RequestMetadata;
+  requestMetadata: ApiRequestMetadata;
 };
 
 export const sendDocument = async ({
@@ -33,38 +40,16 @@ export const sendDocument = async ({
   sendEmail,
   requestMetadata,
 }: SendDocumentOptions) => {
-  const user = await prisma.user.findFirstOrThrow({
-    where: {
-      id: userId,
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-    },
+  const { documentWhereInput } = await getDocumentWhereInput({
+    documentId,
+    userId,
+    teamId,
   });
 
-  const document = await prisma.document.findUnique({
-    where: {
-      id: documentId,
-      ...(teamId
-        ? {
-            team: {
-              id: teamId,
-              members: {
-                some: {
-                  userId,
-                },
-              },
-            },
-          }
-        : {
-            userId,
-            teamId: null,
-          }),
-    },
+  const document = await prisma.document.findFirst({
+    where: documentWhereInput,
     include: {
-      Recipient: {
+      recipients: {
         orderBy: [{ signingOrder: { sort: 'asc', nulls: 'last' } }, { id: 'asc' }],
       },
       documentMeta: true,
@@ -76,23 +61,23 @@ export const sendDocument = async ({
     throw new Error('Document not found');
   }
 
-  if (document.Recipient.length === 0) {
+  if (document.recipients.length === 0) {
     throw new Error('Document has no recipients');
   }
 
-  if (document.status === DocumentStatus.COMPLETED) {
+  if (isDocumentCompleted(document.status)) {
     throw new Error('Can not send completed document');
   }
 
   const signingOrder = document.documentMeta?.signingOrder || DocumentSigningOrder.PARALLEL;
 
-  let recipientsToNotify = document.Recipient;
+  let recipientsToNotify = document.recipients;
 
   if (signingOrder === DocumentSigningOrder.SEQUENTIAL) {
     // Get the currently active recipient.
-    recipientsToNotify = document.Recipient.filter(
-      (r) => r.signingStatus === SigningStatus.NOT_SIGNED && r.role !== RecipientRole.CC,
-    ).slice(0, 1);
+    recipientsToNotify = document.recipients
+      .filter((r) => r.signingStatus === SigningStatus.NOT_SIGNED && r.role !== RecipientRole.CC)
+      .slice(0, 1);
 
     // Secondary filter so we aren't resending if the current active recipient has already
     // received the document.
@@ -106,7 +91,7 @@ export const sendDocument = async ({
   }
 
   if (document.formValues) {
-    const file = await getFile(documentData);
+    const file = await getFileServerSide(documentData);
 
     const prefilled = await insertFormValuesInPdf({
       pdf: Buffer.from(file),
@@ -114,8 +99,14 @@ export const sendDocument = async ({
       formValues: document.formValues as Record<string, string | number | boolean>,
     });
 
-    const newDocumentData = await putPdfFile({
-      name: document.title,
+    let fileName = document.title;
+
+    if (!document.title.endsWith('.pdf')) {
+      fileName = `${document.title}.pdf`;
+    }
+
+    const newDocumentData = await putPdfFileServerSide({
+      name: fileName,
       type: 'application/pdf',
       arrayBuffer: async () => Promise.resolve(prefilled),
     });
@@ -177,14 +168,14 @@ export const sendDocument = async ({
             userId,
             documentId,
             recipientId: recipient.id,
-            requestMetadata,
+            requestMetadata: requestMetadata?.requestMetadata,
           },
         });
       }),
     );
   }
 
-  const allRecipientsHaveNoActionToTake = document.Recipient.every(
+  const allRecipientsHaveNoActionToTake = document.recipients.every(
     (recipient) =>
       recipient.role === RecipientRole.CC || recipient.signingStatus === SigningStatus.SIGNED,
   );
@@ -194,7 +185,7 @@ export const sendDocument = async ({
       name: 'internal.seal-document',
       payload: {
         documentId,
-        requestMetadata,
+        requestMetadata: requestMetadata?.requestMetadata,
       },
     });
 
@@ -204,7 +195,8 @@ export const sendDocument = async ({
         id: documentId,
       },
       include: {
-        Recipient: true,
+        documentMeta: true,
+        recipients: true,
       },
     });
   }
@@ -215,8 +207,7 @@ export const sendDocument = async ({
         data: createDocumentAuditLogData({
           type: DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_SENT,
           documentId: document.id,
-          requestMetadata,
-          user,
+          metadata: requestMetadata,
           data: {},
         }),
       });
@@ -230,14 +221,15 @@ export const sendDocument = async ({
         status: DocumentStatus.PENDING,
       },
       include: {
-        Recipient: true,
+        documentMeta: true,
+        recipients: true,
       },
     });
   });
 
   await triggerWebhook({
     event: WebhookTriggerEvents.DOCUMENT_SENT,
-    data: updatedDocument,
+    data: ZWebhookDocumentSchema.parse(mapDocumentToWebhookDocumentPayload(updatedDocument)),
     userId,
     teamId,
   });

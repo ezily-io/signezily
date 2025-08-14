@@ -1,16 +1,18 @@
+import type { FieldType, Team } from '@prisma/client';
+
 import { type TFieldMetaSchema as FieldMeta } from '@documenso/lib/types/field-meta';
 import { prisma } from '@documenso/prisma';
-import type { FieldType, Team } from '@documenso/prisma/client';
 
 import { DOCUMENT_AUDIT_LOG_TYPE } from '../../types/document-audit-logs';
 import type { RequestMetadata } from '../../universal/extract-request-metadata';
 import { createDocumentAuditLogData, diffFieldChanges } from '../../utils/document-audit-logs';
+import { buildTeamWhereQuery } from '../../utils/teams';
 
 export type UpdateFieldOptions = {
   fieldId: number;
   documentId: number;
   userId: number;
-  teamId?: number;
+  teamId: number;
   recipientId?: number;
   type?: FieldType;
   pageNumber?: number;
@@ -44,31 +46,12 @@ export const updateField = async ({
   const oldField = await prisma.field.findFirstOrThrow({
     where: {
       id: fieldId,
-      Document: {
+      document: {
         id: documentId,
-        ...(teamId
-          ? {
-              team: {
-                id: teamId,
-                members: {
-                  some: {
-                    userId,
-                  },
-                },
-              },
-            }
-          : {
-              userId,
-              teamId: null,
-            }),
+        team: buildTeamWhereQuery({ teamId, userId }),
       },
     },
   });
-
-  const newFieldMeta = {
-    ...(oldField.fieldMeta as FieldMeta),
-    ...fieldMeta,
-  };
 
   const field = prisma.$transaction(async (tx) => {
     const updatedField = await tx.field.update({
@@ -83,10 +66,10 @@ export const updateField = async ({
         positionY: pageY,
         width: pageWidth,
         height: pageHeight,
-        fieldMeta: newFieldMeta,
+        fieldMeta,
       },
       include: {
-        Recipient: true,
+        recipient: true,
       },
     });
 
@@ -105,14 +88,7 @@ export const updateField = async ({
 
     if (teamId) {
       team = await prisma.team.findFirst({
-        where: {
-          id: teamId,
-          members: {
-            some: {
-              userId,
-            },
-          },
-        },
+        where: buildTeamWhereQuery({ teamId, userId }),
       });
     }
 
@@ -127,7 +103,7 @@ export const updateField = async ({
         },
         data: {
           fieldId: updatedField.secondaryId,
-          fieldRecipientEmail: updatedField.Recipient?.email ?? '',
+          fieldRecipientEmail: updatedField.recipient?.email ?? '',
           fieldRecipientId: recipientId ?? -1,
           fieldType: updatedField.type,
           changes: diffFieldChanges(oldField, updatedField),

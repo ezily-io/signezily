@@ -1,36 +1,30 @@
 import { prisma } from '@documenso/prisma';
 
+import { buildTeamWhereQuery } from '../../utils/teams';
+
 export interface GetFieldsForDocumentOptions {
   documentId: number;
   userId: number;
+  teamId: number;
 }
 
 export type DocumentField = Awaited<ReturnType<typeof getFieldsForDocument>>[number];
 
-export const getFieldsForDocument = async ({ documentId, userId }: GetFieldsForDocumentOptions) => {
+export const getFieldsForDocument = async ({
+  documentId,
+  userId,
+  teamId,
+}: GetFieldsForDocumentOptions) => {
   const fields = await prisma.field.findMany({
     where: {
-      documentId,
-      Document: {
-        OR: [
-          {
-            userId,
-          },
-          {
-            team: {
-              members: {
-                some: {
-                  userId,
-                },
-              },
-            },
-          },
-        ],
+      document: {
+        id: documentId,
+        team: buildTeamWhereQuery({ teamId, userId }),
       },
     },
     include: {
-      Signature: true,
-      Recipient: {
+      signature: true,
+      recipient: {
         select: {
           name: true,
           email: true,

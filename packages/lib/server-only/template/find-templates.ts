@@ -1,16 +1,19 @@
+import { DocumentVisibility, type Prisma, TeamMemberRole, type Template } from '@prisma/client';
+import { match } from 'ts-pattern';
+
 import { prisma } from '@documenso/prisma';
-import type { Prisma, Template } from '@documenso/prisma/client';
+
+import { type FindResultResponse } from '../../types/search-params';
+import { getMemberRoles } from '../team/get-member-roles';
 
 export type FindTemplatesOptions = {
   userId: number;
-  teamId?: number;
+  teamId: number;
   type?: Template['type'];
   page?: number;
   perPage?: number;
+  folderId?: string;
 };
-
-export type FindTemplatesResponse = Awaited<ReturnType<typeof findTemplates>>;
-export type FindTemplateRow = FindTemplatesResponse['templates'][number];
 
 export const findTemplates = async ({
   userId,
@@ -18,45 +21,71 @@ export const findTemplates = async ({
   type,
   page = 1,
   perPage = 10,
+  folderId,
 }: FindTemplatesOptions) => {
-  let whereFilter: Prisma.TemplateWhereInput = {
-    userId,
-    teamId: null,
-    type,
-  };
+  const whereFilter: Prisma.TemplateWhereInput[] = [];
 
-  if (teamId !== undefined) {
-    whereFilter = {
-      team: {
-        id: teamId,
-        members: {
-          some: {
-            userId,
-          },
-        },
-      },
-    };
+  if (teamId === undefined) {
+    whereFilter.push({ userId });
   }
 
-  const [templates, count] = await Promise.all([
+  if (teamId !== undefined) {
+    const { teamRole } = await getMemberRoles({
+      teamId,
+      reference: {
+        type: 'User',
+        id: userId,
+      },
+    });
+
+    whereFilter.push(
+      { teamId },
+      {
+        OR: [
+          match(teamRole)
+            .with(TeamMemberRole.ADMIN, () => ({
+              visibility: {
+                in: [
+                  DocumentVisibility.EVERYONE,
+                  DocumentVisibility.MANAGER_AND_ABOVE,
+                  DocumentVisibility.ADMIN,
+                ],
+              },
+            }))
+            .with(TeamMemberRole.MANAGER, () => ({
+              visibility: {
+                in: [DocumentVisibility.EVERYONE, DocumentVisibility.MANAGER_AND_ABOVE],
+              },
+            }))
+            .otherwise(() => ({ visibility: DocumentVisibility.EVERYONE })),
+          { userId, teamId },
+        ],
+      },
+    );
+  }
+
+  if (folderId) {
+    whereFilter.push({ folderId });
+  } else {
+    whereFilter.push({ folderId: null });
+  }
+
+  const [data, count] = await Promise.all([
     prisma.template.findMany({
-      where: whereFilter,
+      where: {
+        type,
+        AND: whereFilter,
+      },
       include: {
-        templateDocumentData: true,
         team: {
           select: {
             id: true,
             url: true,
           },
         },
-        Field: true,
-        Recipient: true,
-        templateMeta: {
-          select: {
-            signingOrder: true,
-            distributionMethod: true,
-          },
-        },
+        fields: true,
+        recipients: true,
+        templateMeta: true,
         directLink: {
           select: {
             token: true,
@@ -70,12 +99,17 @@ export const findTemplates = async ({
       },
     }),
     prisma.template.count({
-      where: whereFilter,
+      where: {
+        AND: whereFilter,
+      },
     }),
   ]);
 
   return {
-    templates,
+    data,
+    count,
+    currentPage: Math.max(page, 1),
+    perPage,
     totalPages: Math.ceil(count / perPage),
-  };
+  } satisfies FindResultResponse<typeof data>;
 };

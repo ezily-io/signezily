@@ -1,9 +1,8 @@
-'use client';
-
 import { useEffect, useState } from 'react';
 
-import { Trans, msg } from '@lingui/macro';
+import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/react/macro';
 import { ChevronDown, ChevronUp, Trash } from 'lucide-react';
 
 import { validateCheckboxField } from '@documenso/lib/advanced-fields-validation/validate-checkbox';
@@ -45,6 +44,9 @@ export const CheckboxFieldAdvancedSettings = ({
   const [required, setRequired] = useState(fieldState.required ?? false);
   const [validationLength, setValidationLength] = useState(fieldState.validationLength ?? 0);
   const [validationRule, setValidationRule] = useState(fieldState.validationRule ?? '');
+  const [direction, setDirection] = useState<'vertical' | 'horizontal'>(
+    fieldState.direction ?? 'vertical',
+  );
 
   const handleToggleChange = (field: keyof CheckboxFieldMeta, value: string | boolean) => {
     const readOnly = field === 'readOnly' ? Boolean(value) : Boolean(fieldState.readOnly);
@@ -53,11 +55,14 @@ export const CheckboxFieldAdvancedSettings = ({
       field === 'validationRule' ? String(value) : String(fieldState.validationRule);
     const validationLength =
       field === 'validationLength' ? Number(value) : Number(fieldState.validationLength);
+    const currentDirection =
+      field === 'direction' && String(value) === 'horizontal' ? 'horizontal' : 'vertical';
 
     setReadOnly(readOnly);
     setRequired(required);
     setValidationRule(validationRule);
     setValidationLength(validationLength);
+    setDirection(currentDirection);
 
     const errors = validateCheckboxField(
       values.map((item) => item.value),
@@ -66,6 +71,7 @@ export const CheckboxFieldAdvancedSettings = ({
         required,
         validationRule,
         validationLength,
+        direction: currentDirection,
         type: 'checkbox',
       },
     );
@@ -87,6 +93,7 @@ export const CheckboxFieldAdvancedSettings = ({
         required,
         validationRule,
         validationLength,
+        direction: direction,
         type: 'checkbox',
       },
     );
@@ -126,6 +133,41 @@ export const CheckboxFieldAdvancedSettings = ({
 
   return (
     <div className="flex flex-col gap-4">
+      <div className="mb-2">
+        <Label>
+          <Trans>Label</Trans>
+        </Label>
+        <Input
+          id="label"
+          className="bg-background mt-2"
+          placeholder={_(msg`Field label`)}
+          value={fieldState.label}
+          onChange={(e) => handleFieldChange('label', e.target.value)}
+        />
+      </div>
+
+      <div className="mb-2">
+        <Label>
+          <Trans>Direction</Trans>
+        </Label>
+        <Select
+          value={fieldState.direction ?? 'vertical'}
+          onValueChange={(val) => handleToggleChange('direction', val)}
+        >
+          <SelectTrigger className="text-muted-foreground bg-background mt-2 w-full">
+            <SelectValue placeholder={_(msg`Select direction`)} />
+          </SelectTrigger>
+          <SelectContent position="popper">
+            <SelectItem value="vertical">
+              <Trans>Vertical</Trans>
+            </SelectItem>
+            <SelectItem value="horizontal">
+              <Trans>Horizontal</Trans>
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       <div className="flex flex-row items-center gap-x-4">
         <div className="flex w-2/3 flex-col">
           <Label>
@@ -205,8 +247,7 @@ export const CheckboxFieldAdvancedSettings = ({
           {values.map((value, index) => (
             <div key={index} className="mt-2 flex items-center gap-4">
               <Checkbox
-                className="data-[state=checked]:bg-documenso border-foreground/30 h-5 w-5"
-                checkClassName="text-white"
+                className="data-[state=checked]:bg-primary border-foreground/30 h-5 w-5"
                 checked={value.checked}
                 onCheckedChange={(checked) => handleCheckboxValue(index, 'checked', checked)}
               />
@@ -217,7 +258,7 @@ export const CheckboxFieldAdvancedSettings = ({
               />
               <button
                 type="button"
-                className="col-span-1 mt-auto inline-flex h-10 w-10 items-center  text-slate-500 hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50"
+                className="col-span-1 mt-auto inline-flex h-10 w-10 items-center text-slate-500 hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50"
                 onClick={() => removeValue(index)}
               >
                 <Trash className="h-5 w-5" />

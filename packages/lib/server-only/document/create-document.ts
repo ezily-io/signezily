@@ -1,24 +1,39 @@
-'use server';
+import { DocumentSource, WebhookTriggerEvents } from '@prisma/client';
+import type { DocumentVisibility } from '@prisma/client';
 
-import { AppError, AppErrorCode } from '@documenso/lib/errors/app-error';
+import { normalizePdf as makeNormalizedPdf } from '@documenso/lib/server-only/pdf/normalize-pdf';
 import { DOCUMENT_AUDIT_LOG_TYPE } from '@documenso/lib/types/document-audit-logs';
-import type { RequestMetadata } from '@documenso/lib/universal/extract-request-metadata';
+import type { ApiRequestMetadata } from '@documenso/lib/universal/extract-request-metadata';
 import { createDocumentAuditLogData } from '@documenso/lib/utils/document-audit-logs';
 import { prisma } from '@documenso/prisma';
-import { DocumentSource, DocumentVisibility, WebhookTriggerEvents } from '@documenso/prisma/client';
-import type { Team, TeamGlobalSettings } from '@documenso/prisma/client';
-import { TeamMemberRole } from '@documenso/prisma/client';
 
+import { AppError, AppErrorCode } from '../../errors/app-error';
+import {
+  ZWebhookDocumentSchema,
+  mapDocumentToWebhookDocumentPayload,
+} from '../../types/webhook-payload';
+import { prefixedId } from '../../universal/id';
+import { getFileServerSide } from '../../universal/upload/get-file.server';
+import { putPdfFileServerSide } from '../../universal/upload/put-file.server';
+import { extractDerivedDocumentMeta } from '../../utils/document';
+import { determineDocumentVisibility } from '../../utils/document-visibility';
+import { buildTeamWhereQuery } from '../../utils/teams';
+import { getTeamById } from '../team/get-team';
+import { getTeamSettings } from '../team/get-team-settings';
 import { triggerWebhook } from '../webhooks/trigger/trigger-webhook';
 
 export type CreateDocumentOptions = {
   title: string;
   externalId?: string | null;
   userId: number;
-  teamId?: number;
+  teamId: number;
   documentDataId: string;
   formValues?: Record<string, string | number | boolean>;
-  requestMetadata?: RequestMetadata;
+  normalizePdf?: boolean;
+  timezone?: string;
+  userTimezone?: string;
+  requestMetadata: ApiRequestMetadata;
+  folderId?: string;
 };
 
 export const createDocument = async ({
@@ -27,92 +42,91 @@ export const createDocument = async ({
   externalId,
   documentDataId,
   teamId,
+  normalizePdf,
   formValues,
   requestMetadata,
+  timezone,
+  userTimezone,
+  folderId,
 }: CreateDocumentOptions) => {
-  const user = await prisma.user.findFirstOrThrow({
-    where: {
-      id: userId,
-    },
-    include: {
-      teamMembers: {
-        select: {
-          teamId: true,
-        },
-      },
-    },
+  const team = await getTeamById({ userId, teamId });
+
+  const settings = await getTeamSettings({
+    userId,
+    teamId,
   });
 
-  if (
-    teamId !== undefined &&
-    !user.teamMembers.some((teamMember) => teamMember.teamId === teamId)
-  ) {
-    throw new AppError(AppErrorCode.NOT_FOUND, 'Team not found');
-  }
+  let folderVisibility: DocumentVisibility | undefined;
 
-  let team: (Team & { teamGlobalSettings: TeamGlobalSettings | null }) | null = null;
-  let userTeamRole: TeamMemberRole | undefined;
-
-  if (teamId) {
-    const teamWithUserRole = await prisma.team.findFirstOrThrow({
+  if (folderId) {
+    const folder = await prisma.folder.findFirst({
       where: {
-        id: teamId,
+        id: folderId,
+        team: buildTeamWhereQuery({
+          teamId,
+          userId,
+        }),
       },
-      include: {
-        teamGlobalSettings: true,
-        members: {
-          where: {
-            userId: userId,
-          },
-          select: {
-            role: true,
-          },
-        },
+      select: {
+        visibility: true,
       },
     });
 
-    team = teamWithUserRole;
-    userTeamRole = teamWithUserRole.members[0]?.role;
+    if (!folder) {
+      throw new AppError(AppErrorCode.NOT_FOUND, {
+        message: 'Folder not found',
+      });
+    }
+
+    folderVisibility = folder.visibility;
   }
 
-  const determineVisibility = (
-    globalVisibility: DocumentVisibility | null | undefined,
-    userRole: TeamMemberRole,
-  ): DocumentVisibility => {
-    const defaultVisibility = globalVisibility ?? DocumentVisibility.EVERYONE;
+  if (normalizePdf) {
+    const documentData = await prisma.documentData.findFirst({
+      where: {
+        id: documentDataId,
+      },
+    });
 
-    if (userRole === TeamMemberRole.ADMIN) {
-      return defaultVisibility;
+    if (documentData) {
+      const buffer = await getFileServerSide(documentData);
+
+      const normalizedPdf = await makeNormalizedPdf(Buffer.from(buffer));
+
+      const newDocumentData = await putPdfFileServerSide({
+        name: title.endsWith('.pdf') ? title : `${title}.pdf`,
+        type: 'application/pdf',
+        arrayBuffer: async () => Promise.resolve(normalizedPdf),
+      });
+
+      // eslint-disable-next-line require-atomic-updates
+      documentDataId = newDocumentData.id;
     }
+  }
 
-    if (userRole === TeamMemberRole.MANAGER) {
-      if (defaultVisibility === DocumentVisibility.ADMIN) {
-        return DocumentVisibility.MANAGER_AND_ABOVE;
-      }
-      return defaultVisibility;
-    }
-
-    return DocumentVisibility.EVERYONE;
-  };
+  // userTimezone is last because it's always passed in regardless of the organisation/team settings
+  // for uploads from the frontend
+  const timezoneToUse = timezone || settings.documentTimezone || userTimezone;
 
   return await prisma.$transaction(async (tx) => {
     const document = await tx.document.create({
       data: {
         title,
+        qrToken: prefixedId('qr'),
         externalId,
         documentDataId,
         userId,
         teamId,
-        visibility: determineVisibility(
-          team?.teamGlobalSettings?.documentVisibility,
-          userTeamRole ?? TeamMemberRole.MEMBER,
-        ),
+        folderId,
+        visibility:
+          folderVisibility ??
+          determineDocumentVisibility(settings.documentVisibility, team.currentTeamRole),
         formValues,
         source: DocumentSource.DOCUMENT,
         documentMeta: {
-          create: {
-            language: team?.teamGlobalSettings?.documentLanguage,
-          },
+          create: extractDerivedDocumentMeta(settings, {
+            timezone: timezoneToUse,
+          }),
         },
       },
     });
@@ -121,8 +135,7 @@ export const createDocument = async ({
       data: createDocumentAuditLogData({
         type: DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_CREATED,
         documentId: document.id,
-        user,
-        requestMetadata,
+        metadata: requestMetadata,
         data: {
           title,
           source: {
@@ -132,13 +145,27 @@ export const createDocument = async ({
       }),
     });
 
+    const createdDocument = await tx.document.findFirst({
+      where: {
+        id: document.id,
+      },
+      include: {
+        documentMeta: true,
+        recipients: true,
+      },
+    });
+
+    if (!createdDocument) {
+      throw new Error('Document not found');
+    }
+
     await triggerWebhook({
       event: WebhookTriggerEvents.DOCUMENT_CREATED,
-      data: document,
+      data: ZWebhookDocumentSchema.parse(mapDocumentToWebhookDocumentPayload(createdDocument)),
       userId,
       teamId,
     });
 
-    return document;
+    return createdDocument;
   });
 };

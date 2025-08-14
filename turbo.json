@@ -2,20 +2,12 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "build": {
-      "dependsOn": [
-        "prebuild",
-        "^build"
-      ],
-      "outputs": [
-        ".next/**",
-        "!.next/cache/**"
-      ]
+      "dependsOn": ["prebuild", "^build"],
+      "outputs": [".next/**", "!.next/cache/**"]
     },
     "prebuild": {
       "cache": false,
-      "dependsOn": [
-        "^prebuild"
-      ]
+      "dependsOn": ["^prebuild"]
     },
     "lint": {
       "cache": false
@@ -31,9 +23,7 @@
       "persistent": true
     },
     "start": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
     },
@@ -41,36 +31,26 @@
       "cache": false
     },
     "test:e2e": {
-      "dependsOn": [
-        "^build"
-      ],
-      "cache": false
-    },
-    "translate:compile": {
+      "dependsOn": ["^build"],
       "cache": false
     }
   },
-  "globalDependencies": [
-    "**/.env.*local"
-  ],
+  "globalDependencies": ["**/.env.*local"],
   "globalEnv": [
     "APP_VERSION",
     "NEXT_PRIVATE_ENCRYPTION_KEY",
     "NEXT_PRIVATE_ENCRYPTION_SECONDARY_KEY",
-    "NEXTAUTH_URL",
     "NEXTAUTH_SECRET",
     "NEXT_PUBLIC_PROJECT",
     "NEXT_PUBLIC_WEBAPP_URL",
-    "NEXT_PUBLIC_MARKETING_URL",
     "NEXT_PRIVATE_INTERNAL_WEBAPP_URL",
     "NEXT_PUBLIC_POSTHOG_KEY",
     "NEXT_PUBLIC_FEATURE_BILLING_ENABLED",
-    "NEXT_PUBLIC_STRIPE_COMMUNITY_PLAN_MONTHLY_PRICE_ID",
-    "NEXT_PUBLIC_STRIPE_ENTERPRISE_PLAN_MONTHLY_PRICE_ID",
     "NEXT_PUBLIC_DISABLE_SIGNUP",
     "NEXT_PUBLIC_DOCUMENT_SIZE_UPLOAD_LIMIT",
     "NEXT_PRIVATE_DATABASE_URL",
     "NEXT_PRIVATE_DIRECT_DATABASE_URL",
+    "NEXT_PRIVATE_LOGGER_FILE_PATH",
     "NEXT_PRIVATE_SIGNING_TRANSPORT",
     "NEXT_PRIVATE_SIGNING_PASSPHRASE",
     "NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH",
@@ -85,7 +65,6 @@
     "NEXT_PRIVATE_OIDC_CLIENT_ID",
     "NEXT_PRIVATE_OIDC_CLIENT_SECRET",
     "NEXT_PRIVATE_OIDC_PROVIDER_LABEL",
-    "NEXT_PRIVATE_OIDC_ALLOW_SIGNUP",
     "NEXT_PRIVATE_OIDC_SKIP_VERIFY",
     "NEXT_PUBLIC_UPLOAD_TRANSPORT",
     "NEXT_PRIVATE_UPLOAD_ENDPOINT",
@@ -125,16 +104,12 @@
     "NEXT_PRIVATE_GITHUB_TOKEN",
     "NEXT_PRIVATE_BROWSERLESS_URL",
     "NEXT_PRIVATE_JOBS_PROVIDER",
-    "NEXT_PRIVATE_TRIGGER_API_KEY",
-    "NEXT_PRIVATE_TRIGGER_API_URL",
     "NEXT_PRIVATE_INNGEST_APP_ID",
     "NEXT_PRIVATE_SUPPORT_EMAIL",
+    "NEXT_PRIVATE_LOGGER_HONEY_BADGER_API_KEY",
     "INNGEST_EVENT_KEY",
     "NEXT_PRIVATE_INNGEST_EVENT_KEY",
     "CI",
-    "VERCEL",
-    "VERCEL_ENV",
-    "VERCEL_URL",
     "NODE_ENV",
     "DEPLOYMENT_TARGET",
     "FONT_CAVEAT_URI",

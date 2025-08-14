@@ -1,19 +1,22 @@
+import type { OrganisationMember } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { P, match } from 'ts-pattern';
 
 import { prisma } from '@documenso/prisma';
-import type { TeamMember } from '@documenso/prisma/client';
-import { Prisma } from '@documenso/prisma/client';
 
-import type { FindResultSet } from '../../types/find-result-set';
+import { AppError, AppErrorCode } from '../../errors/app-error';
+import type { FindResultResponse } from '../../types/search-params';
+import { getHighestOrganisationRoleInGroup } from '../../utils/organisations';
+import { getHighestTeamRoleInGroup } from '../../utils/teams';
 
 export interface FindTeamMembersOptions {
   userId: number;
   teamId: number;
-  term?: string;
+  query?: string;
   page?: number;
   perPage?: number;
   orderBy?: {
-    column: keyof TeamMember | 'name';
+    column: keyof OrganisationMember | 'name';
     direction: 'asc' | 'desc';
   };
 }
@@ -21,7 +24,7 @@ export interface FindTeamMembersOptions {
 export const findTeamMembers = async ({
   userId,
   teamId,
-  term,
+  query,
   page = 1,
   perPage = 10,
   orderBy,
@@ -30,34 +33,64 @@ export const findTeamMembers = async ({
   const orderByDirection = orderBy?.direction ?? 'desc';
 
   // Check that the user belongs to the team they are trying to find members in.
-  const userTeam = await prisma.team.findUniqueOrThrow({
+  const userTeam = await prisma.organisationMember.findFirst({
     where: {
-      id: teamId,
-      members: {
+      userId,
+      organisationGroupMembers: {
         some: {
-          userId,
+          group: {
+            teamGroups: {
+              some: {
+                teamId,
+              },
+            },
+          },
         },
       },
     },
   });
 
-  const termFilters: Prisma.TeamMemberWhereInput | undefined = match(term)
+  if (!userTeam) {
+    throw new AppError(AppErrorCode.UNAUTHORIZED);
+  }
+
+  const termFilters: Prisma.OrganisationMemberWhereInput | undefined = match(query)
     .with(P.string.minLength(1), () => ({
       user: {
-        name: {
-          contains: term,
-          mode: Prisma.QueryMode.insensitive,
-        },
+        OR: [
+          {
+            name: {
+              contains: query,
+              mode: Prisma.QueryMode.insensitive,
+            },
+          },
+          {
+            email: {
+              contains: query,
+              mode: Prisma.QueryMode.insensitive,
+            },
+          },
+        ],
       },
     }))
     .otherwise(() => undefined);
 
-  const whereClause: Prisma.TeamMemberWhereInput = {
+  const whereClause: Prisma.OrganisationMemberWhereInput = {
     ...termFilters,
-    teamId: userTeam.id,
+    organisationGroupMembers: {
+      some: {
+        group: {
+          teamGroups: {
+            some: {
+              teamId,
+            },
+          },
+        },
+      },
+    },
   };
 
-  let orderByClause: Prisma.TeamMemberOrderByWithRelationInput = {
+  let orderByClause: Prisma.OrganisationMemberOrderByWithRelationInput = {
     [orderByColumn]: orderByDirection,
   };
 
@@ -71,7 +104,7 @@ export const findTeamMembers = async ({
   }
 
   const [data, count] = await Promise.all([
-    prisma.teamMember.findMany({
+    prisma.organisationMember.findMany({
       where: whereClause,
       skip: Math.max(page - 1, 0) * perPage,
       take: perPage,
@@ -79,22 +112,53 @@ export const findTeamMembers = async ({
       include: {
         user: {
           select: {
-            name: true,
+            id: true,
             email: true,
+            name: true,
+            avatarImageId: true,
+          },
+        },
+        organisationGroupMembers: {
+          include: {
+            group: {
+              include: {
+                teamGroups: true,
+              },
+            },
           },
         },
       },
     }),
-    prisma.teamMember.count({
+    prisma.organisationMember.count({
       where: whereClause,
     }),
   ]);
 
+  // same as get-team-members.
+  const mappedData = data.map((member) => ({
+    id: member.id,
+    userId: member.userId,
+    createdAt: member.createdAt,
+    email: member.user.email,
+    name: member.user.name,
+    avatarImageId: member.user.avatarImageId,
+    // Filter teamGroups to only include the current team
+    teamRole: getHighestTeamRoleInGroup(
+      member.organisationGroupMembers.flatMap(({ group }) =>
+        group.teamGroups.filter((tg) => tg.teamId === teamId),
+      ),
+    ),
+    teamRoleGroupType: member.organisationGroupMembers[0].group.type,
+    organisationRole: getHighestOrganisationRoleInGroup(
+      member.organisationGroupMembers.flatMap(({ group }) => group),
+    ),
+  }));
+
   return {
-    data,
+    data: mappedData,
     count,
     currentPage: Math.max(page, 1),
     perPage,
     totalPages: Math.ceil(count / perPage),
-  } satisfies FindResultSet<typeof data>;
+  } satisfies FindResultResponse<typeof mappedData>;
 };

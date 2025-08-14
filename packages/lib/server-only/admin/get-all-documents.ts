@@ -1,18 +1,21 @@
+import type { Prisma } from '@prisma/client';
+
 import { prisma } from '@documenso/prisma';
-import type { Prisma } from '@documenso/prisma/client';
+
+import type { FindResultResponse } from '../../types/search-params';
 
 export interface FindDocumentsOptions {
-  term?: string;
+  query?: string;
   page?: number;
   perPage?: number;
 }
 
-export const findDocuments = async ({ term, page = 1, perPage = 10 }: FindDocumentsOptions) => {
-  const termFilters: Prisma.DocumentWhereInput | undefined = !term
+export const findDocuments = async ({ query, page = 1, perPage = 10 }: FindDocumentsOptions) => {
+  const termFilters: Prisma.DocumentWhereInput | undefined = !query
     ? undefined
     : {
         title: {
-          contains: term,
+          contains: query,
           mode: 'insensitive',
         },
       };
@@ -28,14 +31,14 @@ export const findDocuments = async ({ term, page = 1, perPage = 10 }: FindDocume
         createdAt: 'desc',
       },
       include: {
-        User: {
+        user: {
           select: {
             id: true,
             name: true,
             email: true,
           },
         },
-        Recipient: true,
+        recipients: true,
       },
     }),
     prisma.document.count({
@@ -51,5 +54,5 @@ export const findDocuments = async ({ term, page = 1, perPage = 10 }: FindDocume
     currentPage: Math.max(page, 1),
     perPage,
     totalPages: Math.ceil(count / perPage),
-  };
+  } satisfies FindResultResponse<typeof data>;
 };

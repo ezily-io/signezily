@@ -1,18 +1,21 @@
-'use server';
+import type { DocumentDistributionMethod, DocumentSigningOrder } from '@prisma/client';
 
 import { DOCUMENT_AUDIT_LOG_TYPE } from '@documenso/lib/types/document-audit-logs';
-import type { RequestMetadata } from '@documenso/lib/universal/extract-request-metadata';
+import type { ApiRequestMetadata } from '@documenso/lib/universal/extract-request-metadata';
 import {
   createDocumentAuditLogData,
   diffDocumentMetaChanges,
 } from '@documenso/lib/utils/document-audit-logs';
 import { prisma } from '@documenso/prisma';
-import type { DocumentDistributionMethod, DocumentSigningOrder } from '@documenso/prisma/client';
 
 import type { SupportedLanguageCodes } from '../../constants/i18n';
+import { AppError, AppErrorCode } from '../../errors/app-error';
 import type { TDocumentEmailSettings } from '../../types/document-email';
+import { getDocumentWhereInput } from '../document/get-document-by-id';
 
 export type CreateDocumentMetaOptions = {
+  userId: number;
+  teamId: number;
   documentId: number;
   subject?: string;
   message?: string;
@@ -20,64 +23,77 @@ export type CreateDocumentMetaOptions = {
   password?: string;
   dateFormat?: string;
   redirectUrl?: string;
+  emailId?: string | null;
+  emailReplyTo?: string | null;
   emailSettings?: TDocumentEmailSettings;
   signingOrder?: DocumentSigningOrder;
+  allowDictateNextSigner?: boolean;
   distributionMethod?: DocumentDistributionMethod;
   typedSignatureEnabled?: boolean;
+  uploadSignatureEnabled?: boolean;
+  drawSignatureEnabled?: boolean;
   language?: SupportedLanguageCodes;
-  userId: number;
-  requestMetadata: RequestMetadata;
+  requestMetadata: ApiRequestMetadata;
 };
 
 export const upsertDocumentMeta = async ({
+  userId,
+  teamId,
   subject,
   message,
   timezone,
   dateFormat,
   documentId,
   password,
-  userId,
   redirectUrl,
   signingOrder,
+  allowDictateNextSigner,
+  emailId,
+  emailReplyTo,
   emailSettings,
   distributionMethod,
   typedSignatureEnabled,
+  uploadSignatureEnabled,
+  drawSignatureEnabled,
   language,
   requestMetadata,
 }: CreateDocumentMetaOptions) => {
-  const user = await prisma.user.findFirstOrThrow({
-    where: {
-      id: userId,
-    },
-    select: {
-      id: true,
-      email: true,
-      name: true,
-    },
+  const { documentWhereInput, team } = await getDocumentWhereInput({
+    documentId,
+    userId,
+    teamId,
   });
 
-  const { documentMeta: originalDocumentMeta } = await prisma.document.findFirstOrThrow({
-    where: {
-      id: documentId,
-      OR: [
-        {
-          userId: user.id,
-        },
-        {
-          team: {
-            members: {
-              some: {
-                userId: user.id,
-              },
-            },
-          },
-        },
-      ],
-    },
+  const document = await prisma.document.findFirst({
+    where: documentWhereInput,
     include: {
       documentMeta: true,
     },
   });
+
+  if (!document) {
+    throw new AppError(AppErrorCode.NOT_FOUND, {
+      message: 'Document not found',
+    });
+  }
+
+  const { documentMeta: originalDocumentMeta } = document;
+
+  // Validate the emailId belongs to the organisation.
+  if (emailId) {
+    const email = await prisma.organisationEmail.findFirst({
+      where: {
+        id: emailId,
+        organisationId: team.organisationId,
+      },
+    });
+
+    if (!email) {
+      throw new AppError(AppErrorCode.NOT_FOUND, {
+        message: 'Email not found',
+      });
+    }
+  }
 
   return await prisma.$transaction(async (tx) => {
     const upsertedDocumentMeta = await tx.documentMeta.upsert({
@@ -93,9 +109,14 @@ export const upsertDocumentMeta = async ({
         documentId,
         redirectUrl,
         signingOrder,
+        allowDictateNextSigner,
+        emailId,
+        emailReplyTo,
         emailSettings,
         distributionMethod,
         typedSignatureEnabled,
+        uploadSignatureEnabled,
+        drawSignatureEnabled,
         language,
       },
       update: {
@@ -106,9 +127,14 @@ export const upsertDocumentMeta = async ({
         timezone,
         redirectUrl,
         signingOrder,
+        allowDictateNextSigner,
+        emailId,
+        emailReplyTo,
         emailSettings,
         distributionMethod,
         typedSignatureEnabled,
+        uploadSignatureEnabled,
+        drawSignatureEnabled,
         language,
       },
     });
@@ -120,8 +146,7 @@ export const upsertDocumentMeta = async ({
         data: createDocumentAuditLogData({
           type: DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_META_UPDATED,
           documentId,
-          user,
-          requestMetadata,
+          metadata: requestMetadata,
           data: {
             changes: diffDocumentMetaChanges(originalDocumentMeta ?? {}, upsertedDocumentMeta),
           },

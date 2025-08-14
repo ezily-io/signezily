@@ -1,5 +1,3 @@
-'use client';
-
 import * as React from 'react';
 
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
@@ -22,7 +20,7 @@ const Checkbox = React.forwardRef<
     {...props}
   >
     <CheckboxPrimitive.Indicator
-      className={cn('text-primary flex items-center justify-center', checkClassName)}
+      className={cn('text-primary-foreground flex items-center justify-center', checkClassName)}
     >
       <Check className="h-3 w-3 stroke-[3px]" />
     </CheckboxPrimitive.Indicator>

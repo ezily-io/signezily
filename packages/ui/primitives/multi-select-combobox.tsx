@@ -1,10 +1,8 @@
-'use client';
-
 import * as React from 'react';
 
 import type { MessageDescriptor } from '@lingui/core';
-import { Trans } from '@lingui/macro';
 import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/react/macro';
 import { AnimatePresence } from 'framer-motion';
 import { Check, ChevronsUpDown, Loader, XIcon } from 'lucide-react';
 
@@ -24,13 +22,17 @@ type ComboBoxOption<T = OptionValue> = {
 };
 
 type MultiSelectComboboxProps<T = OptionValue> = {
-  emptySelectionPlaceholder?: React.ReactNode | string;
+  emptySelectionPlaceholder?: React.ReactElement | string;
   enableClearAllButton?: boolean;
+  enableSearch?: boolean;
+  className?: string;
+  contentClassName?: string;
   loading?: boolean;
   inputPlaceholder?: MessageDescriptor;
   onChange: (_values: T[]) => void;
   options: ComboBoxOption<T>[];
   selectedValues: T[];
+  testId?: string;
 };
 
 /**
@@ -43,11 +45,15 @@ type MultiSelectComboboxProps<T = OptionValue> = {
 export function MultiSelectCombobox<T = OptionValue>({
   emptySelectionPlaceholder = 'Select values...',
   enableClearAllButton,
+  enableSearch = true,
+  className,
+  contentClassName,
   inputPlaceholder,
   loading,
   onChange,
   options,
   selectedValues,
+  testId,
 }: MultiSelectComboboxProps<T>) {
   const { _ } = useLingui();
 
@@ -61,8 +67,6 @@ export function MultiSelectCombobox<T = OptionValue>({
     }
 
     onChange(newSelectedOptions);
-
-    setOpen(false);
   };
 
   const selectedOptions = React.useMemo(() => {
@@ -109,7 +113,8 @@ export function MultiSelectCombobox<T = OptionValue>({
             role="combobox"
             disabled={loading}
             aria-expanded={open}
-            className="w-[200px] px-3"
+            className={cn('w-[200px] px-3', className)}
+            data-testid={testId}
           >
             <AnimatePresence>
               {loading ? (
@@ -146,9 +151,9 @@ export function MultiSelectCombobox<T = OptionValue>({
         )}
       </div>
 
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className={cn('z-[50000000] w-full p-0', contentClassName)}>
         <Command>
-          <CommandInput placeholder={inputPlaceholder && _(inputPlaceholder)} />
+          {enableSearch && <CommandInput placeholder={inputPlaceholder && _(inputPlaceholder)} />}
           <CommandEmpty>
             <Trans>No value found.</Trans>
           </CommandEmpty>

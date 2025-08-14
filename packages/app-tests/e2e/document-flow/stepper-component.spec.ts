@@ -1,16 +1,16 @@
 import { expect, test } from '@playwright/test';
-import { DateTime } from 'luxon';
-import path from 'node:path';
-
-import { getRecipientByEmail } from '@documenso/lib/server-only/recipient/get-recipient-by-email';
-import { prisma } from '@documenso/prisma';
 import {
   DocumentSigningOrder,
   DocumentStatus,
   FieldType,
   RecipientRole,
   SigningStatus,
-} from '@documenso/prisma/client';
+} from '@prisma/client';
+import { DateTime } from 'luxon';
+import path from 'node:path';
+
+import { getRecipientByEmail } from '@documenso/lib/server-only/recipient/get-recipient-by-email';
+import { prisma } from '@documenso/prisma';
 import {
   seedBlankDocument,
   seedPendingDocumentWithFullFields,
@@ -18,13 +18,14 @@ import {
 import { seedUser } from '@documenso/prisma/seed/users';
 
 import { apiSignin } from '../fixtures/authentication';
+import { signSignaturePad } from '../fixtures/signature';
 
 // Can't use the function in server-only/document due to it indirectly using
 // require imports.
 const getDocumentByToken = async (token: string) => {
   return await prisma.document.findFirstOrThrow({
     where: {
-      Recipient: {
+      recipients: {
         some: {
           token,
         },
@@ -34,37 +35,41 @@ const getDocumentByToken = async (token: string) => {
 };
 
 test('[DOCUMENT_FLOW]: should be able to upload a PDF document', async ({ page }) => {
-  const user = await seedUser();
+  const { user, team } = await seedUser();
 
   await apiSignin({
     page,
     email: user.email,
+    redirectPath: `/t/${team.url}/documents`,
   });
 
   // Upload document.
   const [fileChooser] = await Promise.all([
     page.waitForEvent('filechooser'),
-    page.locator('input[type=file]').evaluate((e) => {
-      if (e instanceof HTMLInputElement) {
-        e.click();
-      }
-    }),
+    page
+      .locator('input[type=file]')
+      .nth(1)
+      .evaluate((e) => {
+        if (e instanceof HTMLInputElement) {
+          e.click();
+        }
+      }),
   ]);
 
   await fileChooser.setFiles(path.join(__dirname, '../../../../assets/example.pdf'));
 
   // Wait to be redirected to the edit page.
-  await page.waitForURL(/\/documents\/\d+/);
+  await page.waitForURL(new RegExp(`/t/${team.url}/documents/\\d+`));
 });
 
 test('[DOCUMENT_FLOW]: should be able to create a document', async ({ page }) => {
-  const user = await seedUser();
-  const document = await seedBlankDocument(user);
+  const { user, team } = await seedUser();
+  const document = await seedBlankDocument(user, team.id);
 
   await apiSignin({
     page,
     email: user.email,
-    redirectPath: `/documents/${document.id}/edit`,
+    redirectPath: `/t/${team.url}/documents/${document.id}/edit`,
   });
 
   const documentTitle = `example-${Date.now()}.pdf`;
@@ -107,9 +112,10 @@ test('[DOCUMENT_FLOW]: should be able to create a document', async ({ page }) =>
 
   // Add subject and send
   await expect(page.getByRole('heading', { name: 'Distribute Document' })).toBeVisible();
+  await page.waitForTimeout(2500);
   await page.getByRole('button', { name: 'Send' }).click();
 
-  await page.waitForURL('/documents');
+  await page.waitForURL(new RegExp(`/t/${team.url}/documents/\\d+`));
 
   // Assert document was created
   await expect(page.getByRole('link', { name: documentTitle })).toBeVisible();
@@ -118,13 +124,13 @@ test('[DOCUMENT_FLOW]: should be able to create a document', async ({ page }) =>
 test('[DOCUMENT_FLOW]: should be able to create a document with multiple recipients', async ({
   page,
 }) => {
-  const user = await seedUser();
-  const document = await seedBlankDocument(user);
+  const { user, team } = await seedUser();
+  const document = await seedBlankDocument(user, team.id);
 
   await apiSignin({
     page,
     email: user.email,
-    redirectPath: `/documents/${document.id}/edit`,
+    redirectPath: `/t/${team.url}/documents/${document.id}/edit`,
   });
 
   const documentTitle = `example-${Date.now()}.pdf`;
@@ -191,9 +197,10 @@ test('[DOCUMENT_FLOW]: should be able to create a document with multiple recipie
 
   // Add subject and send
   await expect(page.getByRole('heading', { name: 'Distribute Document' })).toBeVisible();
+  await page.waitForTimeout(2500);
   await page.getByRole('button', { name: 'Send' }).click();
 
-  await page.waitForURL('/documents');
+  await page.waitForURL(new RegExp(`/t/${team.url}/documents/\\d+`));
 
   // Assert document was created
   await expect(page.getByRole('link', { name: documentTitle })).toBeVisible();
@@ -202,13 +209,13 @@ test('[DOCUMENT_FLOW]: should be able to create a document with multiple recipie
 test('[DOCUMENT_FLOW]: should be able to create a document with multiple recipients with different roles', async ({
   page,
 }) => {
-  const user = await seedUser();
-  const document = await seedBlankDocument(user);
+  const { user, team } = await seedUser();
+  const document = await seedBlankDocument(user, team.id);
 
   await apiSignin({
     page,
     email: user.email,
-    redirectPath: `/documents/${document.id}/edit`,
+    redirectPath: `/t/${team.url}/documents/${document.id}/edit`,
   });
 
   // Set title
@@ -288,9 +295,10 @@ test('[DOCUMENT_FLOW]: should be able to create a document with multiple recipie
 
   // Add subject and send
   await expect(page.getByRole('heading', { name: 'Distribute Document' })).toBeVisible();
+  await page.waitForTimeout(2500);
   await page.getByRole('button', { name: 'Send' }).click();
 
-  await page.waitForURL('/documents');
+  await page.waitForURL(new RegExp(`/t/${team.url}/documents/\\d+`));
 
   // Assert document was created
   await expect(page.getByRole('link', { name: 'Test Title' })).toBeVisible();
@@ -299,13 +307,13 @@ test('[DOCUMENT_FLOW]: should be able to create a document with multiple recipie
 test('[DOCUMENT_FLOW]: should not be able to create a document without signatures', async ({
   page,
 }) => {
-  const user = await seedUser();
-  const document = await seedBlankDocument(user);
+  const { user, team } = await seedUser();
+  const document = await seedBlankDocument(user, team.id);
 
   await apiSignin({
     page,
     email: user.email,
-    redirectPath: `/documents/${document.id}/edit`,
+    redirectPath: `/t/${team.url}/documents/${document.id}/edit`,
   });
 
   const documentTitle = `example-${Date.now()}.pdf`;
@@ -335,10 +343,11 @@ test('[DOCUMENT_FLOW]: should not be able to create a document without signature
 });
 
 test('[DOCUMENT_FLOW]: should be able to approve a document', async ({ page }) => {
-  const user = await seedUser();
+  const { user, team } = await seedUser();
 
   const { recipients } = await seedPendingDocumentWithFullFields({
     owner: user,
+    teamId: team.id,
     recipients: ['user@documenso.com', 'approver@documenso.com'],
     recipientsCreateOptions: [
       {
@@ -354,7 +363,7 @@ test('[DOCUMENT_FLOW]: should be able to approve a document', async ({ page }) =
   });
 
   for (const recipient of recipients) {
-    const { token, Field, role } = recipient;
+    const { token, fields, role } = recipient;
 
     const signUrl = `/sign/${token}`;
 
@@ -365,23 +374,17 @@ test('[DOCUMENT_FLOW]: should be able to approve a document', async ({ page }) =
       }),
     ).toBeVisible();
 
-    // Add signature.
-    const canvas = page.locator('canvas');
-    const box = await canvas.boundingBox();
-    if (box) {
-      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-      await page.mouse.down();
-      await page.mouse.move(box.x + box.width / 4, box.y + box.height / 4);
-      await page.mouse.up();
-    }
+    await signSignaturePad(page);
 
-    for (const field of Field) {
+    for (const field of fields) {
       await page.locator(`#field-${field.id}`).getByRole('button').click();
 
       await expect(page.locator(`#field-${field.id}`)).toHaveAttribute('data-inserted', 'true');
     }
 
-    await page.getByRole('button', { name: 'Complete' }).click();
+    await page
+      .getByRole('button', { name: role === RecipientRole.SIGNER ? 'Complete' : 'Approve' })
+      .click();
     await page
       .getByRole('button', { name: role === RecipientRole.SIGNER ? 'Sign' : 'Approve' })
       .click();
@@ -392,13 +395,13 @@ test('[DOCUMENT_FLOW]: should be able to approve a document', async ({ page }) =
 test('[DOCUMENT_FLOW]: should be able to create, send with redirect url, sign a document and redirect to redirect url', async ({
   page,
 }) => {
-  const user = await seedUser();
-  const document = await seedBlankDocument(user);
+  const { user, team } = await seedUser();
+  const document = await seedBlankDocument(user, team.id);
 
   await apiSignin({
     page,
     email: user.email,
-    redirectPath: `/documents/${document.id}/edit`,
+    redirectPath: `/t/${team.url}/documents/${document.id}/edit`,
   });
 
   const documentTitle = `example-${Date.now()}.pdf`;
@@ -426,14 +429,15 @@ test('[DOCUMENT_FLOW]: should be able to create, send with redirect url, sign a 
   await expect(page.getByRole('heading', { name: 'Add Fields' })).toBeVisible();
   await page.getByRole('button', { name: 'Continue' }).click();
 
+  await page.waitForTimeout(2500);
   await page.getByRole('button', { name: 'Send' }).click();
 
-  await page.waitForURL('/documents');
+  await page.waitForURL(`/t/${team.url}/documents`);
 
   // Assert document was created
   await expect(page.getByRole('link', { name: documentTitle })).toBeVisible();
   await page.getByRole('link', { name: documentTitle }).click();
-  await page.waitForURL(/\/documents\/\d+/);
+  await page.waitForURL(new RegExp(`/t/${team.url}/documents/\\d+`));
 
   const url = page.url().split('/');
   const documentId = url[url.length - 1];
@@ -450,7 +454,7 @@ test('[DOCUMENT_FLOW]: should be able to create, send with redirect url, sign a 
   const { status } = await getDocumentByToken(token);
   expect(status).toBe(DocumentStatus.PENDING);
 
-  await page.getByRole('button', { name: 'Complete' }).click();
+  await page.getByRole('button', { name: 'Approve' }).click();
   await expect(page.getByRole('dialog').getByText('Complete Approval').first()).toBeVisible();
   await page.getByRole('button', { name: 'Approve' }).click();
 
@@ -465,18 +469,19 @@ test('[DOCUMENT_FLOW]: should be able to create, send with redirect url, sign a 
 });
 
 test('[DOCUMENT_FLOW]: should be able to sign a document with custom date', async ({ page }) => {
-  const user = await seedUser();
+  const { user, team } = await seedUser();
 
   const now = DateTime.utc();
 
   const { document, recipients } = await seedPendingDocumentWithFullFields({
+    teamId: team.id,
     owner: user,
     recipients: ['user1@example.com'],
     fields: [FieldType.DATE],
   });
 
-  const { token, Field } = recipients[0];
-  const [recipientField] = Field;
+  const { token, fields } = recipients[0];
+  const [recipientField] = fields;
 
   await page.goto(`/sign/${token}`);
   await page.waitForURL(`/sign/${token}`);
@@ -492,7 +497,7 @@ test('[DOCUMENT_FLOW]: should be able to sign a document with custom date', asyn
 
   const field = await prisma.field.findFirst({
     where: {
-      Recipient: {
+      recipient: {
         email: 'user1@example.com',
       },
       documentId: Number(document.id),
@@ -514,13 +519,13 @@ test('[DOCUMENT_FLOW]: should be able to sign a document with custom date', asyn
 test('[DOCUMENT_FLOW]: should be able to create and sign a document with 3 recipients in sequential order', async ({
   page,
 }) => {
-  const user = await seedUser();
-  const document = await seedBlankDocument(user);
+  const { user, team } = await seedUser();
+  const document = await seedBlankDocument(user, team.id);
 
   await apiSignin({
     page,
     email: user.email,
-    redirectPath: `/documents/${document.id}/edit`,
+    redirectPath: `/t/${team.url}/documents/${document.id}/edit`,
   });
 
   const documentTitle = `Sequential-Signing-${Date.now()}.pdf`;
@@ -536,12 +541,19 @@ test('[DOCUMENT_FLOW]: should be able to create and sign a document with 3 recip
     if (i > 1) {
       await page.getByRole('button', { name: 'Add Signer' }).click();
     }
+
     await page
-      .getByPlaceholder('Email')
+      .getByLabel('Email')
+      .nth(i - 1)
+      .focus();
+
+    await page
+      .getByLabel('Email')
       .nth(i - 1)
       .fill(`user${i}@example.com`);
+
     await page
-      .getByPlaceholder('Name')
+      .getByLabel('Name')
       .nth(i - 1)
       .fill(`User ${i}`);
   }
@@ -567,22 +579,23 @@ test('[DOCUMENT_FLOW]: should be able to create and sign a document with 3 recip
   await page.getByRole('button', { name: 'Continue' }).click();
 
   await expect(page.getByRole('heading', { name: 'Distribute Document' })).toBeVisible();
+  await page.waitForTimeout(2500);
   await page.getByRole('button', { name: 'Send' }).click();
 
-  await page.waitForURL('/documents');
+  await page.waitForURL(new RegExp(`/t/${team.url}/documents/\\d+`));
 
   await expect(page.getByRole('link', { name: documentTitle })).toBeVisible();
 
   const createdDocument = await prisma.document.findFirst({
     where: { title: documentTitle },
-    include: { Recipient: true },
+    include: { recipients: true },
   });
 
   expect(createdDocument).not.toBeNull();
-  expect(createdDocument?.Recipient.length).toBe(3);
+  expect(createdDocument?.recipients.length).toBe(3);
 
   for (let i = 0; i < 3; i++) {
-    const recipient = createdDocument?.Recipient.find(
+    const recipient = createdDocument?.recipients.find(
       (r) => r.email === `user${i + 1}@example.com`,
     );
     expect(recipient).not.toBeNull();
@@ -602,19 +615,10 @@ test('[DOCUMENT_FLOW]: should be able to create and sign a document with 3 recip
 
     await page.goto(`/sign/${recipient?.token}`);
     await expect(page.getByRole('heading', { name: 'Sign Document' })).toBeVisible();
+    await signSignaturePad(page);
 
     await page.locator(`#field-${recipientField.id}`).getByRole('button').click();
 
-    const canvas = page.locator('canvas#signature');
-    const box = await canvas.boundingBox();
-    if (box) {
-      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-      await page.mouse.down();
-      await page.mouse.move(box.x + box.width / 4, box.y + box.height / 4);
-      await page.mouse.up();
-    }
-
-    await page.getByRole('button', { name: 'Sign', exact: true }).click();
     await page.getByRole('button', { name: 'Complete' }).click();
     await page.getByRole('button', { name: 'Sign' }).click();
 
@@ -629,7 +633,7 @@ test('[DOCUMENT_FLOW]: should be able to create and sign a document with 3 recip
   }
 
   // Wait for the document to be signed.
-  await page.waitForTimeout(5000);
+  await page.waitForTimeout(10000);
 
   const finalDocument = await prisma.document.findFirst({
     where: { id: createdDocument?.id },
@@ -641,9 +645,10 @@ test('[DOCUMENT_FLOW]: should be able to create and sign a document with 3 recip
 test('[DOCUMENT_FLOW]: should prevent out-of-order signing in sequential mode', async ({
   page,
 }) => {
-  const user = await seedUser();
+  const { user, team } = await seedUser();
 
-  const { document, recipients } = await seedPendingDocumentWithFullFields({
+  const { recipients } = await seedPendingDocumentWithFullFields({
+    teamId: team.id,
     owner: user,
     recipients: ['user1@example.com', 'user2@example.com', 'user3@example.com'],
     fields: [FieldType.SIGNATURE],

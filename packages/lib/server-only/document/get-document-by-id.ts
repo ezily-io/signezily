@@ -1,38 +1,48 @@
+import type { Prisma } from '@prisma/client';
+import { DocumentStatus, TeamMemberRole } from '@prisma/client';
 import { match } from 'ts-pattern';
 
 import { prisma } from '@documenso/prisma';
-import type { Prisma } from '@documenso/prisma/client';
-import { TeamMemberRole } from '@documenso/prisma/client';
 
+import { AppError, AppErrorCode } from '../../errors/app-error';
 import { DocumentVisibility } from '../../types/document-visibility';
 import { getTeamById } from '../team/get-team';
 
 export type GetDocumentByIdOptions = {
-  id: number;
+  documentId: number;
   userId: number;
-  teamId?: number;
+  teamId: number;
+  folderId?: string;
 };
 
-export const getDocumentById = async ({ id, userId, teamId }: GetDocumentByIdOptions) => {
-  const documentWhereInput = await getDocumentWhereInput({
-    documentId: id,
+export const getDocumentById = async ({
+  documentId,
+  userId,
+  teamId,
+  folderId,
+}: GetDocumentByIdOptions) => {
+  const { documentWhereInput } = await getDocumentWhereInput({
+    documentId,
     userId,
     teamId,
   });
 
-  return await prisma.document.findFirstOrThrow({
-    where: documentWhereInput,
+  const document = await prisma.document.findFirst({
+    where: {
+      ...documentWhereInput,
+      folderId,
+    },
     include: {
       documentData: true,
       documentMeta: true,
-      User: {
+      user: {
         select: {
           id: true,
           name: true,
           email: true,
         },
       },
-      Recipient: {
+      recipients: {
         select: {
           email: true,
         },
@@ -45,23 +55,20 @@ export const getDocumentById = async ({ id, userId, teamId }: GetDocumentByIdOpt
       },
     },
   });
+
+  if (!document) {
+    throw new AppError(AppErrorCode.NOT_FOUND, {
+      message: 'Document could not be found',
+    });
+  }
+
+  return document;
 };
 
 export type GetDocumentWhereInputOptions = {
   documentId: number;
   userId: number;
-  teamId?: number;
-
-  /**
-   * Whether to return a filter that allows access to both the user and team documents.
-   * This only applies if `teamId` is passed in.
-   *
-   * If true, and `teamId` is passed in, the filter will allow both team and user documents.
-   * If false, and `teamId` is passed in, the filter will only allow team documents.
-   *
-   * Defaults to false.
-   */
-  overlapUserTeamScope?: boolean;
+  teamId: number;
 };
 
 /**
@@ -73,56 +80,8 @@ export const getDocumentWhereInput = async ({
   documentId,
   userId,
   teamId,
-  overlapUserTeamScope = false,
 }: GetDocumentWhereInputOptions) => {
-  const documentWhereInput: Prisma.DocumentWhereUniqueInput = {
-    id: documentId,
-    OR: [
-      {
-        userId,
-      },
-    ],
-  };
-
-  if (teamId === undefined || !documentWhereInput.OR) {
-    return documentWhereInput;
-  }
-
   const team = await getTeamById({ teamId, userId });
-
-  // Allow access to team and user documents.
-  if (overlapUserTeamScope) {
-    documentWhereInput.OR.push({
-      teamId: team.id,
-    });
-  }
-
-  // Allow access to only team documents.
-  if (!overlapUserTeamScope) {
-    documentWhereInput.OR = [
-      {
-        teamId: team.id,
-      },
-    ];
-  }
-
-  // Allow access to documents sent to or from the team email.
-  if (team.teamEmail) {
-    documentWhereInput.OR.push(
-      {
-        Recipient: {
-          some: {
-            email: team.teamEmail.email,
-          },
-        },
-      },
-      {
-        User: {
-          email: team.teamEmail.email,
-        },
-      },
-    );
-  }
 
   const user = await prisma.user.findFirstOrThrow({
     where: {
@@ -130,36 +89,68 @@ export const getDocumentWhereInput = async ({
     },
   });
 
-  const visibilityFilters = [
-    ...match(team.currentTeamMember?.role)
-      .with(TeamMemberRole.ADMIN, () => [
-        { visibility: DocumentVisibility.EVERYONE },
-        { visibility: DocumentVisibility.MANAGER_AND_ABOVE },
-        { visibility: DocumentVisibility.ADMIN },
-      ])
-      .with(TeamMemberRole.MANAGER, () => [
-        { visibility: DocumentVisibility.EVERYONE },
-        { visibility: DocumentVisibility.MANAGER_AND_ABOVE },
-      ])
-      .otherwise(() => [{ visibility: DocumentVisibility.EVERYONE }]),
+  const teamVisibilityFilters = match(team.currentTeamRole)
+    .with(TeamMemberRole.ADMIN, () => [
+      DocumentVisibility.EVERYONE,
+      DocumentVisibility.MANAGER_AND_ABOVE,
+      DocumentVisibility.ADMIN,
+    ])
+    .with(TeamMemberRole.MANAGER, () => [
+      DocumentVisibility.EVERYONE,
+      DocumentVisibility.MANAGER_AND_ABOVE,
+    ])
+    .otherwise(() => [DocumentVisibility.EVERYONE]);
+
+  const documentOrInput: Prisma.DocumentWhereInput[] = [
+    // Allow access if they own the document.
     {
-      OR: [
-        {
-          Recipient: {
-            some: {
-              email: user.email,
-            },
-          },
+      userId,
+    },
+    // Or, if they belong to the team that the document is associated with.
+    {
+      visibility: {
+        in: teamVisibilityFilters,
+      },
+      teamId,
+    },
+    // Or, if they are a recipient of the document.
+    {
+      status: {
+        not: DocumentStatus.DRAFT,
+      },
+      recipients: {
+        some: {
+          email: user.email,
         },
-        {
-          userId: user.id,
-        },
-      ],
+      },
     },
   ];
 
+  // Allow access to documents sent to or from the team email.
+  if (team.teamEmail) {
+    documentOrInput.push(
+      {
+        recipients: {
+          some: {
+            email: team.teamEmail.email,
+          },
+        },
+      },
+      {
+        user: {
+          email: team.teamEmail.email,
+        },
+      },
+    );
+  }
+
+  const documentWhereInput: Prisma.DocumentWhereUniqueInput = {
+    id: documentId,
+    OR: documentOrInput,
+  };
+
   return {
-    ...documentWhereInput,
-    OR: [...visibilityFilters],
+    documentWhereInput,
+    team,
   };
 };

@@ -1,19 +1,27 @@
-'use client';
-
 import { useEffect } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Trans } from '@lingui/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
+import {
+  DocumentStatus,
+  DocumentVisibility,
+  type Field,
+  type Recipient,
+  SendStatus,
+  TeamMemberRole,
+} from '@prisma/client';
 import { InfoIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { match } from 'ts-pattern';
 
+import { useCurrentOrganisation } from '@documenso/lib/client-only/providers/organisation';
 import { DATE_FORMATS, DEFAULT_DOCUMENT_DATE_FORMAT } from '@documenso/lib/constants/date-formats';
+import { DOCUMENT_SIGNATURE_TYPES } from '@documenso/lib/constants/document';
 import { SUPPORTED_LANGUAGES } from '@documenso/lib/constants/i18n';
 import { DEFAULT_DOCUMENT_TIME_ZONE, TIME_ZONES } from '@documenso/lib/constants/time-zones';
+import type { TDocument } from '@documenso/lib/types/document';
 import { extractDocumentAuthMethods } from '@documenso/lib/utils/document-auth';
-import type { TeamMemberRole } from '@documenso/prisma/client';
-import { DocumentStatus, type Field, type Recipient, SendStatus } from '@documenso/prisma/client';
-import type { DocumentWithData } from '@documenso/prisma/types/document-with-data';
+import { extractTeamSignatureSettings } from '@documenso/lib/utils/teams';
 import {
   DocumentGlobalAuthAccessSelect,
   DocumentGlobalAuthAccessTooltip,
@@ -22,6 +30,10 @@ import {
   DocumentGlobalAuthActionSelect,
   DocumentGlobalAuthActionTooltip,
 } from '@documenso/ui/components/document/document-global-auth-action-select';
+import {
+  DocumentReadOnlyFields,
+  mapFieldsWithRecipients,
+} from '@documenso/ui/components/document/document-read-only-fields';
 import {
   DocumentVisibilitySelect,
   DocumentVisibilityTooltip,
@@ -40,7 +52,9 @@ import {
   FormLabel,
   FormMessage,
 } from '@documenso/ui/primitives/form/form';
+import { MultiSelectCombobox } from '@documenso/ui/primitives/multi-select-combobox';
 
+import { DocumentSignatureSettingsTooltip } from '../../components/document/document-signature-settings-tooltip';
 import { Combobox } from '../combobox';
 import { Input } from '../input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../select';
@@ -55,16 +69,14 @@ import {
   DocumentFlowFormContainerHeader,
   DocumentFlowFormContainerStep,
 } from './document-flow-root';
-import { ShowFieldItem } from './show-field-item';
 import type { DocumentFlowStep } from './types';
 
 export type AddSettingsFormProps = {
   documentFlow: DocumentFlowStep;
   recipients: Recipient[];
   fields: Field[];
-  isDocumentEnterprise: boolean;
   isDocumentPdfLoaded: boolean;
-  document: DocumentWithData;
+  document: TDocument;
   currentTeamMemberRole?: TeamMemberRole;
   onSubmit: (_data: TAddSettingsFormSchema) => void;
 };
@@ -73,12 +85,15 @@ export const AddSettingsFormPartial = ({
   documentFlow,
   recipients,
   fields,
-  isDocumentEnterprise,
   isDocumentPdfLoaded,
   document,
   currentTeamMemberRole,
   onSubmit,
 }: AddSettingsFormProps) => {
+  const { t } = useLingui();
+
+  const organisation = useCurrentOrganisation();
+
   const { documentAuthOption } = extractDocumentAuthMethods({
     documentAuth: document.authOptions,
   });
@@ -89,8 +104,9 @@ export const AddSettingsFormPartial = ({
       title: document.title,
       externalId: document.externalId || '',
       visibility: document.visibility || '',
-      globalAccessAuth: documentAuthOption?.globalAccessAuth || undefined,
-      globalActionAuth: documentAuthOption?.globalActionAuth || undefined,
+      globalAccessAuth: documentAuthOption?.globalAccessAuth || [],
+      globalActionAuth: documentAuthOption?.globalActionAuth || [],
+
       meta: {
         timezone:
           TIME_ZONES.find((timezone) => timezone === document.documentMeta?.timezone) ??
@@ -100,6 +116,7 @@ export const AddSettingsFormPartial = ({
             ?.value ?? DEFAULT_DOCUMENT_DATE_FORMAT,
         redirectUrl: document.documentMeta?.redirectUrl ?? '',
         language: document.documentMeta?.language ?? 'en',
+        signatureTypes: extractTeamSignatureSettings(document.documentMeta),
       },
     },
   });
@@ -109,6 +126,22 @@ export const AddSettingsFormPartial = ({
   const documentHasBeenSent = recipients.some(
     (recipient) => recipient.sendStatus === SendStatus.SENT,
   );
+
+  const canUpdateVisibility = match(currentTeamMemberRole)
+    .with(TeamMemberRole.ADMIN, () => true)
+    .with(
+      TeamMemberRole.MANAGER,
+      () =>
+        document.visibility === DocumentVisibility.EVERYONE ||
+        document.visibility === DocumentVisibility.MANAGER_AND_ABOVE,
+    )
+    .otherwise(() => false);
+
+  const onFormSubmit = form.handleSubmit(onSubmit);
+
+  const onGoNextClick = () => {
+    void onFormSubmit().catch(console.error);
+  };
 
   // We almost always want to set the timezone to the user's local timezone to avoid confusion
   // when the document is signed.
@@ -136,10 +169,13 @@ export const AddSettingsFormPartial = ({
       />
 
       <DocumentFlowFormContainerContent>
-        {isDocumentPdfLoaded &&
-          fields.map((field, index) => (
-            <ShowFieldItem key={index} field={field} recipients={recipients} />
-          ))}
+        {isDocumentPdfLoaded && (
+          <DocumentReadOnlyFields
+            showRecipientColors={true}
+            recipientIds={recipients.map((recipient) => recipient.id)}
+            fields={mapFieldsWithRecipients(fields, recipients)}
+          />
+        )}
 
         <Form {...form}>
           <fieldset
@@ -180,13 +216,21 @@ export const AddSettingsFormPartial = ({
                       </TooltipTrigger>
 
                       <TooltipContent className="text-foreground max-w-md space-y-2 p-4">
-                        控制文件的語言，包括用於電子郵件通知的語言，以及生成並附加到文件的最終證書的語言。
+                        <Trans>
+                          Controls the language for the document, including the language to be used
+                          for email notifications, and the final certificate that is generated and
+                          attached to the document.
+                        </Trans>
                       </TooltipContent>
                     </Tooltip>
                   </FormLabel>
 
                   <FormControl>
-                    <Select {...field} onValueChange={field.onChange}>
+                    <Select
+                      value={field.value}
+                      disabled={field.disabled}
+                      onValueChange={field.onChange}
+                    >
                       <SelectTrigger className="bg-background">
                         <SelectValue />
                       </SelectTrigger>
@@ -216,7 +260,11 @@ export const AddSettingsFormPartial = ({
                   </FormLabel>
 
                   <FormControl>
-                    <DocumentGlobalAuthAccessSelect {...field} onValueChange={field.onChange} />
+                    <DocumentGlobalAuthAccessSelect
+                      value={field.value}
+                      disabled={field.disabled}
+                      onValueChange={field.onChange}
+                    />
                   </FormControl>
                 </FormItem>
               )}
@@ -235,7 +283,8 @@ export const AddSettingsFormPartial = ({
 
                     <FormControl>
                       <DocumentVisibilitySelect
-                        currentMemberRole={currentTeamMemberRole}
+                        canUpdateVisibility={canUpdateVisibility}
+                        currentTeamMemberRole={currentTeamMemberRole}
                         {...field}
                         onValueChange={field.onChange}
                       />
@@ -245,7 +294,7 @@ export const AddSettingsFormPartial = ({
               />
             )}
 
-            {isDocumentEnterprise && (
+            {organisation.organisationClaim.flags.cfr21 && (
               <FormField
                 control={form.control}
                 name="globalActionAuth"
@@ -257,7 +306,11 @@ export const AddSettingsFormPartial = ({
                     </FormLabel>
 
                     <FormControl>
-                      <DocumentGlobalAuthActionSelect {...field} onValueChange={field.onChange} />
+                      <DocumentGlobalAuthActionSelect
+                        value={field.value}
+                        disabled={field.disabled}
+                        onValueChange={field.onChange}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
@@ -271,7 +324,7 @@ export const AddSettingsFormPartial = ({
                 </AccordionTrigger>
 
                 <AccordionContent className="text-muted-foreground -mx-1 px-1 pt-2 text-sm leading-relaxed">
-                  <div className="flex flex-col space-y-6 ">
+                  <div className="flex flex-col space-y-6">
                     <FormField
                       control={form.control}
                       name="externalId"
@@ -304,6 +357,34 @@ export const AddSettingsFormPartial = ({
 
                     <FormField
                       control={form.control}
+                      name="meta.signatureTypes"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="flex flex-row items-center">
+                            <Trans>Allowed Signature Types</Trans>
+                            <DocumentSignatureSettingsTooltip />
+                          </FormLabel>
+
+                          <FormControl>
+                            <MultiSelectCombobox
+                              options={Object.values(DOCUMENT_SIGNATURE_TYPES).map((option) => ({
+                                label: t(option.label),
+                                value: option.value,
+                              }))}
+                              selectedValues={field.value}
+                              onChange={field.onChange}
+                              className="bg-background w-full"
+                              emptySelectionPlaceholder="Select signature types"
+                            />
+                          </FormControl>
+
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
                       name="meta.dateFormat"
                       render={({ field }) => (
                         <FormItem>
@@ -313,7 +394,7 @@ export const AddSettingsFormPartial = ({
 
                           <FormControl>
                             <Select
-                              {...field}
+                              value={field.value}
                               onValueChange={field.onChange}
                               disabled={documentHasBeenSent}
                             >
@@ -349,7 +430,7 @@ export const AddSettingsFormPartial = ({
                             <Combobox
                               className="bg-background"
                               options={TIME_ZONES}
-                              {...field}
+                              value={field.value}
                               onChange={(value) => value && field.onChange(value)}
                               disabled={documentHasBeenSent}
                             />
@@ -404,7 +485,7 @@ export const AddSettingsFormPartial = ({
           disabled={form.formState.isSubmitting}
           canGoBack={stepIndex !== 0}
           onGoBackClick={previousStep}
-          onGoNextClick={form.handleSubmit(onSubmit)}
+          onGoNextClick={onGoNextClick}
         />
       </DocumentFlowFormContainerFooter>
     </>

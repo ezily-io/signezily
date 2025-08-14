@@ -1,10 +1,11 @@
+import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
 import { TEAM_MEMBER_ROLE_PERMISSIONS_MAP } from '@documenso/lib/constants/teams';
 import { AppError, AppErrorCode } from '@documenso/lib/errors/app-error';
 import { prisma } from '@documenso/prisma';
-import { Prisma } from '@documenso/prisma/client';
-import type { DocumentVisibility } from '@documenso/prisma/client';
+
+import { buildTeamWhereQuery } from '../../utils/teams';
 
 export type UpdateTeamOptions = {
   userId: number;
@@ -12,55 +13,42 @@ export type UpdateTeamOptions = {
   data: {
     name?: string;
     url?: string;
-    documentVisibility?: DocumentVisibility;
-    includeSenderDetails?: boolean;
   };
 };
 
-export const updateTeam = async ({ userId, teamId, data }: UpdateTeamOptions) => {
+export const updateTeam = async ({ userId, teamId, data }: UpdateTeamOptions): Promise<void> => {
   try {
-    await prisma.$transaction(async (tx) => {
-      const foundPendingTeamWithUrl = await tx.teamPending.findFirst({
-        where: {
-          url: data.url,
+    const foundTeamWithUrl = await prisma.team.findFirst({
+      where: {
+        url: data.url,
+        id: {
+          not: teamId,
         },
+      },
+    });
+
+    const foundOrganisationWithUrl = await prisma.organisation.findFirst({
+      where: {
+        url: data.url,
+      },
+    });
+
+    if (foundTeamWithUrl || foundOrganisationWithUrl) {
+      throw new AppError(AppErrorCode.ALREADY_EXISTS, {
+        message: 'Team URL already exists.',
       });
+    }
 
-      if (foundPendingTeamWithUrl) {
-        throw new AppError(AppErrorCode.ALREADY_EXISTS, 'Team URL already exists.');
-      }
-
-      const team = await tx.team.update({
-        where: {
-          id: teamId,
-          members: {
-            some: {
-              userId,
-              role: {
-                in: TEAM_MEMBER_ROLE_PERMISSIONS_MAP['MANAGE_TEAM'],
-              },
-            },
-          },
-        },
-        data: {
-          url: data.url,
-          name: data.name,
-          teamGlobalSettings: {
-            upsert: {
-              create: {
-                documentVisibility: data.documentVisibility,
-                includeSenderDetails: data.includeSenderDetails,
-              },
-              update: {
-                documentVisibility: data.documentVisibility,
-                includeSenderDetails: data.includeSenderDetails,
-              },
-            },
-          },
-        },
-      });
-
-      return team;
+    await prisma.team.update({
+      where: buildTeamWhereQuery({
+        teamId,
+        userId,
+        roles: TEAM_MEMBER_ROLE_PERMISSIONS_MAP['MANAGE_TEAM'],
+      }),
+      data: {
+        url: data.url,
+        name: data.name,
+      },
     });
   } catch (err) {
     console.error(err);
@@ -72,7 +60,9 @@ export const updateTeam = async ({ userId, teamId, data }: UpdateTeamOptions) =>
     const target = z.array(z.string()).safeParse(err.meta?.target);
 
     if (err.code === 'P2002' && target.success && target.data.includes('url')) {
-      throw new AppError(AppErrorCode.ALREADY_EXISTS, 'Team URL already exists.');
+      throw new AppError(AppErrorCode.ALREADY_EXISTS, {
+        message: 'Team URL already exists.',
+      });
     }
 
     throw err;

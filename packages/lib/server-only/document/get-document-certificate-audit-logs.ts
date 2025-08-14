@@ -16,6 +16,8 @@ export const getDocumentCertificateAuditLogs = async ({
       type: {
         in: [
           DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_RECIPIENT_COMPLETED,
+          DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_RECIPIENT_REJECTED,
+          DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_FIELD_INSERTED,
           DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_OPENED,
           DOCUMENT_AUDIT_LOG_TYPE.EMAIL_SENT,
         ],
@@ -29,8 +31,14 @@ export const getDocumentCertificateAuditLogs = async ({
     [DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_RECIPIENT_COMPLETED]: auditLogs.filter(
       (log) => log.type === DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_RECIPIENT_COMPLETED,
     ),
+    [DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_RECIPIENT_REJECTED]: auditLogs.filter(
+      (log) => log.type === DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_RECIPIENT_REJECTED,
+    ),
     [DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_OPENED]: auditLogs.filter(
       (log) => log.type === DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_OPENED,
+    ),
+    [DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_FIELD_INSERTED]: auditLogs.filter(
+      (log) => log.type === DOCUMENT_AUDIT_LOG_TYPE.DOCUMENT_FIELD_INSERTED,
     ),
     [DOCUMENT_AUDIT_LOG_TYPE.EMAIL_SENT]: auditLogs.filter(
       (log) =>

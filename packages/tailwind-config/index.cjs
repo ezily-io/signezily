@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { fontFamily } = require('tailwindcss/defaultTheme');
+const { default: flattenColorPalette } = require('tailwindcss/lib/util/flattenColorPalette');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ['class'],
+  darkMode: ['variant', '&:is(.dark:not(.dark-mode-disabled) *)'],
   content: ['src/**/*.{ts,tsx}'],
   theme: {
     extend: {
@@ -14,8 +15,12 @@ module.exports = {
       zIndex: {
         9999: '9999',
       },
+      aspectRatio: {
+        'signature-pad': '16 / 7',
+      },
       colors: {
         border: 'hsl(var(--border))',
+        'field-border': 'hsl(var(--field-border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
@@ -102,12 +107,23 @@ module.exports = {
           900: '#364772',
           950: '#252d46',
         },
+        recipient: {
+          green: 'hsl(var(--recipient-green))',
+          blue: 'hsl(var(--recipient-blue))',
+          purple: 'hsl(var(--recipient-purple))',
+          orange: 'hsl(var(--recipient-orange))',
+          yellow: 'hsl(var(--recipient-yellow))',
+          pink: 'hsl(var(--recipient-pink))',
+        },
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       borderRadius: {
+        DEFAULT: 'calc(var(--radius) - 3px)',
+        '2xl': 'calc(var(--radius) + 4px)',
+        xl: 'calc(var(--radius) + 2px)',
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
@@ -139,5 +155,21 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
+  plugins: [
+    require('tailwindcss-animate'),
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/container-queries'),
+    addVariablesForColors,
+  ],
 };
+
+function addVariablesForColors({ addBase, theme }) {
+  let allColors = flattenColorPalette(theme('colors'));
+  let newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val]),
+  );
+
+  addBase({
+    ':root': newVars,
+  });
+}

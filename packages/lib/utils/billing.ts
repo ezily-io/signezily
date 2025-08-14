@@ -1,42 +1,39 @@
-import { env } from 'next-runtime-env';
+import type { Subscription } from '@documenso/prisma/generated/zod/modelSchema/SubscriptionSchema';
 
 import { IS_BILLING_ENABLED } from '../constants/app';
-import type { Subscription } from '.prisma/client';
-import { SubscriptionStatus } from '.prisma/client';
+import { AppErrorCode } from '../errors/app-error';
+import { AppError } from '../errors/app-error';
+import type { StripeOrganisationCreateMetadata } from '../types/subscription';
 
-/**
- * Returns true if there is a subscription that is active and is one of the provided price IDs.
- */
-export const subscriptionsContainsActivePlan = (
-  subscriptions: Subscription[],
-  priceIds: string[],
+export const generateStripeOrganisationCreateMetadata = (
+  organisationName: string,
+  userId: number,
 ) => {
-  return subscriptions.some(
-    (subscription) =>
-      subscription.status === SubscriptionStatus.ACTIVE && priceIds.includes(subscription.priceId),
-  );
-};
-/**
- * Returns true if there is a subscription that is active and is one of the provided product IDs.
- */
-export const subscriptionsContainsActiveProductId = (
-  subscriptions: Subscription[],
-  productId: string[],
-) => {
-  return subscriptions.some(
-    (subscription) =>
-      subscription.status === SubscriptionStatus.ACTIVE && productId.includes(subscription.planId),
-  );
+  const metadata: StripeOrganisationCreateMetadata = {
+    organisationName,
+    userId,
+  };
+
+  return {
+    organisationCreateData: JSON.stringify(metadata),
+  };
 };
 
-export const subscriptionsContainActiveEnterprisePlan = (
-  subscriptions?: Subscription[],
-): boolean => {
-  const enterprisePlanId = env('NEXT_PUBLIC_STRIPE_ENTERPRISE_PLAN_MONTHLY_PRICE_ID');
+/**
+ * Throws an error if billing is enabled and no subscription is found.
+ */
+export const validateIfSubscriptionIsRequired = (subscription?: Subscription | null) => {
+  const isBillingEnabled = IS_BILLING_ENABLED();
 
-  if (!enterprisePlanId || !subscriptions || !IS_BILLING_ENABLED()) {
-    return false;
+  if (!isBillingEnabled) {
+    return;
   }
 
-  return subscriptionsContainsActivePlan(subscriptions, [enterprisePlanId]);
+  if (isBillingEnabled && !subscription) {
+    throw new AppError(AppErrorCode.NOT_FOUND, {
+      message: 'Subscription not found',
+    });
+  }
+
+  return subscription;
 };

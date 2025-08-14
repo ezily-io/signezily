@@ -1,16 +1,17 @@
 import { createElement } from 'react';
 
-import { msg } from '@lingui/macro';
+import { msg } from '@lingui/core/macro';
 
 import { mailer } from '@documenso/email/mailer';
 import { DocumentSuperDeleteEmailTemplate } from '@documenso/email/templates/document-super-delete';
 import { prisma } from '@documenso/prisma';
 
-import { getI18nInstance } from '../../client-only/providers/i18n.server';
+import { getI18nInstance } from '../../client-only/providers/i18n-server';
 import { NEXT_PUBLIC_WEBAPP_URL } from '../../constants/app';
+import { AppError, AppErrorCode } from '../../errors/app-error';
 import { extractDerivedDocumentEmailSettings } from '../../types/document-email';
 import { renderEmailWithI18N } from '../../utils/render-email-with-i18n';
-import { teamGlobalSettingsToBranding } from '../../utils/team-global-settings-to-branding';
+import { getEmailContext } from '../email/get-email-context';
 
 export interface SendDeleteEmailOptions {
   documentId: number;
@@ -23,18 +24,15 @@ export const sendDeleteEmail = async ({ documentId, reason }: SendDeleteEmailOpt
       id: documentId,
     },
     include: {
-      User: true,
+      user: true,
       documentMeta: true,
-      team: {
-        include: {
-          teamGlobalSettings: true,
-        },
-      },
     },
   });
 
   if (!document) {
-    throw new Error('Document not found');
+    throw new AppError(AppErrorCode.NOT_FOUND, {
+      message: 'Document not found',
+    });
   }
 
   const isDocumentDeletedEmailEnabled = extractDerivedDocumentEmailSettings(
@@ -45,7 +43,16 @@ export const sendDeleteEmail = async ({ documentId, reason }: SendDeleteEmailOpt
     return;
   }
 
-  const { email, name } = document.User;
+  const { branding, emailLanguage, senderEmail } = await getEmailContext({
+    emailType: 'INTERNAL',
+    source: {
+      type: 'team',
+      teamId: document.teamId,
+    },
+    meta: document.documentMeta,
+  });
+
+  const { email, name } = document.user;
 
   const assetBaseUrl = NEXT_PUBLIC_WEBAPP_URL() || 'http://localhost:3000';
 
@@ -55,30 +62,23 @@ export const sendDeleteEmail = async ({ documentId, reason }: SendDeleteEmailOpt
     assetBaseUrl,
   });
 
-  const branding = document.team?.teamGlobalSettings
-    ? teamGlobalSettingsToBranding(document.team.teamGlobalSettings)
-    : undefined;
-
   const [html, text] = await Promise.all([
-    renderEmailWithI18N(template, { lang: document.documentMeta?.language, branding }),
+    renderEmailWithI18N(template, { lang: emailLanguage, branding }),
     renderEmailWithI18N(template, {
-      lang: document.documentMeta?.language,
+      lang: emailLanguage,
       branding,
       plainText: true,
     }),
   ]);
 
-  const i18n = await getI18nInstance();
+  const i18n = await getI18nInstance(emailLanguage);
 
   await mailer.sendMail({
     to: {
       address: email,
       name: name || '',
     },
-    from: {
-      name: process.env.NEXT_PRIVATE_SMTP_FROM_NAME || 'Documenso',
-      address: process.env.NEXT_PRIVATE_SMTP_FROM_ADDRESS || 'noreply@documenso.com',
-    },
+    from: senderEmail,
     subject: i18n._(msg`Document Deleted!`),
     html,
     text,

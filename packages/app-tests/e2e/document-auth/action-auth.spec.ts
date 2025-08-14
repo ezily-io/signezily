@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test';
+import { FieldType } from '@prisma/client';
 
 import { ZRecipientAuthOptionsSchema } from '@documenso/lib/types/document-auth';
 import {
   createDocumentAuthOptions,
   createRecipientAuthOptions,
 } from '@documenso/lib/utils/document-auth';
-import { FieldType } from '@documenso/prisma/client';
 import {
   seedPendingDocumentNoFields,
   seedPendingDocumentWithFullFields,
@@ -13,39 +13,33 @@ import {
 import { seedTestEmail, seedUser } from '@documenso/prisma/seed/users';
 
 import { apiSignin, apiSignout } from '../fixtures/authentication';
+import { signSignaturePad } from '../fixtures/signature';
 
 test.describe.configure({ mode: 'parallel', timeout: 60000 });
 
 test('[DOCUMENT_AUTH]: should allow signing when no auth setup', async ({ page }) => {
-  const user = await seedUser();
+  const { user, team } = await seedUser();
 
-  const recipientWithAccount = await seedUser();
+  const { user: recipientWithAccount } = await seedUser();
 
   const { recipients } = await seedPendingDocumentWithFullFields({
     owner: user,
+    teamId: team.id,
     recipients: [recipientWithAccount, seedTestEmail()],
   });
 
   // Check that both are granted access.
   for (const recipient of recipients) {
-    const { token, Field } = recipient;
+    const { token, fields } = recipient;
 
     const signUrl = `/sign/${token}`;
 
     await page.goto(signUrl);
     await expect(page.getByRole('heading', { name: 'Sign Document' })).toBeVisible();
 
-    // Add signature.
-    const canvas = page.locator('canvas').first();
-    const box = await canvas.boundingBox();
-    if (box) {
-      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-      await page.mouse.down();
-      await page.mouse.move(box.x + box.width / 4, box.y + box.height / 4);
-      await page.mouse.up();
-    }
+    await signSignaturePad(page);
 
-    for (const field of Field) {
+    for (const field of fields) {
       await page.locator(`#field-${field.id}`).getByRole('button').click();
 
       if (field.type === FieldType.TEXT) {
@@ -63,24 +57,25 @@ test('[DOCUMENT_AUTH]: should allow signing when no auth setup', async ({ page }
 });
 
 test('[DOCUMENT_AUTH]: should allow signing with valid global auth', async ({ page }) => {
-  const user = await seedUser();
+  const { user, team } = await seedUser();
 
-  const recipientWithAccount = await seedUser();
+  const { user: recipientWithAccount } = await seedUser();
 
   const { recipients } = await seedPendingDocumentWithFullFields({
     owner: user,
+    teamId: team.id,
     recipients: [recipientWithAccount],
     updateDocumentOptions: {
       authOptions: createDocumentAuthOptions({
-        globalAccessAuth: null,
-        globalActionAuth: 'ACCOUNT',
+        globalAccessAuth: [],
+        globalActionAuth: ['ACCOUNT'],
       }),
     },
   });
 
   const recipient = recipients[0];
 
-  const { token, Field } = recipient;
+  const { token, fields } = recipient;
 
   const signUrl = `/sign/${token}`;
 
@@ -92,17 +87,9 @@ test('[DOCUMENT_AUTH]: should allow signing with valid global auth', async ({ pa
 
   await expect(page.getByRole('heading', { name: 'Sign Document' })).toBeVisible();
 
-  // Add signature.
-  const canvas = page.locator('canvas').first();
-  const box = await canvas.boundingBox();
-  if (box) {
-    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-    await page.mouse.down();
-    await page.mouse.move(box.x + box.width / 4, box.y + box.height / 4);
-    await page.mouse.up();
-  }
+  await signSignaturePad(page);
 
-  for (const field of Field) {
+  for (const field of fields) {
     await page.locator(`#field-${field.id}`).getByRole('button').click();
 
     if (field.type === FieldType.TEXT) {
@@ -122,17 +109,18 @@ test('[DOCUMENT_AUTH]: should allow signing with valid global auth', async ({ pa
 test.skip('[DOCUMENT_AUTH]: should deny signing document when required for global auth', async ({
   page,
 }) => {
-  const user = await seedUser();
+  const { user, team } = await seedUser();
 
-  const recipientWithAccount = await seedUser();
+  const { user: recipientWithAccount } = await seedUser();
 
   const { recipients } = await seedPendingDocumentNoFields({
     owner: user,
+    teamId: team.id,
     recipients: [recipientWithAccount],
     updateDocumentOptions: {
       authOptions: createDocumentAuthOptions({
-        globalAccessAuth: null,
-        globalActionAuth: 'ACCOUNT',
+        globalAccessAuth: [],
+        globalActionAuth: ['ACCOUNT'],
       }),
     },
   });
@@ -153,29 +141,30 @@ test.skip('[DOCUMENT_AUTH]: should deny signing document when required for globa
 test('[DOCUMENT_AUTH]: should deny signing fields when required for global auth', async ({
   page,
 }) => {
-  const user = await seedUser();
+  const { user, team } = await seedUser();
 
-  const recipientWithAccount = await seedUser();
+  const { user: recipientWithAccount } = await seedUser();
 
   const { recipients } = await seedPendingDocumentWithFullFields({
     owner: user,
+    teamId: team.id,
     recipients: [recipientWithAccount, seedTestEmail()],
     updateDocumentOptions: {
       authOptions: createDocumentAuthOptions({
-        globalAccessAuth: null,
-        globalActionAuth: 'ACCOUNT',
+        globalAccessAuth: [],
+        globalActionAuth: ['ACCOUNT'],
       }),
     },
   });
 
   // Check that both are denied access.
   for (const recipient of recipients) {
-    const { token, Field } = recipient;
+    const { token, fields } = recipient;
 
     await page.goto(`/sign/${token}`);
     await expect(page.getByRole('heading', { name: 'Sign Document' })).toBeVisible();
 
-    for (const field of Field) {
+    for (const field of fields) {
       if (field.type !== FieldType.SIGNATURE) {
         continue;
       }
@@ -192,14 +181,15 @@ test('[DOCUMENT_AUTH]: should deny signing fields when required for global auth'
 test('[DOCUMENT_AUTH]: should allow field signing when required for recipient auth', async ({
   page,
 }) => {
-  const user = await seedUser();
+  const { user, team } = await seedUser();
 
-  const recipientWithInheritAuth = await seedUser();
-  const recipientWithExplicitNoneAuth = await seedUser();
-  const recipientWithExplicitAccountAuth = await seedUser();
+  const { user: recipientWithInheritAuth } = await seedUser();
+  const { user: recipientWithExplicitNoneAuth } = await seedUser();
+  const { user: recipientWithExplicitAccountAuth } = await seedUser();
 
   const { recipients } = await seedPendingDocumentWithFullFields({
     owner: user,
+    teamId: team.id,
     recipients: [
       recipientWithInheritAuth,
       recipientWithExplicitNoneAuth,
@@ -208,32 +198,32 @@ test('[DOCUMENT_AUTH]: should allow field signing when required for recipient au
     recipientsCreateOptions: [
       {
         authOptions: createRecipientAuthOptions({
-          accessAuth: null,
-          actionAuth: null,
+          accessAuth: [],
+          actionAuth: [],
         }),
       },
       {
         authOptions: createRecipientAuthOptions({
-          accessAuth: null,
-          actionAuth: 'EXPLICIT_NONE',
+          accessAuth: [],
+          actionAuth: ['EXPLICIT_NONE'],
         }),
       },
       {
         authOptions: createRecipientAuthOptions({
-          accessAuth: null,
-          actionAuth: 'ACCOUNT',
+          accessAuth: [],
+          actionAuth: ['ACCOUNT'],
         }),
       },
     ],
-    fields: [FieldType.DATE],
+    fields: [FieldType.DATE, FieldType.SIGNATURE],
   });
 
   for (const recipient of recipients) {
-    const { token, Field } = recipient;
+    const { token, fields } = recipient;
     const { actionAuth } = ZRecipientAuthOptionsSchema.parse(recipient.authOptions);
 
     // This document has no global action auth, so only account should require auth.
-    const isAuthRequired = actionAuth === 'ACCOUNT';
+    const isAuthRequired = actionAuth.includes('ACCOUNT');
 
     const signUrl = `/sign/${token}`;
 
@@ -241,7 +231,7 @@ test('[DOCUMENT_AUTH]: should allow field signing when required for recipient au
     await expect(page.getByRole('heading', { name: 'Sign Document' })).toBeVisible();
 
     if (isAuthRequired) {
-      for (const field of Field) {
+      for (const field of fields) {
         if (field.type !== FieldType.SIGNATURE) {
           continue;
         }
@@ -261,17 +251,11 @@ test('[DOCUMENT_AUTH]: should allow field signing when required for recipient au
       });
     }
 
-    // Add signature.
-    const canvas = page.locator('canvas').first();
-    const box = await canvas.boundingBox();
-    if (box) {
-      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-      await page.mouse.down();
-      await page.mouse.move(box.x + box.width / 4, box.y + box.height / 4);
-      await page.mouse.up();
+    if (fields.some((field) => field.type === FieldType.SIGNATURE)) {
+      await signSignaturePad(page);
     }
 
-    for (const field of Field) {
+    for (const field of fields) {
       await page.locator(`#field-${field.id}`).getByRole('button').click();
 
       if (field.type === FieldType.TEXT) {
@@ -297,14 +281,15 @@ test('[DOCUMENT_AUTH]: should allow field signing when required for recipient au
 test('[DOCUMENT_AUTH]: should allow field signing when required for recipient and global auth', async ({
   page,
 }) => {
-  const user = await seedUser();
+  const { user, team } = await seedUser();
 
-  const recipientWithInheritAuth = await seedUser();
-  const recipientWithExplicitNoneAuth = await seedUser();
-  const recipientWithExplicitAccountAuth = await seedUser();
+  const { user: recipientWithInheritAuth } = await seedUser();
+  const { user: recipientWithExplicitNoneAuth } = await seedUser();
+  const { user: recipientWithExplicitAccountAuth } = await seedUser();
 
   const { recipients } = await seedPendingDocumentWithFullFields({
     owner: user,
+    teamId: team.id,
     recipients: [
       recipientWithInheritAuth,
       recipientWithExplicitNoneAuth,
@@ -313,38 +298,38 @@ test('[DOCUMENT_AUTH]: should allow field signing when required for recipient an
     recipientsCreateOptions: [
       {
         authOptions: createRecipientAuthOptions({
-          accessAuth: null,
-          actionAuth: null,
+          accessAuth: [],
+          actionAuth: [],
         }),
       },
       {
         authOptions: createRecipientAuthOptions({
-          accessAuth: null,
-          actionAuth: 'EXPLICIT_NONE',
+          accessAuth: [],
+          actionAuth: ['EXPLICIT_NONE'],
         }),
       },
       {
         authOptions: createRecipientAuthOptions({
-          accessAuth: null,
-          actionAuth: 'ACCOUNT',
+          accessAuth: [],
+          actionAuth: ['ACCOUNT'],
         }),
       },
     ],
-    fields: [FieldType.DATE],
+    fields: [FieldType.DATE, FieldType.SIGNATURE],
     updateDocumentOptions: {
       authOptions: createDocumentAuthOptions({
-        globalAccessAuth: null,
-        globalActionAuth: 'ACCOUNT',
+        globalAccessAuth: [],
+        globalActionAuth: ['ACCOUNT'],
       }),
     },
   });
 
   for (const recipient of recipients) {
-    const { token, Field } = recipient;
+    const { token, fields } = recipient;
     const { actionAuth } = ZRecipientAuthOptionsSchema.parse(recipient.authOptions);
 
     // This document HAS global action auth, so account and inherit should require auth.
-    const isAuthRequired = actionAuth === 'ACCOUNT' || actionAuth === null;
+    const isAuthRequired = actionAuth.includes('ACCOUNT') || actionAuth.length === 0;
 
     const signUrl = `/sign/${token}`;
 
@@ -352,7 +337,7 @@ test('[DOCUMENT_AUTH]: should allow field signing when required for recipient an
     await expect(page.getByRole('heading', { name: 'Sign Document' })).toBeVisible();
 
     if (isAuthRequired) {
-      for (const field of Field) {
+      for (const field of fields) {
         if (field.type !== FieldType.SIGNATURE) {
           continue;
         }
@@ -372,17 +357,11 @@ test('[DOCUMENT_AUTH]: should allow field signing when required for recipient an
       });
     }
 
-    // Add signature.
-    const canvas = page.locator('canvas').first();
-    const box = await canvas.boundingBox();
-    if (box) {
-      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-      await page.mouse.down();
-      await page.mouse.move(box.x + box.width / 4, box.y + box.height / 4);
-      await page.mouse.up();
+    if (fields.some((field) => field.type === FieldType.SIGNATURE)) {
+      await signSignaturePad(page);
     }
 
-    for (const field of Field) {
+    for (const field of fields) {
       await page.locator(`#field-${field.id}`).getByRole('button').click();
 
       if (field.type === FieldType.TEXT) {

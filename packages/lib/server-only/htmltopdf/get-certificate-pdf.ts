@@ -2,12 +2,14 @@ import { DateTime } from 'luxon';
 import type { Browser } from 'playwright';
 
 import { NEXT_PUBLIC_WEBAPP_URL } from '../../constants/app';
-import type { SupportedLanguageCodes } from '../../constants/i18n';
+import { type SupportedLanguageCodes, isValidLanguageCode } from '../../constants/i18n';
+import { env } from '../../utils/env';
 import { encryptSecondaryData } from '../crypto/encrypt';
 
 export type GetCertificatePdfOptions = {
   documentId: number;
-  language?: SupportedLanguageCodes;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  language?: SupportedLanguageCodes | (string & {});
 };
 
 export const getCertificatePdf = async ({ documentId, language }: GetCertificatePdfOptions) => {
@@ -20,10 +22,12 @@ export const getCertificatePdf = async ({ documentId, language }: GetCertificate
 
   let browser: Browser;
 
-  if (process.env.NEXT_PRIVATE_BROWSERLESS_URL) {
+  const browserlessUrl = env('NEXT_PRIVATE_BROWSERLESS_URL');
+
+  if (browserlessUrl) {
     // !: Use CDP rather than the default `connect` method to avoid coupling to the playwright version.
     // !: Previously we would have to keep the playwright version in sync with the browserless version to avoid errors.
-    browser = await chromium.connectOverCDP(process.env.NEXT_PRIVATE_BROWSERLESS_URL);
+    browser = await chromium.connectOverCDP(browserlessUrl);
   } else {
     browser = await chromium.launch();
   }
@@ -38,18 +42,31 @@ export const getCertificatePdf = async ({ documentId, language }: GetCertificate
 
   const page = await browserContext.newPage();
 
-  if (language) {
-    await page.context().addCookies([
-      {
-        name: 'language',
-        value: language,
-        url: NEXT_PUBLIC_WEBAPP_URL(),
-      },
-    ]);
-  }
+  const lang = isValidLanguageCode(language) ? language : 'en';
+
+  await page.context().addCookies([
+    {
+      name: 'lang',
+      value: lang,
+      url: NEXT_PUBLIC_WEBAPP_URL(),
+    },
+  ]);
 
   await page.goto(`${NEXT_PUBLIC_WEBAPP_URL()}/__htmltopdf/certificate?d=${encryptedId}`, {
     waitUntil: 'networkidle',
+    timeout: 10_000,
+  });
+
+  // !: This is a workaround to ensure the page is loaded correctly.
+  // !: It's not clear why but suddenly browserless cdp connections would
+  // !: cause the page to render blank until a reload is performed.
+  await page.reload({
+    waitUntil: 'networkidle',
+    timeout: 10_000,
+  });
+
+  await page.waitForSelector('h1', {
+    state: 'visible',
     timeout: 10_000,
   });
 
