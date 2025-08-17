@@ -62,7 +62,7 @@ build_base() {
 build_web() {
 
     echo "Building Documenso Web..."
-    
+
     # Environment Variables
     ECR_REPOSITORY="signezily"
     SERVICE="documenso-app-dev"
@@ -92,7 +92,7 @@ build_web() {
 build_marketing_site() {
 
     echo "Building Documenso Docs..."
-    
+
     # Environment Variables
     ECR_REPOSITORY="signezily"
     SERVICE="documenso-app-dev"
@@ -122,7 +122,7 @@ build_marketing_site() {
 build_documentation_site() {
 
     echo "Building Documenso Docs..."
-    
+
     # Environment Variables
     ECR_REPOSITORY="signezily"
     SERVICE="documenso-app-dev"

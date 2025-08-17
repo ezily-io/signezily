@@ -19,16 +19,15 @@ case $value in
     ;;
   default)
     echo "Running documenso main website"
-    sh generate_cert_p12.sh
+    sh ../../generate_cert_p12.sh
     set -x
-    npx prisma migrate deploy --schema ./packages/prisma/schema.prisma
-    node apps/web/server.js
+    npx prisma migrate deploy --schema ../../packages/prisma/schema.prisma
+    node build/server/main.js
     ;;
   documentation)
     echo "Running documentation site"
-    sh generate_cert_p12.sh
+    sh ../../generate_cert_p12.sh
     set -x
-    npx prisma migrate deploy --schema ./packages/prisma/schema.prisma
     node apps/documentation/server.js
     ;;
   *)
