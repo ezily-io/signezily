@@ -5,6 +5,7 @@ resource "aws_ecs_service" "main_given_task" {
   task_definition = var.ecs_task_definition_arn
   #launch_type     = "FARGATE"
   desired_count   = var.desired_count
+  enable_execute_command = true
 
   dynamic "capacity_provider_strategy" {
     for_each = var.dynamic_capacity_provider_strategy
