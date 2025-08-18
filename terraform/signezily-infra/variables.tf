@@ -1,7 +1,8 @@
 variable "region" {
   type        = string
-  default     = "ap-northeast-1"
+  default     = "us-east-1"
   description = "AWS region."
+  sensitive   = true
 }
 
 variable "application" {
@@ -30,13 +31,13 @@ variable "service_name" {
 
 variable "cluster_id" {
   type        = string
-  default     = "arn:aws:ecs:ap-northeast-1:898622234277:cluster/data"
+  sensitive   = true
   description = "ECS cluster where the application lives."
 }
 
 variable "certificate_arn" {
   type        = string
-  default     = "arn:aws:acm:ap-northeast-1:898622234277:certificate/f926aa8b-39df-4849-be62-297fb131be27"
+  sensitive   = true
   description = "ACM certificate ARN."
 }
 
@@ -72,31 +73,33 @@ variable "docker_image_tag" {
 
 variable "app_image_ecr" {
   type        = string
-  default     = "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily"
+  sensitive   = true
   description = "ECR API image to be used."
 }
 
 variable "marketing_image_ecr" {
   type        = string
-  default     = "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily"
+  sensitive   = true
   description = "ECR API image to be used."
 }
 
 variable "docs_image_ecr" {
   type        = string
-  default     = "898622234277.dkr.ecr.ap-northeast-1.amazonaws.com/signezily"
+  sensitive   = true
   description = "ECR API image to be used."
 }
 
 variable "env" {
-  type = map(any)
+  type      = map(any)
+  sensitive = true
   default = {
   }
   description = "Environment variables for the ECS task."
 }
 
 variable "secrets" {
-  type = map(any)
+  type      = map(any)
+  sensitive = true
   default = {
   }
   description = "Secrets from secrets manager for the ECS task."

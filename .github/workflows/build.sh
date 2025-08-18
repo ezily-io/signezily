@@ -1,12 +1,9 @@
 #!/bin/bash -e
 
 # Set Environment Variables
-export AWS_DEFAULT_REGION=ap-northeast-1
-export AWS_REGION=ap-northeast-1
-export AWS_ACCOUNT=898622234277
 export BUILDKIT_PROGRESS=plain
 export DOCKER_BUILDKIT=1
-export CLUSTER="dev"
+
 
 # Global version variable extracted from package.json
 getVersion(){
