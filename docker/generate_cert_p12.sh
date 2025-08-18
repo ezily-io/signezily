@@ -12,12 +12,11 @@ check_openssl_installed() {
 }
 
 # Generate the PKCS#12 file
-generate_pkcs12() {   
-  cd apps
+generate_pkcs12() {
   echo -e "$SIGN_PRIV_KEY_FILE" > $PRIVATE_KEY
   echo -e "$SIGN_CERT_FILE" > $CERTIFICATE
-  chown nextjs:nodejs $PRIVATE_KEY
-  chown nextjs:nodejs $CERTIFICATE
+  chown nodejs:nodejs $PRIVATE_KEY
+  chown nodejs:nodejs $CERTIFICATE
   chmod 600 $PRIVATE_KEY
   chmod 600 $CERTIFICATE
   echo "Creating PKCS#12 file..."
