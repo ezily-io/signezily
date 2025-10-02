@@ -15,5 +15,5 @@ export const compareSync = (password: string, hash: string) => {
 };
 
 export const hashString = (input: string) => {
-  return crypto.createHash('sha512').update(input).digest('hex');
+  return bcryptHashSync(input, SALT_ROUNDS);
 };
