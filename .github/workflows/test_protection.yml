@@ -1,0 +1,22 @@
+name: Test Deployment Protection
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-protected-deployment:
+    runs-on: ubuntu-latest
+    environment: protected_env
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Dummy step
+        run: |
+          echo "Testing deployment protection rule"
+          echo "This is a dummy step to verify environment protection works"
+          exit 0
+
+      - name: Success
+        run: echo "✅ Deployment protection test passed"
