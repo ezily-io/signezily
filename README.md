@@ -363,18 +363,3 @@ This will load environment variables from your `.env` and `.env.local` files.
 ## Repo Activity
 
 ![Repository Activity](https://repobeats.axiom.co/api/embed/622a2e9aa709696f7226304b5b7178a5741b3868.svg)
-
-## 🔄 Restart Plan
-
-If you wish to restart the public service or bring development back to main-stage:
-
-1. **Re-enable Infrastructure**:
-   - Update `terraform/signezily-infra/variables.tf` to set `del_protect` back to `true`.
-   - Run `terraform apply` in the infrastructure directory.
-2. **Remove Sunset Notice**:
-   - Remove the warning banner from `README.md`.
-   - Revert the changes in `apps/marketing/src/app/(marketing)/page.tsx`.
-3. **Internal Documentation**:
-   - Refer to the [Local Development](#local-development) section to spin up the environment for testing.
-4. **Data Restoration**:
-   - The final RDS snapshot (created during sunset) can be used to restore the database to its last known state.
