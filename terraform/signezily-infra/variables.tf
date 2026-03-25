@@ -42,13 +42,13 @@ variable "certificate_arn" {
 
 variable "cpu" {
   type        = string
-  default     = "1024"
+  default     = "2048"
   description = "Fargate CPU."
 }
 
 variable "memory" {
   type        = string
-  default     = "2048"
+  default     = "4096"
   description = "Fargate memory."
 }
 

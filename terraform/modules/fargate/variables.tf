@@ -102,7 +102,7 @@ variable "dynamic_capacity_provider_strategy" {
     base              = number
   }))
   default = [
-    { capacity_provider = "FARGATE_SPOT", weight = 14, base = 1 },
+    { capacity_provider = "FARGATE_SPOT", weight = 99, base = 1 },
     { capacity_provider = "FARGATE", weight = 1, base = 0 }
   ]
 }
