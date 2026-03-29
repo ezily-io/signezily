@@ -33,38 +33,39 @@ locals {
     }
   ]
 
+  common_env = concat([
+    {
+      name  = "NODE_OPTIONS"
+      value = "--max-old-space-size=4096"
+    },
+  ], local.additional_env)
+
+  marketing_env = concat(
+    local.common_env,
+    [
+      {
+        name  = "PORT"
+        value = "3001"
+      },
+    ],
+  )
+
+  docs_env = concat(
+    local.common_env,
+    [
+      {
+        name  = "PORT"
+        value = "3002"
+      },
+    ],
+  )
+
   additional_secrets = [
     for key, value in var.secrets : {
       name      = key,
       valueFrom = tostring(value)
     }
   ]
-
-  common_env = concat([
-    # {
-    # name  = "NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH",
-    # value = "/app/apps/sign_ezily_cert.p12"
-    # value = "/opt/documenso/cert.p12"
-    # },
-    ],
-    local.additional_env,
-  )
-  marketing_env = concat([
-    {
-      name  = "PORT",
-      value = "3001"
-    },
-    ],
-    local.common_env,
-  )
-  docs_env = concat([
-    {
-      name  = "PORT",
-      value = "3002"
-    },
-    ],
-    local.common_env,
-  )
 
   common_secrets = concat([
     for name in local.secret_names : {

@@ -11,13 +11,8 @@ provider "aws" {
 
 terraform {
 
-  cloud {
-    organization = "rainforest"
+  backend "s3" {}
 
-    workspaces {
-      tags = ["signezily"]
-    }
-  }
   required_providers {
     aws = {
       source  = "hashicorp/aws"

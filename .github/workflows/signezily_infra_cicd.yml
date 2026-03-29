@@ -51,12 +51,9 @@ jobs:
     name: Terraform
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    if: '! github.event.pull_request.draft'
     defaults:
       run:
         working-directory: terraform/signezily-infra/
-    env:
-      TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
 
     strategy:
       matrix:
@@ -88,7 +85,6 @@ jobs:
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             if [[ "${{ github.event.inputs.environment }}" == "${{ matrix.environment.name }}" ]]; then
               echo "ExecutionType=${{ github.event.inputs.ExecutionType }}" >> $GITHUB_ENV
-              echo "TF_WORKSPACE=${{ matrix.environment.tf_workspace }}" >> $GITHUB_ENV
             else
               echo "ExecutionType=skip" >> $GITHUB_ENV
             fi
@@ -96,10 +92,8 @@ jobs:
             # Apply only to the environment that tfvars were modified when pushed to main
             if [[ "${{ steps.filter.outputs.prod }}" == "true" && "${{ matrix.environment.name }}" == "prod" ]]; then
               echo "ExecutionType=apply" >> $GITHUB_ENV
-              echo "TF_WORKSPACE=${{ matrix.environment.tf_workspace }}" >> $GITHUB_ENV
             elif [[ "${{ steps.filter.outputs.dev }}" == "true" && "${{ matrix.environment.name }}" == "dev" ]]; then
               echo "ExecutionType=apply" >> $GITHUB_ENV
-              echo "TF_WORKSPACE=${{ matrix.environment.tf_workspace }}" >> $GITHUB_ENV
             else
               echo "ExecutionType=skip" >> $GITHUB_ENV
             fi
@@ -108,7 +102,6 @@ jobs:
             if [[ "${{ matrix.environment.name }}" == "dev" || \
                   "${{ steps.filter.outputs.prod }}" == "true" ]]; then
               echo "ExecutionType=plan" >> $GITHUB_ENV
-              echo "TF_WORKSPACE=${{ matrix.environment.tf_workspace }}" >> $GITHUB_ENV
             else
               echo "ExecutionType=skip" >> $GITHUB_ENV
             fi
@@ -125,12 +118,15 @@ jobs:
         if: ${{ env.ExecutionType != 'skip' }}
         uses: hashicorp/setup-terraform@v2
         with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
           terraform_version: 1.5.7
 
       - name: Terraform Init
         if: ${{ env.ExecutionType != 'skip' }}
-        run: terraform init -no-color || terraform init -upgrade -no-color
+        run: |
+            terraform init -no-color \
+              -backend-config=backend/${{ matrix.environment.name }}.hcl \
+            || terraform init -upgrade -no-color \
+              -backend-config=backend/${{ matrix.environment.name }}.hcl
       
       - name: Terraform Format
         if: ${{ env.ExecutionType != 'skip' }}
