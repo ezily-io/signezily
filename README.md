@@ -1,3 +1,10 @@
+# 🛑 Signezily (Documenso)
+
+> [!WARNING]
+> **This product is scheduled to be sunset on March 15, 2026.**
+> After this date, the public-facing service will be decommissioned. We will update the detail of the roll-back plan, in case want to revive the project
+
+
 <img src="https://github.com/documenso/documenso/assets/13398220/a643571f-0239-46a6-a73e-6bef38d1228b" alt="Documenso Logo">
 
 <p align="center" style="margin-top: 20px">
