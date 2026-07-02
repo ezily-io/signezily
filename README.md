@@ -1,3 +1,8 @@
+# ⚠️ UPDATE - JULY 2026: PROJECT ARCHIVED ⚠️
+## Find more in the technical plans:
+### [Decommissions Part I](https://app.notion.com/p/Decommission-SignEzily-Part-I-303603e19cec800c9907e6ccef8d17b8)
+### [Decommissions Part II](https://app.notion.com/p/Decommission-SignEzily-Part-II-38e603e19cec80e99e0afb42949571b7)
+
 <img src="https://github.com/documenso/documenso/assets/13398220/a643571f-0239-46a6-a73e-6bef38d1228b" alt="Documenso Logo">
 
 <p align="center" style="margin-top: 20px">
